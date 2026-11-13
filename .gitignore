@@ -1,0 +1,13 @@
+/target/
+/certs/*.crt
+/certs/*.key
+/certs/*.pem
+!/certs/.gitkeep
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+downloads/*
+!downloads/.gitkeep
+!downloads/README.md

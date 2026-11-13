@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000" fill="none">
+  <rect width="900" height="1000" fill="#101820"/>
+  <!-- faint instrument grid -->
+  <g stroke="#2a3a46" stroke-width="1">
+    <path d="M80 80h740M80 920h740M80 80v840M820 80v840"/>
+    <path stroke-dasharray="2 10" d="M80 500h740M450 80v840"/>
+  </g>
+  <g fill="#5b7382" font-family="ui-monospace, monospace" font-size="18">
+    <text x="96" y="68">N / 01</text>
+    <text x="720" y="68">64×64</text>
+    <text x="96" y="952">SDKPODS</text>
+    <text x="700" y="952">0,0</text>
+  </g>
+  <!-- registration ticks -->
+  <g stroke="#6f8b9a" stroke-width="1.5">
+    <path d="M80 80h16M80 80v16M820 80h-16M820 80v16M80 920h16M80 920v-16M820 920h-16M820 920v-16"/>
+  </g>
+  <path fill="#d7e2e8" d="M230 200h140L560 560V200h140v600H560L370 420v380H230V200z"/>
+  <rect x="230" y="828" width="140" height="8" fill="#3d8a96"/>
+</svg>

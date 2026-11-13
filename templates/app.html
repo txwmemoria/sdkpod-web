@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app.name }} — {{ studio_name }}{% endblock %}
+
+{% block content %}
+<article class="detail" style="--accent: {{ app.accent }}">
+  <a class="back mono" href="{{ home_href }}#works" data-enter>← {{ ui.back_works }}</a>
+
+  <header class="detail-head" data-enter>
+    <p class="kicker"><span class="mono">{{ app.index }}</span> {{ app.status_label }} · v{{ app.version }}</p>
+    <h1 class="mono">{{ app.name }}</h1>
+    <p class="lede">{{ app.tagline }}</p>
+  </header>
+
+  <div class="detail-stage" aria-hidden="true" data-enter>
+    <div class="detail-frame">
+      <span class="mono detail-frame-label">N / MARK</span>
+      <svg class="detail-n" viewBox="0 0 64 64" aria-hidden="true">
+        <path fill="currentColor" d="M14 12h11L38 36V12h12v40H38L25 28v24H14V12z"/>
+      </svg>
+    </div>
+  </div>
+
+  <p class="detail-copy" data-enter>{{ app.description }}</p>
+
+  {% if app.has_install %}
+  <div class="install" data-enter>
+    <p class="install-label mono">{{ ui.label_install }}</p>
+    <pre class="install-code mono"><code>{{ app.install }}</code></pre>
+  </div>
+  {% endif %}
+
+  <dl class="spec" data-enter>
+    <div>
+      <dt>{{ ui.label_platform }}</dt>
+      <dd class="mono">{{ app.platforms }}</dd>
+    </div>
+    <div>
+      <dt>{{ ui.label_version }}</dt>
+      <dd class="mono">v{{ app.version }}</dd>
+    </div>
+    <div>
+      <dt>{{ ui.label_released }}</dt>
+      <dd class="mono">{{ app.release_date }}</dd>
+    </div>
+    <div>
+      {% if app.has_repo %}
+      <dt>{{ ui.label_license }}</dt>
+      {% else %}
+      <dt>{{ ui.label_size }}</dt>
+      {% endif %}
+      <dd class="mono">{{ app.size_label }}</dd>
+    </div>
+  </dl>
+
+  <div class="detail-actions" data-enter>
+    {% if app.has_repo %}
+    <a class="action" href="{{ app.repo_url }}" target="_blank" rel="noopener noreferrer"><span>{{ ui.cta_open_source }}</span><span class="action-glyph" aria-hidden="true">↗</span></a>
+    {% endif %}
+    {% if app.has_download %}
+    <a class="action{% if app.has_repo %} quiet{% endif %}" href="{{ app.download_href }}"><span>{{ ui.cta_download_app }}</span><span class="action-glyph" aria-hidden="true">↓</span></a>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

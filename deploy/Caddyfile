@@ -1,0 +1,12 @@
+# 可选：用 Caddy 终止 TLS，后端走明文（若你想拆分边缘与应用）
+# 默认栈不需要 Caddy——sdkpods 自身监听 80/443。
+
+{$SDKPODS_DOMAIN:sdkpods.com}, www.{$SDKPODS_DOMAIN:sdkpods.com} {
+	encode gzip zstd
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+	}
+	reverse_proxy 127.0.0.1:8080
+}

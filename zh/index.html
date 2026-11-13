@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SDK Pods — 个人应用工作室</title>
+  <meta name="description" content="把想法做成可下载、可迭代的工具与应用。工程克制，产品说人话。" />
+  <meta property="og:title" content="SDK Pods — 个人应用工作室" />
+  <meta property="og:description" content="把想法做成可下载、可迭代的工具与应用。工程克制，产品说人话。" />
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="./" />
+  <link rel="alternate" hreflang="en" href="../en/" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/css/site.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="SDK Pods 首页">
+        <img src="../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="#works">作品</a>
+        <a href="#about">关于</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">联系</a>
+        <span class="tools">
+          <a class="pill" href="../en/" hreflang="en" lang="en" data-lang-switch="en" aria-label="Switch to English">EN</a>
+          <button type="button" data-theme-toggle aria-label="切换浅色或深色主题">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">个人应用工作室</p>
+          <h1>把想法做成可下载、可迭代的<em>工具</em>与应用。</h1>
+          <p class="lede">工程克制，产品说人话。</p>
+          <div class="btn-row">
+            <a class="btn solid" href="#works">查看作品 <span aria-hidden="true">↓</span></a>
+            <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">源码 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="term" role="img" aria-label="终端预览：sw verify 在对端机器上编译并测试，1.6 秒通过">
+          <div class="term-bar"><i></i><i></i><i></i><span>sw · verify</span></div>
+          <pre><code><span class="t-dim">$</span> sw verify
+<span class="t-ok">ok</span> mac-mini  <span class="t-dim">verify</span>  f3f2730 + 1 file
+  on mac-mini (macos)  /Users/me/projects/app
+  <span class="t-dim">›</span> reusing worktree
+  <span class="t-dim">›</span> applying patch
+  <span class="t-dim">›</span> [1/2] cargo build --release
+  <span class="t-dim">›</span> [2/2] cargo test
+<span class="t-ok">pass</span> mac-mini exit 0 in 1.6s</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="works" class="section">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">作品</p>
+          <h2>工具与应用，持续小步迭代。</h2>
+        </header>
+
+        <article class="work">
+          <div class="work-id">
+            <span class="idx">01</span>
+            <a class="work-name" href="apps/sync-work/">sw</a>
+            <ul class="chips">
+              <li class="on">稳定</li>
+              <li>v0.1.0</li>
+              <li>MIT</li>
+            </ul>
+          </div>
+          <div class="work-body">
+            <h3>跨机器验证与 AI 上下文同步</h3>
+            <p>在 Windows / macOS / Linux 两台对等机器上开发同一项目时，用一条命令把未提交改动送到对端编译测试，并把 Claude 等本地 AI 会话一并带走。无需先 push，也不碰对端工作区。基于 iroh：局域网直连，跨网走加密中继。</p>
+            <div class="cmd">
+              <code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code>
+              <button type="button" data-done="已复制">复制</button>
+            </div>
+            <div class="btn-row">
+              <a class="btn solid" href="apps/sync-work/">阅读介绍 <span aria-hidden="true">→</span></a>
+              <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="wrap about">
+        <p class="eyebrow">关于</p>
+        <div>
+          <header class="section-head" style="display:block">
+            <h2>独立制作。本地优先。更新克制。</h2>
+          </header>
+          <p>把想法做成可下载、可迭代的工具与应用。工程克制，产品说人话。</p>
+          <dl class="facts">
+            <div><dt>域名</dt><dd class="mono">sdkpod.com</dd></div>
+            <div><dt>邮箱</dt><dd><a href="mailto:hello@sdkpod.com">hello@sdkpod.com</a></dd></div>
+            <div><dt>目录</dt><dd>1 个作品</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="./"><img src="../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. 为沉稳软件而做。</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/site.js" defer></script>
+</body>
+</html>

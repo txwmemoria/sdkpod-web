@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>sw — Cross-machine verify and AI context sync · SDK Pods</title>
+  <meta name="description" content="Verify your uncommitted working tree on a peer machine and carry local AI session context with you. No push required." />
+  <meta property="og:title" content="sw — Cross-machine verify and AI context sync" />
+  <meta property="og:description" content="Verify your uncommitted working tree on a peer machine and carry local AI session context with you. No push required." />
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../../../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="../../../zh/apps/sync-work/" />
+  <link rel="alternate" hreflang="en" href="./" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../../assets/css/site.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="../../" aria-label="SDK Pods home">
+        <img src="../../../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="../../#works">Works</a>
+        <a href="../../#about">About</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">Contact</a>
+        <span class="tools">
+          <a class="pill" href="../../../zh/apps/sync-work/" hreflang="zh-CN" lang="zh-CN" data-lang-switch="zh" aria-label="切换到中文">中</a>
+          <button type="button" data-theme-toggle aria-label="Toggle light or dark theme">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="app-hero">
+      <div class="wrap">
+        <a class="back" href="../../#works">← Back to works</a>
+        <h1>sw</h1>
+        <p class="tagline">Cross-machine verify and AI context sync</p>
+        <p class="lede">On two peer machines (Windows, macOS, or Linux), verify your current working tree—including uncommitted files—on the other side, and carry local AI session context with you. No push required; the peer checkout stays untouched. Built on iroh: LAN direct when possible, encrypted relay across networks.</p>
+        <ul class="chips">
+          <li class="on">Stable</li>
+          <li>v0.1.0</li>
+          <li>MIT</li>
+          <li>macOS</li>
+          <li>Windows</li>
+          <li>Linux</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn solid" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">Open GitHub <span aria-hidden="true">↗</span></a>
+          <a class="btn line" href="#setup">Install <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap app-layout">
+      <article class="prose">
+        <h2 id="solves">What it solves</h2>
+
+        <p><strong>1. Will this change build and test on the other machine?</strong></p>
+        <p>The usual path is commit → push → switch desk → pull → run the build. Often you only changed a few lines.</p>
+
+        <p><strong>2. The AI session dies when you change machines.</strong></p>
+        <p>Claude Code keeps chat and memory on disk (<code>~/.claude/</code>). Git moves code; it does not move that.</p>
+
+        <p><code>sw</code> turns each into a command:</p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>You want</th><th>Command</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Compile and test the working tree I have now (no commit)</td><td><code>sw verify</code></td></tr>
+              <tr><td>Take the AI session and memory to the other machine</td><td><code>sw ctx</code></td></tr>
+              <tr><td>I committed; bring the other machine onto this branch</td><td><code>sw handoff</code></td></tr>
+              <tr><td>See why a peer is unreachable</td><td><code>sw doctor</code></td></tr>
+              <tr><td>Watch peers, projects, and verify history</td><td><code>sw tui</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The machines are peers. Either side can start. They do not need the same LAN: HTTPS relay when needed; direct path on LAN or VPN when possible.</p>
+
+        <h2 id="verify">What <code>sw verify</code> looks like</h2>
+
+        <p>Started on Windows, built on a Mac—<strong>no commit, no push</strong>:</p>
+
+<pre><code>verify mac-mini  verify  f3f2730 + 1 file
+  on mac-mini (macos)  /Users/me/projects/app
+  › reusing worktree
+  › applying patch
+  › [1/2] cargo build --release --all-targets
+<span class="t-bad">error[E0308]: mismatched types</span>
+ --&gt; src/style.rs:106:18
+<span class="t-bad">fail</span> mac-mini exit 1 in 1.6s</code></pre>
+
+        <p>Three things that matter:</p>
+        <ol>
+          <li>The working tree—including unstaged and untracked files—travels as a patch.</li>
+          <li>Compiler diagnostics come back with file and line.</li>
+          <li>The exit code is the peer’s—so it fits <code>&amp;&amp;</code>, hooks, or an edit → verify → edit loop.</li>
+        </ol>
+
+        <p>Cold cache is about a minute; afterward often <strong>~1.6s</strong> with a persistent worktree and build cache—remote verify stays inside the inner loop.</p>
+
+        <h2 id="setup">From zero</h2>
+
+        <p>Needs <strong>Rust 1.91+</strong> and <strong>git</strong>. Pair and install the node once per machine; link each repository once.</p>
+
+        <h3>1. Install on both machines</h3>
+<pre><code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code></pre>
+        <p>Keep <code>--locked</code> so both sides resolve the same dependencies.</p>
+
+        <h3>2. Pair once</h3>
+<pre><code><span class="t-dim"># machine A</span>
+sw pair init
+
+<span class="t-dim"># machine B</span>
+sw pair join sw1:…
+
+<span class="t-dim"># machine A, with B’s ticket</span>
+sw pair join sw1:…
+sw pair list</code></pre>
+        <p>Tickets carry a public key, machine name, and platform—enough for every project you add later.</p>
+
+        <h3>3. Launch the node at login</h3>
+<pre><code>sw service install</code></pre>
+        <p>User-level launchd / Run key / systemd—no admin. A machine only answers <code>verify</code> / <code>ctx</code> while its node runs.</p>
+
+        <h3>4. One project</h3>
+<pre><code><span class="t-dim"># machine A</span>
+sw init                 <span class="t-dim"># commit syncwork.toml</span>
+
+<span class="t-dim"># machine B, after git pull</span>
+sw link</code></pre>
+        <p>Paths may differ; the project name is the shared id. For Claude context, run <code>sw hook install</code> on both sides, then <code>sw doctor</code>.</p>
+
+        <h2 id="daily">Day to day</h2>
+
+<pre><code>sw verify
+sw verify check
+sw verify --peer mac
+sw ctx
+sw ctx --watch
+sw handoff
+sw status
+sw tui</code></pre>
+
+        <p>Rule of thumb: <strong>code rides the patch; config rides git.</strong> After editing <code>syncwork.toml</code>, use <code>sw handoff</code> (or push) so the peer sees the new recipes.</p>
+
+        <p>One Claude session on one machine at a time. Simultaneous <code>/resume</code> forks the files—both copies are kept. Markdown memory is three-way merged when possible.</p>
+      </article>
+
+      <aside class="side" aria-label="Details">
+        <dl class="facts">
+          <div><dt>Platform</dt><dd>macOS · Windows · Linux</dd></div>
+          <div><dt>Version</dt><dd class="mono">v0.1.0</dd></div>
+          <div><dt>Released</dt><dd class="mono">2026-11-10</dd></div>
+          <div><dt>License</dt><dd class="mono">MIT</dd></div>
+        </dl>
+        <div class="cmd wrap-text">
+          <code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code>
+          <button type="button" data-done="Copied">Copy</button>
+        </div>
+        <a class="btn line block" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <p class="side-label">On this page</p>
+        <ul class="toc">
+          <li><a href="#solves">What it solves</a></li>
+          <li><a href="#verify">What sw verify looks like</a></li>
+          <li><a href="#setup">From zero</a></li>
+          <li><a href="#daily">Day to day</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="../../"><img src="../../../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. Made for calm software.</p>
+    </div>
+  </footer>
+
+  <script src="../../../assets/js/site.js" defer></script>
+</body>
+</html>

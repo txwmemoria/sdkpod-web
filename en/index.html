@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SDK Pods — Independent app studio</title>
+  <meta name="description" content="Ideas shipped as tools and apps. Restrained engineering, plain-spoken products." />
+  <meta property="og:title" content="SDK Pods — Independent app studio" />
+  <meta property="og:description" content="Ideas shipped as tools and apps. Restrained engineering, plain-spoken products." />
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="../zh/" />
+  <link rel="alternate" hreflang="en" href="./" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/css/site.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="SDK Pods home">
+        <img src="../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#works">Works</a>
+        <a href="#about">About</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">Contact</a>
+        <span class="tools">
+          <a class="pill" href="../zh/" hreflang="zh-CN" lang="zh-CN" data-lang-switch="zh" aria-label="切换到中文">中</a>
+          <button type="button" data-theme-toggle aria-label="Toggle light or dark theme">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">Independent app studio</p>
+          <h1>Ideas shipped as <em>tools</em> and apps.</h1>
+          <p class="lede">Restrained engineering, plain-spoken products.</p>
+          <div class="btn-row">
+            <a class="btn solid" href="#works">Browse works <span aria-hidden="true">↓</span></a>
+            <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="term" role="img" aria-label="Terminal preview: sw verify builds and tests on a peer machine and passes in 1.6 seconds">
+          <div class="term-bar"><i></i><i></i><i></i><span>sw · verify</span></div>
+          <pre><code><span class="t-dim">$</span> sw verify
+<span class="t-ok">ok</span> mac-mini  <span class="t-dim">verify</span>  f3f2730 + 1 file
+  on mac-mini (macos)  /Users/me/projects/app
+  <span class="t-dim">›</span> reusing worktree
+  <span class="t-dim">›</span> applying patch
+  <span class="t-dim">›</span> [1/2] cargo build --release
+  <span class="t-dim">›</span> [2/2] cargo test
+<span class="t-ok">pass</span> mac-mini exit 0 in 1.6s</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="works" class="section">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="eyebrow">Works</p>
+          <h2>Tools and apps, iterated in small steps.</h2>
+        </header>
+
+        <article class="work">
+          <div class="work-id">
+            <span class="idx">01</span>
+            <a class="work-name" href="apps/sync-work/">sw</a>
+            <ul class="chips">
+              <li class="on">Stable</li>
+              <li>v0.1.0</li>
+              <li>MIT</li>
+            </ul>
+          </div>
+          <div class="work-body">
+            <h3>Cross-machine verify and AI context sync</h3>
+            <p>On two peer machines (Windows, macOS, or Linux), verify your current working tree—including uncommitted files—on the other side, and carry local AI session context with you. No push required; the peer checkout stays untouched. Built on iroh: LAN direct when possible, encrypted relay across networks.</p>
+            <div class="cmd">
+              <code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code>
+              <button type="button" data-done="Copied">Copy</button>
+            </div>
+            <div class="btn-row">
+              <a class="btn solid" href="apps/sync-work/">Read guide <span aria-hidden="true">→</span></a>
+              <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="wrap about">
+        <p class="eyebrow">About</p>
+        <div>
+          <header class="section-head" style="display:block">
+            <h2>Independent. Local-first. Updates kept deliberate.</h2>
+          </header>
+          <p>Ideas shipped as tools and apps. Restrained engineering, plain-spoken products.</p>
+          <dl class="facts">
+            <div><dt>Domain</dt><dd class="mono">sdkpod.com</dd></div>
+            <div><dt>Email</dt><dd><a href="mailto:hello@sdkpod.com">hello@sdkpod.com</a></dd></div>
+            <div><dt>Catalog</dt><dd>1 work</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="./"><img src="../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. Made for calm software.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SDK Pods</title>
+  <meta name="description" content="SDK Pods — independent app studio. 个人应用工作室。" />
+  <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="zh/" />
+  <link rel="alternate" hreflang="en" href="en/" />
+  <script>
+    // Send visitors to their language: saved choice first, then browser language.
+    (function () {
+      var lang = null;
+      try { lang = localStorage.getItem("lang"); } catch (e) {}
+      if (lang !== "zh" && lang !== "en") {
+        lang = (navigator.language || "en").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+      }
+      location.replace(lang + "/");
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0;url=en/" /></noscript>
+</head>
+<body>
+  <p><a href="en/">SDK Pods — English</a> · <a href="zh/">中文</a></p>
+</body>
+</html>

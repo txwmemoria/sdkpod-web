@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>sw — 跨机器验证与 AI 上下文同步 · SDK Pods</title>
+  <meta name="description" content="用一条命令把未提交改动送到对端机器编译测试，并把本地 AI 会话一并带走。无需先 push。" />
+  <meta property="og:title" content="sw — 跨机器验证与 AI 上下文同步" />
+  <meta property="og:description" content="用一条命令把未提交改动送到对端机器编译测试，并把本地 AI 会话一并带走。无需先 push。" />
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../../../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="./" />
+  <link rel="alternate" hreflang="en" href="../../../en/apps/sync-work/" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../../assets/css/site.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="../../" aria-label="SDK Pods 首页">
+        <img src="../../../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="../../#works">作品</a>
+        <a href="../../#about">关于</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">联系</a>
+        <span class="tools">
+          <a class="pill" href="../../../en/apps/sync-work/" hreflang="en" lang="en" data-lang-switch="en" aria-label="Switch to English">EN</a>
+          <button type="button" data-theme-toggle aria-label="切换浅色或深色主题">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="app-hero">
+      <div class="wrap">
+        <a class="back" href="../../#works">← 返回作品列表</a>
+        <h1>sw</h1>
+        <p class="tagline">跨机器验证与 AI 上下文同步</p>
+        <p class="lede">在 Windows / macOS / Linux 两台对等机器上开发同一项目时，用一条命令把未提交改动送到对端编译测试，并把 Claude 等本地 AI 会话一并带走。无需先 push，也不碰对端工作区。基于 iroh：局域网直连，跨网走加密中继。</p>
+        <ul class="chips">
+          <li class="on">稳定</li>
+          <li>v0.1.0</li>
+          <li>MIT</li>
+          <li>macOS</li>
+          <li>Windows</li>
+          <li>Linux</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn solid" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">打开 GitHub <span aria-hidden="true">↗</span></a>
+          <a class="btn line" href="#setup">安装 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap app-layout">
+      <article class="prose">
+        <h2 id="solves">它解决什么</h2>
+
+        <p><strong>一、想知道代码在另一台机器上能不能编过、测过。</strong></p>
+        <p>常见流程是：提交 → 推送 → 切机器 → 拉取 → 跑构建。往往只是几行改动，也要走完整套。</p>
+
+        <p><strong>二、换机器之后，本地 AI 会话断了。</strong></p>
+        <p>Claude Code 的对话和记忆在本机（<code>~/.claude/</code>）。代码能靠 git 过去，这些不能。</p>
+
+        <p><code>sw</code> 各变成一条命令：</p>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>你想做的</th><th>命令</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>让对端编译并测试<strong>当前工作区</strong>（不必提交）</td><td><code>sw verify</code></td></tr>
+              <tr><td>把 AI 会话与记忆带到另一台机器</td><td><code>sw ctx</code></td></tr>
+              <tr><td>提交完，让对端跟上这个分支</td><td><code>sw handoff</code></td></tr>
+              <tr><td>哪里不通，一次查清</td><td><code>sw doctor</code></td></tr>
+              <tr><td>本机、对端、项目与 verify 历史</td><td><code>sw tui</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>两台机器对等，任意一方都能发起。不要求同一局域网：能上网即可互通；同网或 VPN 时会尝试直连。</p>
+
+        <h2 id="verify"><code>sw verify</code> 长什么样</h2>
+
+        <p>在 Windows 上发起，Mac 编译——改动<strong>没有 commit，也没有 push</strong>：</p>
+
+<pre><code>verify mac-mini  verify  f3f2730 + 1 file
+  on mac-mini (macos)  /Users/me/projects/app
+  › reusing worktree
+  › applying patch
+  › [1/2] cargo build --release --all-targets
+<span class="t-bad">error[E0308]: mismatched types</span>
+ --&gt; src/style.rs:106:18
+<span class="t-bad">fail</span> mac-mini exit 1 in 1.6s</code></pre>
+
+        <p>三件关键事：</p>
+        <ol>
+          <li>当前工作区（含未暂存、未跟踪）打成 patch 直接送到对端。</li>
+          <li>对端诊断原样回到你的终端，带着文件与行号。</li>
+          <li>退出码是对端的——可接进 <code>&amp;&amp;</code>、hook，或「改 → 远端验 → 再改」的循环。</li>
+        </ol>
+
+        <p>首次冷缓存约一分钟级；之后常在 <strong>1.6s</strong> 量级——对端保留持久 worktree 与构建缓存，远端验证能进内层开发循环。</p>
+
+        <h2 id="setup">从零到能用</h2>
+
+        <p>需要 <strong>Rust 1.91+</strong> 与 <strong>git</strong>。配对与节点每台机器一次；每个仓库再接入一次。</p>
+
+        <h3>1. 安装（两台都装）</h3>
+<pre><code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code></pre>
+        <p><code>--locked</code> 不要省，否则两边可能解析出不同依赖版本。</p>
+
+        <h3>2. 配对（一次）</h3>
+<pre><code><span class="t-dim"># 机器 A</span>
+sw pair init          <span class="t-dim"># 复制 sw1:…</span>
+
+<span class="t-dim"># 机器 B</span>
+sw pair join sw1:…    <span class="t-dim"># 再把回执 ticket 拷回 A</span>
+
+<span class="t-dim"># 机器 A</span>
+sw pair join sw1:…
+sw pair list</code></pre>
+        <p>ticket 只有公钥、机器名与平台——一次配对覆盖之后所有项目。</p>
+
+        <h3>3. 开机自启节点</h3>
+<pre><code>sw service install</code></pre>
+        <p>macOS / Windows / Linux 用户级自启，不需要管理员。节点负责接收对端的 <code>verify</code> / <code>ctx</code>。</p>
+
+        <h3>4. 接入仓库</h3>
+<pre><code><span class="t-dim"># 机器 A</span>
+sw init               <span class="t-dim"># 生成 syncwork.toml，提交它</span>
+
+<span class="t-dim"># 机器 B（同一项目的克隆）</span>
+git pull &amp;&amp; sw link</code></pre>
+        <p>路径可以不同；靠项目名对应。需要 AI 上下文时两边再跑 <code>sw hook install</code>，最后 <code>sw doctor</code> 应显示通过。</p>
+
+        <h2 id="daily">日常用法</h2>
+
+<pre><code>sw verify                 <span class="t-dim"># 跑名为 verify 的配方</span>
+sw verify check           <span class="t-dim"># 换配方</span>
+sw verify --peer mac      <span class="t-dim"># 多台时指定对端</span>
+sw ctx                    <span class="t-dim"># 双向同步当前项目的 AI 上下文</span>
+sw ctx --watch            <span class="t-dim"># 长会话挂着同步</span>
+sw handoff                <span class="t-dim"># push，并在安全时快进对端</span>
+sw status
+sw tui</code></pre>
+
+        <p>记忆口诀：<strong>代码内容跟着 patch 走，配置文件跟着 git 走。</strong> 改了 <code>syncwork.toml</code> 要用 <code>sw handoff</code>（或自行 push）让对端拿到新配方。</p>
+
+        <p>同一 Claude 会话请同一时间只在一台机器上聊；两边同时 <code>/resume</code> 会分叉——两边文件都会保留。Markdown 记忆文件会尽量三方合并。</p>
+      </article>
+
+      <aside class="side" aria-label="详情">
+        <dl class="facts">
+          <div><dt>平台</dt><dd>macOS · Windows · Linux</dd></div>
+          <div><dt>版本</dt><dd class="mono">v0.1.0</dd></div>
+          <div><dt>发布</dt><dd class="mono">2026-11-10</dd></div>
+          <div><dt>许可</dt><dd class="mono">MIT</dd></div>
+        </dl>
+        <div class="cmd wrap-text">
+          <code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code>
+          <button type="button" data-done="已复制">复制</button>
+        </div>
+        <a class="btn line block" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <p class="side-label">本页目录</p>
+        <ul class="toc">
+          <li><a href="#solves">它解决什么</a></li>
+          <li><a href="#verify">sw verify 长什么样</a></li>
+          <li><a href="#setup">从零到能用</a></li>
+          <li><a href="#daily">日常用法</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="../../"><img src="../../../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. 为沉稳软件而做。</p>
+    </div>
+  </footer>
+
+  <script src="../../../assets/js/site.js" defer></script>
+</body>
+</html>

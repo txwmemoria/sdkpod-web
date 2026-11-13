@@ -1,53 +1,49 @@
 # SDK Pods
 
-个人应用工作室站点，域名 **sdkpods.com**。用 Rust（Axum + rustls）同时提供 **80 → 443** 跳转与 HTTPS 站点，内含作品宣发、下载、健康检查与基础可观测性。
+Personal app studio site for **sdkpod.com**. Plain HTML, CSS and a few lines of JavaScript — no build step, no dependencies, no web fonts.
 
-## 快速开始（本机，免 root）
-
-```bash
-make dev
-# https://127.0.0.1:8443/zh  ·  https://127.0.0.1:8443/en
-# / 按 Accept-Language / Cookie 跳转
+```
+index.html                    language redirect (saved choice → browser language)
+en/index.html                 home (English)
+zh/index.html                 home (中文)
+en/apps/sync-work/index.html  sw guide (English)
+zh/apps/sync-work/index.html  sw guide (中文)
+404.html                      self-contained not-found page
+assets/css/site.css           all styles, light + dark
+assets/js/site.js             theme toggle, copy buttons, language memory
+assets/img/mark.svg           logo / favicon
 ```
 
-## 绑定域名并监听 80 / 443
+All links are relative, so the site works at a domain root or under a sub-path (e.g. `user.github.io/repo/`).
+
+## Preview locally
 
 ```bash
-# 1) 本机解析
-make hosts
-
-# 2) 特权端口启动（会 sudo）
-make local
-# https://sdkpods.com
+python3 -m http.server 8080
 ```
 
-浏览器会提示自签证书，本地开发属预期；生产请将 `SDKPODS_AUTO_TLS=0`，并放入正式证书：
+Then open <http://localhost:8080>.
 
-- `certs/sdkpods.com.crt`
-- `certs/sdkpods.com.key`
+## Editing
 
-## 内容维护
+Edit the HTML directly. Each page exists once per language; keep `en/` and `zh/` in step. To add an app, copy `en/apps/sync-work/` and `zh/apps/sync-work/` to a new folder and add a matching `<article class="work">` block to both home pages.
 
-编辑 `content/apps.toml` 增删作品；安装包放入 `downloads/`，文件名与 `download_path` 对齐。
+## Deploy
 
-## 运维能力
+### GitHub Pages
 
-| 能力 | 说明 |
-|------|------|
-| TLS | rustls 原生 HTTPS；缺失证书时可自动签发自签 |
-| 健康检查 | `GET /healthz`、`GET /readyz` |
-| Metrics | `GET /metrics`（Prometheus 文本） |
-| 日志 | `tracing`；`SDKPODS_LOG_JSON=1` 输出 JSON |
-| Docker | `make docker-up`（`deploy/docker-compose.yml`） |
-| systemd | `deploy/systemd/sdkpods.service` |
-| 可选边缘 | `deploy/Caddyfile`（若希望 Caddy 终止 TLS） |
+1. Push to GitHub.
+2. Settings → Pages → Source: **Deploy from a branch** → `main` / `/ (root)`.
+3. For the custom domain, enter `sdkpod.com` under Pages → Custom domain and add the DNS records GitHub shows.
 
-## API
+`.nojekyll` tells Pages to serve the files as they are.
 
-- `GET /api/apps` — 作品目录
-- `GET /api/apps/:id` — 单应用
-- `GET /downloads/<file>` — 安装包
+### Cloudflare Pages
 
-## 环境变量
+Connect the repository with **no build command** and output directory `/`, or upload directly:
 
-见 `.env.example`。
+```bash
+npx wrangler pages deploy . --project-name=sdkpod
+```
+
+`_headers` sets a few response headers there; GitHub Pages ignores it.

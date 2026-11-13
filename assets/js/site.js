@@ -37,4 +37,63 @@
       } catch { /* clipboard denied */ }
     });
   });
+
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Hero terminal: type the command, then print the output line by line.
+  const code = document.querySelector(".hero .term code");
+  if (code && !calm) {
+    code.innerHTML = code.innerHTML
+      .split("\n")
+      .map((line) => `<span class="tl">${line}</span>`)
+      .join("\n");
+    code.classList.add("typing");
+
+    const lines = [...code.querySelectorAll(".tl")];
+    const caret = document.createElement("span");
+    caret.className = "caret";
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    (async () => {
+      const first = lines[0];
+      const cmd = first.lastChild; // text node: " sw verify"
+      const text = cmd.textContent;
+      cmd.textContent = " ";
+      first.append(caret);
+      first.classList.add("on");
+      await wait(900);
+      for (const ch of text.slice(1)) {
+        cmd.textContent += ch;
+        await wait(55 + Math.random() * 60);
+      }
+      const pauses = [450, 180, 320, 260, 650, 750, 380];
+      for (let i = 1; i < lines.length; i++) {
+        await wait(pauses[i - 1] || 250);
+        lines[i].classList.add("on");
+        lines[i].append(caret);
+      }
+    })();
+  }
+
+  // Scroll reveal: only blocks that start below the fold are hidden, so
+  // nothing visible on load ever flashes.
+  if (!calm && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px" }
+    );
+    document
+      .querySelectorAll(".section > .wrap > .section-head, .work, .about > div, .prose > h2, .prose > pre, .prose > .table-scroll")
+      .forEach((el) => {
+        if (el.getBoundingClientRect().top < innerHeight) return;
+        el.classList.add("reveal");
+        io.observe(el);
+      });
+  }
 })();

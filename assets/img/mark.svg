@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="SDK Pods">
-  <rect width="32" height="32" rx="7" fill="#c8401a"/>
-  <path fill="#fff8f2" d="M8.5 7.5h4.9l5.2 9.4V7.5h4.9v17h-4.9l-5.2-9.4v9.4H8.5v-17z"/>
+  <rect width="32" height="32" rx="6" fill="#0b0d10"/>
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" fill="none" stroke="#2fe6a0" stroke-width="1.5"/>
+  <path fill="#2fe6a0" d="M8.5 7.5h4.9l5.2 9.4V7.5h4.9v17h-4.9l-5.2-9.4v9.4H8.5v-17z"/>
 </svg>

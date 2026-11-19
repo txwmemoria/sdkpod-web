@@ -34,7 +34,10 @@ Edit the HTML directly. Each page exists once per language; keep `en/` and `zh/`
 
 1. Push to GitHub.
 2. Settings → Pages → Source: **Deploy from a branch** → `main` / `/ (root)`.
-3. For the custom domain, enter `sdkpod.com` under Pages → Custom domain and add the DNS records GitHub shows.
+3. The `CNAME` file sets the custom domain to `sdkpod.com`. At the DNS provider (DNSPod), point the domain at GitHub:
+   - `@` → four `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - `www` → `CNAME` `txwmemoria.github.io`
+4. Once GitHub has issued the certificate, tick **Enforce HTTPS** under Settings → Pages.
 
 `.nojekyll` tells Pages to serve the files as they are.
 

@@ -1,3 +1,8 @@
-name = "sdkpod"
-compatibility_date = "2025-11-01"
-pages_build_output_dir = "."
+# Cloudflare Workers static-assets site (no build step, no Worker script).
+name = "sdkpod-web"
+compatibility_date = "2026-11-19"
+
+[assets]
+directory = "."
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"

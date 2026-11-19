@@ -38,12 +38,14 @@ Edit the HTML directly. Each page exists once per language; keep `en/` and `zh/`
 
 `.nojekyll` tells Pages to serve the files as they are.
 
-### Cloudflare Pages
+### Cloudflare (Workers static assets)
 
-Connect the repository with **no build command** and output directory `/`, or upload directly:
+The site is deployed as a Cloudflare Worker named `sdkpod-web` with static assets only — no build step and no Worker script. `wrangler.toml` points the assets directory at the repo root, and `.assetsignore` keeps `.git`, this README and the config files from being uploaded.
+
+With the GitHub repo connected under Workers & Pages, every push to `main` redeploys. Leave the build command empty; the deploy command is `npx wrangler deploy`. To deploy by hand:
 
 ```bash
-npx wrangler pages deploy . --project-name=sdkpod
+npx wrangler deploy
 ```
 
 `_headers` sets a few response headers there; GitHub Pages ignores it.

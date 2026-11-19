@@ -1,0 +1,10 @@
+.git
+.github
+.claude
+.wrangler
+node_modules
+.DS_Store
+.gitignore
+.nojekyll
+README.md
+wrangler.toml

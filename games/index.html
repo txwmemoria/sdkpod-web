@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="摸鱼司 · SDK Pods 的护眼小游戏合集：慢节奏、不晃眼，纯浏览器运行。">
+<meta name="theme-color" content="#e9efe8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161d1a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/img/mark.svg" type="image/svg+xml">
+<title>摸鱼司 · 内部效率平台</title>
+<script>try{var d=JSON.parse(localStorage.getItem("mg.v1")||"{}"),t=d.theme||localStorage.getItem("theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true" data-i18n="app.mark">摸</span>
+      <span>
+        <span data-i18n="app.brand">摸鱼司</span>
+        <small data-i18n="app.brandSub">Internal Slacking Platform</small>
+      </span>
+    </div>
+
+    <span class="spacer"></span>
+
+    <a class="home-link" id="homeLink" href="../" data-i18n-title="app.home">
+      <img src="../assets/img/mark.svg" width="18" height="18" alt="">
+      <span>SDK Pods</span>
+    </a>
+
+    <div class="top-actions">
+      <div class="worktime" data-i18n-title="app.footer">
+        <span aria-hidden="true">🕒</span>
+        <span class="wk" data-i18n="app.workTime">累计摸鱼</span>
+        <b id="workTime">0 秒</b>
+      </div>
+      <button class="btn" id="btnFake" type="button" data-i18n-title="app.bossKey">
+        <span class="btn-icon" aria-hidden="true">📊</span>
+        <span class="btn-label" data-i18n="app.bossKey">假装工作</span>
+        <kbd>Esc</kbd>
+      </button>
+      <button class="icon-btn" id="btnLang" type="button" data-i18n-title="app.langTitle" data-i18n-aria="app.langTitle">EN</button>
+      <button class="icon-btn" id="btnSound" type="button" data-i18n-title="app.soundOff" aria-label="Sound">🔇</button>
+      <button class="icon-btn" id="btnTheme" type="button" data-i18n-title="app.themeDark" aria-label="Theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="view" id="view"></main>
+
+  <footer class="foot">
+    <span data-i18n="app.footer">纯本地运行 · 无服务端 · 无账号 · 成绩只写在这台浏览器的 localStorage 里</span>
+  </footer>
+</div>
+
+<!-- 假装工作：Excel 味的季度报表，Esc 呼出 / 收回 -->
+<div class="fakescreen" id="fakescreen" hidden aria-hidden="true">
+  <div class="fake-bar">
+    <span class="tab on" data-i18n="fake.sheet">Sheet1</span>
+    <span class="tab" data-i18n="fake.sheet2">区域汇总</span>
+    <span class="tab" data-i18n="fake.sheet3">数据源</span>
+    <span class="tab" data-i18n="fake.sheet4">校验</span>
+  </div>
+  <div class="fake-tools">
+    <span>Calibri</span><span>·</span><span>11</span><span>·</span><span>B</span><span>I</span><span>U</span>
+    <span>·</span><span data-i18n="fake.rate">达成率</span><span>·</span><span data-i18n="fake.mom">环比</span>
+    <span>·</span><span data-i18n="fake.cost">渠道费用</span>
+  </div>
+
+  <div class="fake-sheet">
+    <div class="fake-title" data-i18n="fake.title">2026 财年 Q4 经营数据汇总（草案 v3 · 待审）</div>
+    <div class="fake-name">A1</div>
+    <table class="fake-grid">
+      <thead>
+        <tr>
+          <th></th>
+          <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th>
+        </tr>
+        <tr>
+          <th>1</th>
+          <th data-i18n="fake.region">区域</th>
+          <th data-i18n="fake.owner">负责人</th>
+          <th data-i18n="fake.q3">Q3 实际</th>
+          <th data-i18n="fake.q4">Q4 目标</th>
+          <th data-i18n="fake.rate">达成率</th>
+          <th data-i18n="fake.mom">环比</th>
+          <th data-i18n="fake.cost">渠道费用</th>
+          <th data-i18n="fake.note">备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th>2</th><td data-i18n="fake.east">华东</td><td>王 · 成</td><td>1,284.6</td><td>1,420.0</td><td>90.5%</td><td>+6.2%</td><td>184.2</td><td>—</td></tr>
+        <tr><th>3</th><td data-i18n="fake.south">华南</td><td>李 · 静</td><td>986.2</td><td>1,050.0</td><td>93.9%</td><td>+4.8%</td><td>142.7</td><td data-i18n="fake.pending">待复核</td></tr>
+        <tr><th>4</th><td data-i18n="fake.north">华北</td><td>张 · 磊</td><td>1,102.4</td><td>1,180.0</td><td>93.4%</td><td>+3.1%</td><td>151.0</td><td>—</td></tr>
+        <tr><th>5</th><td data-i18n="fake.west">西南</td><td>陈 · 曦</td><td>612.8</td><td>700.0</td><td>87.5%</td><td>+2.4%</td><td>96.4</td><td data-i18n="fake.adjusted">口径调整</td></tr>
+        <tr><th>6</th><td data-i18n="fake.total">合计</td><td>—</td><td>3,986.0</td><td>4,350.0</td><td>91.6%</td><td>+4.4%</td><td>574.3</td><td>—</td></tr>
+        <tr><th>7</th><td data-i18n="fake.memo">备注</td><td colspan="7" data-i18n="fake.memoText">口径与上月一致；渠道费用待财务复核</td></tr>
+      </tbody>
+    </table>
+
+    <div class="fake-chart" aria-hidden="true">
+      <i style="height:52%"></i><i style="height:64%"></i><i style="height:58%"></i>
+      <i style="height:71%"></i><i style="height:66%"></i><i style="height:78%"></i>
+      <i style="height:74%"></i><i style="height:83%"></i><i style="height:80%"></i>
+      <i style="height:88%"></i><i style="height:85%"></i><i style="height:92%"></i>
+    </div>
+
+    <div class="fake-fill" aria-hidden="true"></div>
+  </div>
+
+  <div class="fake-tabs">
+    <span class="tab on">Sheet1</span>
+    <span class="tab" data-i18n="fake.sheet2">区域汇总</span>
+    <span class="tab" data-i18n="fake.sheet3">数据源</span>
+    <span class="tab" data-i18n="fake.sheet4">校验</span>
+  </div>
+
+  <div class="fake-status">
+    <span data-i18n="fake.ready">就绪</span>
+    <span data-i18n="fake.saved">已保存</span>
+    <span>100%</span>
+    <span data-i18n="fake.selected">选取区域：A1:H7</span>
+  </div>
+  <div class="fake-hint" data-i18n="fake.escape">Esc 返回</div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/core.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/games/snake.js"></script>
+<script src="js/games/memory.js"></script>
+<script src="js/games/receipt.js"></script>
+<script src="js/games/tetris.js"></script>
+<script src="js/games/golf.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

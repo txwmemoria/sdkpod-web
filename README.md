@@ -8,6 +8,7 @@ en/index.html                 home (English)
 zh/index.html                 home (中文)
 en/apps/sync-work/index.html  sw guide (English)
 zh/apps/sync-work/index.html  sw guide (中文)
+games/                        摸鱼司 mini-games (own hub, bilingual in-page, plain scripts)
 404.html                      self-contained not-found page
 assets/css/site.css           all styles, light + dark
 assets/js/site.js             theme toggle, copy buttons, language memory
@@ -27,6 +28,8 @@ Then open <http://localhost:8080>.
 ## Editing
 
 Edit the HTML directly. Each page exists once per language; keep `en/` and `zh/` in step. To add an app, copy `en/apps/sync-work/` and `zh/apps/sync-work/` to a new folder and add a matching `<article class="work">` block to both home pages.
+
+The games live in `games/`: `js/core.js` (store, effects), `js/i18n.js` (all copy, zh + en), `js/app.js` (hub and game shell), one file per game in `js/games/`. To add a game, create `js/games/<id>.js` that calls `MG.register({...})`, add its `<script>` tag to `games/index.html` before `js/app.js`, and add its copy to `i18n.js`. Keep new games slow-paced and easy on the eyes: no screen shake, no flashing. The games read the site's `theme` and `lang` choices from localStorage.
 
 ## Deploy
 

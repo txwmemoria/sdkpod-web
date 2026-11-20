@@ -117,21 +117,25 @@
       if (on) { musicBeforeFake = MG.music.state.playing; MG.music.pause(); }
       else if (musicBeforeFake) { musicBeforeFake = false; MG.music.resume(); }
     }
+    if (on && MG.fake) MG.fake.show(els.fake);
     els.fake.hidden = !on;
+    if (!on && MG.fake) MG.fake.hide();
     document.body.classList.toggle('faking', on);
     disguiseTab(on);
+  }
+
+  if (MG.fake) {
+    MG.fake.onBack = function () { toggleFake(false); };
+    MG.fake.onSwitch = function () { disguiseTab(true); };
   }
 
   /* 假装工作时，连浏览器标签的标题和图标都换成表格 */
   var favicon = document.getElementById('favicon');
   var realIcon = favicon ? favicon.getAttribute('href') : '';
-  var SHEET_ICON = 'data:image/svg+xml,' + encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="3" y="4" width="26" height="24" rx="3" fill="#217346"/>' +
-    '<path d="M3 11h26M3 17h26M3 23h26M12 4v24M21 4v24" stroke="#fff" stroke-opacity=".55" stroke-width="1.4"/></svg>');
   function disguiseTab(on) {
     if (on) {
-      document.title = MG.t('fake.tab');
-      if (favicon) favicon.setAttribute('href', SHEET_ICON);
+      document.title = MG.fake ? MG.fake.tabTitle() : MG.t('app.title');
+      if (favicon && MG.fake) favicon.setAttribute('href', MG.fake.tabIcon());
     } else {
       document.title = MG.t('app.title');
       if (favicon) favicon.setAttribute('href', realIcon);
@@ -1513,7 +1517,16 @@
       return;
     }
 
-    if (fakeOn) { e.stopPropagation(); return; }
+    if (fakeOn) {
+      /* 伪装屏里：Tab 换一种伪装，其余按键一律不进游戏 */
+      if (e.key === 'Tab' && MG.fake) {
+        e.preventDefault();
+        MG.fake.cycle();
+        disguiseTab(true);
+      }
+      e.stopPropagation();
+      return;
+    }
     if (!play) return;
     /* 焦点在按钮上时，回车 / 空格交给按钮自己 */
     if (e.target && e.target.closest && e.target.closest('button, a, input')) {
@@ -1561,6 +1574,7 @@
   MG.i18n.onChange = function () {
     applyLangButton();
     if (MG.music) { MG.music.retitle(); paintMusic(); }
+    if (fakeOn && MG.fake) { MG.fake.rerender(); disguiseTab(true); }
     applyTheme();
     applySound();
     refreshWorkTime();

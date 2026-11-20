@@ -9,7 +9,7 @@
 <link rel="icon" id="favicon" href="../assets/img/mark.svg" type="image/svg+xml">
 <title>摸鱼司 · 内部效率平台</title>
 <script>try{var d=JSON.parse(localStorage.getItem("mg.v1")||"{}"),t=d.theme||localStorage.getItem("theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=18">
 </head>
 <body>
 
@@ -56,97 +56,30 @@
   </footer>
 </div>
 
-<!-- 假装工作：Excel 味的季度报表，Esc 呼出 / 收回 -->
-<div class="fakescreen" id="fakescreen" hidden aria-hidden="true">
-  <div class="fake-bar">
-    <span class="tab on" data-i18n="fake.sheet">Sheet1</span>
-    <span class="tab" data-i18n="fake.sheet2">区域汇总</span>
-    <span class="tab" data-i18n="fake.sheet3">数据源</span>
-    <span class="tab" data-i18n="fake.sheet4">校验</span>
-  </div>
-  <div class="fake-tools">
-    <span>Calibri</span><span>·</span><span>11</span><span>·</span><span>B</span><span>I</span><span>U</span>
-    <span>·</span><span data-i18n="fake.rate">达成率</span><span>·</span><span data-i18n="fake.mom">环比</span>
-    <span>·</span><span data-i18n="fake.cost">渠道费用</span>
-  </div>
-
-  <div class="fake-sheet">
-    <div class="fake-title" data-i18n="fake.title">2026 财年 Q4 经营数据汇总（草案 v3 · 待审）</div>
-    <div class="fake-name">A1</div>
-    <table class="fake-grid">
-      <thead>
-        <tr>
-          <th></th>
-          <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th>
-        </tr>
-        <tr>
-          <th>1</th>
-          <th data-i18n="fake.region">区域</th>
-          <th data-i18n="fake.owner">负责人</th>
-          <th data-i18n="fake.q3">Q3 实际</th>
-          <th data-i18n="fake.q4">Q4 目标</th>
-          <th data-i18n="fake.rate">达成率</th>
-          <th data-i18n="fake.mom">环比</th>
-          <th data-i18n="fake.cost">渠道费用</th>
-          <th data-i18n="fake.note">备注</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><th>2</th><td data-i18n="fake.east">华东</td><td data-i18n="fake.o1">王 · 成</td><td>1,284.6</td><td>1,420.0</td><td>90.5%</td><td>+6.2%</td><td>184.2</td><td>—</td></tr>
-        <tr><th>3</th><td data-i18n="fake.south">华南</td><td data-i18n="fake.o2">李 · 静</td><td>986.2</td><td>1,050.0</td><td>93.9%</td><td>+4.8%</td><td>142.7</td><td data-i18n="fake.pending">待复核</td></tr>
-        <tr><th>4</th><td data-i18n="fake.north">华北</td><td data-i18n="fake.o3">张 · 磊</td><td>1,102.4</td><td>1,180.0</td><td>93.4%</td><td>+3.1%</td><td>151.0</td><td>—</td></tr>
-        <tr><th>5</th><td data-i18n="fake.west">西南</td><td data-i18n="fake.o4">陈 · 曦</td><td>612.8</td><td>700.0</td><td>87.5%</td><td>+2.4%</td><td>96.4</td><td data-i18n="fake.adjusted">口径调整</td></tr>
-        <tr><th>6</th><td data-i18n="fake.total">合计</td><td>—</td><td>3,986.0</td><td>4,350.0</td><td>91.6%</td><td>+4.4%</td><td>574.3</td><td>—</td></tr>
-        <tr><th>7</th><td data-i18n="fake.memo">备注</td><td colspan="7" data-i18n="fake.memoText">口径与上月一致；渠道费用待财务复核</td></tr>
-      </tbody>
-    </table>
-
-    <div class="fake-chart" aria-hidden="true">
-      <i style="height:52%"></i><i style="height:64%"></i><i style="height:58%"></i>
-      <i style="height:71%"></i><i style="height:66%"></i><i style="height:78%"></i>
-      <i style="height:74%"></i><i style="height:83%"></i><i style="height:80%"></i>
-      <i style="height:88%"></i><i style="height:85%"></i><i style="height:92%"></i>
-    </div>
-
-    <div class="fake-fill" aria-hidden="true"></div>
-  </div>
-
-  <div class="fake-tabs">
-    <span class="tab on">Sheet1</span>
-    <span class="tab" data-i18n="fake.sheet2">区域汇总</span>
-    <span class="tab" data-i18n="fake.sheet3">数据源</span>
-    <span class="tab" data-i18n="fake.sheet4">校验</span>
-  </div>
-
-  <div class="fake-status">
-    <span data-i18n="fake.ready">就绪</span>
-    <span data-i18n="fake.saved">已保存</span>
-    <span>100%</span>
-    <span data-i18n="fake.selected">选取区域：A1:H7</span>
-  </div>
-  <div class="fake-hint" data-i18n="fake.escape">Esc 返回</div>
-</div>
+<!-- 假装工作：内容由 js/fake.js 生成（表格 / 代码 / 会议纪要，Tab 轮换） -->
+<div class="fakescreen" id="fakescreen" hidden aria-hidden="true"></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- Google AdSense：填好 client（ca-pub-…）和两个广告单元 id 就会出现；留空则不加载任何广告代码 -->
 <script>window.MG_ADS = { client: '', hub: '', play: '' };</script>
-<script src="js/core.js?v=15"></script>
-<script src="js/i18n.js?v=15"></script>
-<script src="js/art.js?v=15"></script>
-<script src="js/weather.js?v=15"></script>
-<script src="js/music.js?v=15"></script>
-<script src="js/ads.js?v=15"></script>
-<script src="js/games/memory.js?v=15"></script>
-<script src="js/games/lights.js?v=15"></script>
-<script src="js/games/cups.js?v=15"></script>
-<script src="js/games/slide.js?v=15"></script>
-<script src="js/games/sudoku.js?v=15"></script>
-<script src="js/games/sweep.js?v=15"></script>
-<script src="js/games/receipt.js?v=15"></script>
-<script src="js/games/golf.js?v=15"></script>
-<script src="js/games/tetris.js?v=15"></script>
-<script src="js/games/snake.js?v=15"></script>
-<script src="js/app.js?v=15"></script>
+<script src="js/core.js?v=18"></script>
+<script src="js/i18n.js?v=18"></script>
+<script src="js/art.js?v=18"></script>
+<script src="js/weather.js?v=18"></script>
+<script src="js/music.js?v=18"></script>
+<script src="js/ads.js?v=18"></script>
+<script src="js/fake.js?v=18"></script>
+<script src="js/games/memory.js?v=18"></script>
+<script src="js/games/lights.js?v=18"></script>
+<script src="js/games/cups.js?v=18"></script>
+<script src="js/games/slide.js?v=18"></script>
+<script src="js/games/sudoku.js?v=18"></script>
+<script src="js/games/sweep.js?v=18"></script>
+<script src="js/games/receipt.js?v=18"></script>
+<script src="js/games/golf.js?v=18"></script>
+<script src="js/games/tetris.js?v=18"></script>
+<script src="js/games/snake.js?v=18"></script>
+<script src="js/app.js?v=18"></script>
 </body>
 </html>

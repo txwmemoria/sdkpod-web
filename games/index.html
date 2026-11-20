@@ -9,7 +9,7 @@
 <link rel="icon" href="../assets/img/mark.svg" type="image/svg+xml">
 <title>摸鱼司 · 内部效率平台</title>
 <script>try{var d=JSON.parse(localStorage.getItem("mg.v1")||"{}"),t=d.theme||localStorage.getItem("theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -41,7 +41,8 @@
   <main class="view" id="view"></main>
 
   <footer class="foot">
-    <span data-i18n="app.footer">纯本地运行 · 无服务端 · 无账号 · 成绩只写在这台浏览器的 localStorage 里</span>
+    <a href="../" data-i18n="app.footer">SDK Pods · 歇一会儿</a>
+    <span class="foot-wx" id="footWx" hidden>· <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" data-i18n="app.wxCredit">天气 Open-Meteo</a></span>
   </footer>
 </div>
 
@@ -118,19 +119,20 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/core.js?v=7"></script>
-<script src="js/i18n.js?v=7"></script>
-<script src="js/art.js?v=7"></script>
-<script src="js/games/memory.js?v=7"></script>
-<script src="js/games/lights.js?v=7"></script>
-<script src="js/games/cups.js?v=7"></script>
-<script src="js/games/slide.js?v=7"></script>
-<script src="js/games/sudoku.js?v=7"></script>
-<script src="js/games/sweep.js?v=7"></script>
-<script src="js/games/receipt.js?v=7"></script>
-<script src="js/games/golf.js?v=7"></script>
-<script src="js/games/tetris.js?v=7"></script>
-<script src="js/games/snake.js?v=7"></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/core.js?v=11"></script>
+<script src="js/i18n.js?v=11"></script>
+<script src="js/art.js?v=11"></script>
+<script src="js/weather.js?v=11"></script>
+<script src="js/games/memory.js?v=11"></script>
+<script src="js/games/lights.js?v=11"></script>
+<script src="js/games/cups.js?v=11"></script>
+<script src="js/games/slide.js?v=11"></script>
+<script src="js/games/sudoku.js?v=11"></script>
+<script src="js/games/sweep.js?v=11"></script>
+<script src="js/games/receipt.js?v=11"></script>
+<script src="js/games/golf.js?v=11"></script>
+<script src="js/games/tetris.js?v=11"></script>
+<script src="js/games/snake.js?v=11"></script>
+<script src="js/app.js?v=11"></script>
 </body>
 </html>

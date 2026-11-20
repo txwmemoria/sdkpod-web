@@ -60,6 +60,7 @@
 
   els.btnSound.addEventListener('click', function () {
     MG.audio.setOn(!store.data.sound);
+    if (!store.data.sound && MG.ambientStop) MG.ambientStop();
     applySound();
     MG.audio.play('click');
     MG.toast(MG.t(store.data.sound ? 'app.toastSound' : 'app.toastMuted'));
@@ -150,6 +151,21 @@
     out += '<path d="M' + x0 + ' ' + (yAt(x0) - 4) + ' Q ' + ((x0 + x1) / 2) + ' ' + (yAt((x0 + x1) / 2) - 6) + ' ' + (x1 + 3) + ' ' + (yAt(x1) - 4) + '" fill="none" stroke-width="2.2"/>';
     return out;
   }
+  /* 雨丝和雪花的位置：固定的伪随机，每次渲染都一样 */
+  function scatter(n, seed, make) {
+    var s = seed, out = '';
+    function r() { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }
+    for (var i = 0; i < n; i++) out += make(r(), r(), r(), i);
+    return out;
+  }
+  var RAIN = scatter(70, 7, function (a, b, c, i) {
+    var x = Math.round(a * 1260 - 30), y = Math.round(b * 360 - 20), len = 10 + Math.round(c * 8);
+    return '<line x1="' + x + '" y1="' + y + '" x2="' + (x - 3) + '" y2="' + (y + len) + '" style="animation-delay:-' + (c * 1.6).toFixed(2) + 's"/>';
+  });
+  var SNOW = scatter(60, 11, function (a, b, c) {
+    return '<circle cx="' + Math.round(a * 1200) + '" cy="' + Math.round(b * 300 - 40) + '" r="' + (1.4 + c * 2).toFixed(1) + '" style="animation-delay:-' + (c * 9).toFixed(2) + 's;animation-duration:' + (8 + a * 5).toFixed(1) + 's"/>';
+  });
+
   var SCENE = [
     '<svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">',
     '<defs>',
@@ -169,18 +185,32 @@
     '<circle cx="700" cy="96" r="1.2"/><circle cx="1010" cy="52" r="1.3"/><circle cx="1120" cy="84" r="1"/><circle cx="1160" cy="30" r="1.2"/>',
     '<circle cx="540" cy="120" r="1"/><circle cx="330" cy="118" r="1"/>',
     '</g>',
+    '<g class="sun-hit" role="button" aria-label="sun">',
     '<circle cx="880" cy="138" r="130" fill="url(#sc-sun)"/>',
     '<circle cx="880" cy="138" r="32" fill="var(--sun-core)"/>',
+    '<circle cx="880" cy="138" r="48" fill="transparent"/>',
+    '</g>',
     '<g class="clouds" fill="var(--cloud)">',
     '<ellipse cx="260" cy="92" rx="96" ry="12"/><ellipse cx="318" cy="80" rx="52" ry="12"/>',
     '<ellipse cx="660" cy="64" rx="74" ry="9"/><ellipse cx="700" cy="56" rx="34" ry="8"/>',
     '<ellipse cx="1060" cy="104" rx="66" ry="9"/>',
     '</g>',
+    /* 多云 / 阴天 / 雨雪时多出来的厚云 */
+    '<g class="wx-clouds" fill="var(--cloud-2)">',
+    '<ellipse cx="420" cy="70" rx="130" ry="26"/><ellipse cx="480" cy="54" rx="70" ry="24"/><ellipse cx="360" cy="60" rx="56" ry="18"/>',
+    '<ellipse cx="820" cy="96" rx="150" ry="28"/><ellipse cx="880" cy="76" rx="80" ry="26"/><ellipse cx="760" cy="86" rx="60" ry="20"/>',
+    '<ellipse cx="1130" cy="60" rx="110" ry="22"/><ellipse cx="1080" cy="48" rx="56" ry="18"/>',
+    '</g>',
     '<g fill="none" stroke="var(--bird)" stroke-width="1.8" stroke-linecap="round">',
     '<path d="M1010 92 q6 -6 12 0 q6 -6 12 0"/><path d="M1042 78 q5 -5 10 0 q5 -5 10 0"/>',
     '</g>',
+    '<rect class="wx-veil" width="1200" height="380" fill="var(--veil)"/>',
     /* 最远的山 */
     '<path d="M0 232 L90 196 L170 214 L280 170 L380 206 L470 188 L560 210 L700 176 L820 204 L930 184 L1040 206 L1130 190 L1200 200 V380 H0Z" fill="var(--hill-4)"/>',
+    '<g class="wx-caps" fill="var(--cap)">',
+    '<path d="M262 177 L280 170 L299 178 L291 180 L282 175 L272 181Z"/><path d="M684 182 L700 176 L716 183 L708 184 L700 180 L692 185Z"/>',
+    '<path d="M916 189 L930 184 L944 190 L936 191 L929 188 L922 192Z"/><path d="M1118 194 L1130 190 L1144 196 L1136 197 L1129 194 L1122 198Z"/>',
+    '</g>',
     '<path d="M0 252 C120 210 220 220 330 236 S540 206 650 218 S860 196 980 216 S1130 230 1200 218 V380 H0Z" fill="var(--hill-3)"/>',
     '<g fill="var(--tree-2)">', trees([[150, 222, 9], [168, 226, 7], [610, 206, 10], [632, 210, 8], [650, 205, 9], [990, 208, 8], [1008, 212, 6]]), '</g>',
     '<path d="M0 292 C140 256 260 266 380 282 S600 254 740 268 S960 252 1080 270 S1170 278 1200 272 V380 H0Z" fill="var(--hill-2)"/>',
@@ -193,7 +223,13 @@
     '<rect x="34" y="-6" width="5" height="10" fill="var(--roof)"/>',
     '</g>',
     '<g fill="var(--tree)">', trees([[300, 262, 13], [324, 266, 10], [760, 252, 11], [850, 258, 14], [876, 262, 10], [470, 268, 9]]), '</g>',
+    '<g class="wx-fog" fill="var(--fog)">',
+    '<ellipse cx="300" cy="262" rx="420" ry="18"/><ellipse cx="900" cy="250" rx="380" ry="16"/>',
+    '</g>',
     '<path d="M0 332 C160 296 300 308 470 318 S760 296 920 312 S1120 320 1200 312 V380 H0Z" fill="var(--hill-1)"/>',
+    '<g class="wx-fog wx-fog-2" fill="var(--fog)">',
+    '<ellipse cx="600" cy="320" rx="560" ry="14"/>',
+    '</g>',
     /* 近处田垄 */
     '<g clip-path="url(#sc-near)" fill="none" stroke="var(--field)" stroke-width="3" stroke-linecap="round">',
     '<path d="M-20 340 Q300 312 700 330"/><path d="M-20 352 Q320 324 740 342"/><path d="M-20 364 Q340 336 780 354"/>',
@@ -205,15 +241,20 @@
     '<path d="M420 352 q2 -10 6 -14 M426 352 q0 -9 -4 -15 M432 352 q3 -8 8 -11"/>',
     '<path d="M610 350 q2 -10 6 -14 M616 350 q0 -9 -4 -15"/>',
     '</g>',
+    '<g class="wx-rain" stroke="var(--rain)" stroke-width="1.6" stroke-linecap="round">', RAIN, '</g>',
+    '<g class="wx-snow" fill="var(--snow)">', SNOW, '</g>',
     /* 桌沿：茶杯 + 小盆栽 */
     '<rect x="0" y="356" width="1200" height="24" fill="var(--desk)"/>',
     '<rect x="0" y="356" width="1200" height="2" fill="#fff" opacity=".18"/>',
     '<g class="scene-desk" transform="translate(-110 0)">',
+    '<g class="cup-hit" role="button" aria-label="tea">',
+    '<rect x="1000" y="276" width="72" height="84" fill="transparent"/>',
     '<ellipse cx="1032" cy="356" rx="30" ry="4" fill="#000" opacity=".08"/>',
     '<path d="M1010 320 h44 l-4 30 a8 8 0 0 1 -8 6 h-20 a8 8 0 0 1 -8 -6z" fill="var(--cup)"/>',
     '<path d="M1012 326 h40" stroke="var(--cup-band)" stroke-width="4"/>',
     '<path d="M1054 326 h7 a9 9 0 0 1 0 18 h-6" fill="none" stroke="var(--cup)" stroke-width="5"/>',
     '<path class="steam" d="M1024 310 c-6 -10 6 -14 0 -26 M1040 310 c-6 -10 6 -14 0 -26" fill="none" stroke="var(--steam)" stroke-width="3" stroke-linecap="round"/>',
+    '</g>',
     '<path d="M1110 328 h40 l-5 28 h-30z" fill="var(--pot)"/>',
     '<path d="M1108 328 h44" stroke="var(--pot)" stroke-width="5" stroke-linecap="round"/>',
     '<path d="M1130 326 c-2 -22 -18 -30 -28 -34 c14 0 26 10 28 22 c2 -16 14 -30 30 -32 c-14 8 -24 22 -30 44z" fill="var(--leaf)"/>',
@@ -378,16 +419,123 @@
   };
   MG.icons = ICONS;
 
+  /* ---------- 窗外：时辰、天气、季节、一句《诗经》 ---------- */
+
+  function daypart() {
+    var h = new Date().getHours();
+    if (h >= 5 && h < 9) return 'dawn';
+    if (h >= 9 && h < 11) return 'morning';
+    if (h >= 11 && h < 13) return 'noon';
+    if (h >= 13 && h < 17) return 'afternoon';
+    if (h >= 17 && h < 19) return 'dusk';
+    if (h >= 19 && h < 23) return 'evening';
+    return 'late';
+  }
+
+  /* 都出自《诗经》，和主站的「如切如磋」一脉；英文是自己译的大意 */
+  var POEMS = {
+    rain:   ['风雨如晦，鸡鸣不已。', '《诗经·郑风·风雨》', 'Wind and rain, dark as dusk — still the rooster calls.'],
+    storm:  ['风雨凄凄，鸡鸣喈喈。', '《诗经·郑风·风雨》', 'Cold wind and rain; the rooster calls on.'],
+    snow:   ['今我来思，雨雪霏霏。', '《诗经·小雅·采薇》', 'Now that I return, the snow falls thick.'],
+    fog:    ['蒹葭苍苍，白露为霜。', '《诗经·秦风·蒹葭》', 'Reeds grey-green, white dew turned to frost.'],
+    night:  ['月出皎兮，佼人僚兮。', '《诗经·陈风·月出》', 'The moon comes out so bright.'],
+    spring: ['桃之夭夭，灼灼其华。', '《诗经·周南·桃夭》', 'The young peach tree, its blossoms ablaze.'],
+    summer: ['习习谷风，维风及雨。', '《诗经·小雅·谷风》', 'A gentle valley wind, and with it, rain.'],
+    autumn: ['八月剥枣，十月获稻。', '《诗经·豳风·七月》', 'Dates in the eighth month, rice in the tenth.'],
+    winter: ['北风其凉，雨雪其雱。', '《诗经·邶风·北风》', 'The north wind is cold; the snow comes down.']
+  };
+
+  function poemKey(wx, season) {
+    if (wx && (wx.kind === 'rain' || wx.kind === 'storm' || wx.kind === 'snow' || wx.kind === 'fog')) return wx.kind;
+    var dp = daypart();
+    if ((wx && !wx.isDay) || dp === 'evening' || dp === 'late') return 'night';
+    return season;
+  }
+
+  /* ---------- 环境声：WebAudio 现场合成，不加载任何音频文件 ---------- */
+  var ambient = { ctx: null, src: null, gain: null, on: false };
+
+  function ambientStart(rainy) {
+    var Ctor = w.AudioContext || w.webkitAudioContext;
+    if (!Ctor) return false;
+    if (!ambient.ctx) ambient.ctx = new Ctor();
+    var ctx = ambient.ctx;
+    if (ctx.state === 'suspended') ctx.resume();
+    var len = ctx.sampleRate * 4;
+    var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    var last = 0;
+    for (var i = 0; i < len; i++) {
+      var white = Math.random() * 2 - 1;
+      if (rainy) data[i] = white;
+      else { last = (last + 0.02 * white) / 1.02; data[i] = last * 3.5; }
+    }
+    var src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    var lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = rainy ? 2600 : 650;
+    var hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = rainy ? 380 : 40;
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(rainy ? 0.045 : 0.09, ctx.currentTime + 1.6);
+    src.connect(hp); hp.connect(lp); lp.connect(gain); gain.connect(ctx.destination);
+    src.start();
+    ambient.src = src; ambient.gain = gain; ambient.on = true;
+    return true;
+  }
+
+  function ambientStop() {
+    if (!ambient.on) return;
+    var ctx = ambient.ctx, src = ambient.src, gain = ambient.gain;
+    gain.gain.cancelScheduledValues(ctx.currentTime);
+    gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+    setTimeout(function () { try { src.stop(); } catch (e) {} }, 900);
+    ambient.on = false;
+  }
+  MG.ambientStop = ambientStop;
+
+  function teaCount(add) {
+    var n = 0;
+    try { n = parseInt(w.localStorage.getItem('mg.tea') || '0', 10) || 0; } catch (e) {}
+    if (add) { n++; try { w.localStorage.setItem('mg.tea', String(n)); } catch (e) {} }
+    return n;
+  }
+
   function buildHero() {
     var sec = MG.h('section', 'hub-hero');
+    var season = MG.weather ? MG.weather.season() : 'autumn';
+    sec.dataset.season = season;
+    sec.dataset.weather = 'clear';
+    sec.dataset.daypart = daypart();
+    sec.dataset.night = /evening|late/.test(daypart()) ? '1' : '0';
+
     var art = MG.h('div', 'hub-scene');
     art.innerHTML = SCENE;
     sec.appendChild(art);
 
     var copy = MG.h('div', 'hub-copy');
-    copy.appendChild(MG.h('p', 'hub-kicker', MG.t('hub.kicker')));
+    var kicker = MG.h('p', 'hub-kicker');
+    kicker.appendChild(MG.h('span', 'hub-greet', MG.t('hub.greet.' + daypart())));
+    var chip = MG.h('span', 'wx-chip');
+    chip.hidden = true;
+    kicker.appendChild(chip);
+    var locate = MG.h('button', 'wx-locate', '');
+    locate.type = 'button';
+    locate.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>';
+    locate.title = MG.t('hub.locate');
+    locate.setAttribute('aria-label', MG.t('hub.locate'));
+    locate.hidden = true;
+    kicker.appendChild(locate);
+    copy.appendChild(kicker);
+
     copy.appendChild(MG.h('h1', null, MG.t('hub.h1')));
-    copy.appendChild(MG.h('p', 'hub-lede', MG.t('hub.lede')));
+    var lede = MG.h('p', 'hub-lede', MG.t('hub.lede'));
+    copy.appendChild(lede);
 
     var row = MG.h('div', 'hub-actions');
     var go = button(MG.t('hub.random'), 'primary', playRandom);
@@ -395,24 +543,104 @@
     row.appendChild(go);
 
     var def = MG.dailyGame();
+    var d = def ? store.syncDaily(def.id) : null;
     if (def) {
-      var d = store.syncDaily(def.id);
       var daily = button(MG.t('hub.dailyChip', { name: MG.gtext(def).name }), 'ghost', function () { startDaily(def.id); });
       daily.classList.add('daily-btn');
       row.appendChild(daily);
-      copy.appendChild(row);
-      copy.appendChild(MG.h('p', 'hub-meta',
+    }
+    copy.appendChild(row);
+
+    var poem = MG.h('p', 'hub-poem');
+    copy.appendChild(poem);
+
+    var meta = MG.h('div', 'hub-meta');
+    if (d) {
+      meta.appendChild(MG.h('span', null,
         (d.best ? MG.t('daily.best', { n: MG.fmtScore(d.best) }) : MG.t('daily.none')) +
         ' · ' + MG.t('daily.streak', { n: d.streak || 0 }) +
         ' · ' + MG.t('hub.slacked', { t: MG.durationText(store.data.workMs) })));
-    } else {
-      copy.appendChild(row);
     }
+    var amb = MG.h('button', 'amb-btn', '');
+    amb.type = 'button';
+    meta.appendChild(amb);
+    copy.appendChild(meta);
 
     if (!store.data.seen) copy.appendChild(MG.h('p', 'hub-hint', MG.t('hub.hintFirst')));
     sec.appendChild(copy);
+
+    var current = null;
+
+    function rainy() { return current && (current.kind === 'rain' || current.kind === 'storm'); }
+    function paintAmb() {
+      amb.textContent = (ambient.on ? '♪ ' : '♫ ') + MG.t(ambient.on ? 'hub.ambOn' : (rainy() ? 'hub.ambRain' : 'hub.ambSoft'));
+      amb.classList.toggle('on', ambient.on);
+    }
+    function paintPoem() {
+      var p = POEMS[poemKey(current, season)] || POEMS.autumn;
+      poem.textContent = '';
+      poem.appendChild(MG.h('span', 'poem-line', p[0]));
+      poem.appendChild(MG.h('span', 'poem-src', MG.i18n.lang === 'en' ? p[2] + ' — Book of Songs' : p[1]));
+    }
+
+    function applyWx(wx) {
+      if (!wx || !sec.isConnected) return;
+      current = wx;
+      sec.dataset.weather = wx.kind;
+      sec.dataset.season = wx.season;
+      season = wx.season;
+      chip.hidden = false;
+      chip.textContent = wx.city + ' · ' + MG.t('hub.wx.' + wx.kind) + ' ' + wx.temp + '°';
+      locate.hidden = wx.mine;
+      var night = !wx.isDay;
+      sec.dataset.night = night ? '1' : '0';
+      var line = MG.t('hub.wxLine.' + (wx.kind === 'clear' ? (night ? 'night' : 'clear') : wx.kind));
+      lede.textContent = line + MG.t('hub.ledeTail');
+      paintPoem();
+      paintAmb();
+      var credit = document.getElementById('footWx');
+      if (credit) credit.hidden = false;
+    }
+
+    paintPoem();
+    paintAmb();
+    /* 缓存命中时回调是同步的，等这一段挂进页面之后再取 */
+    if (MG.weather) setTimeout(function () { MG.weather.get(applyWx); }, 0);
+
+    locate.addEventListener('click', function () {
+      locate.disabled = true;
+      MG.weather.locate(function (ok) {
+        locate.disabled = false;
+        MG.toast(MG.t(ok ? 'hub.located' : 'hub.locateFail'));
+        if (ok) MG.weather.get(applyWx);
+      });
+    });
+
+    amb.addEventListener('click', function () {
+      if (ambient.on) ambientStop();
+      else ambientStart(rainy());
+      paintAmb();
+    });
+
+    /* 小彩蛋：点太阳 / 月亮换昼夜；点茶杯续一杯 */
+    var sun = art.querySelector('.sun-hit');
+    if (sun) sun.addEventListener('click', function () {
+      els.btnTheme.click();
+      MG.toast(MG.t(store.data.theme === 'dark' ? 'hub.eggNight' : 'hub.eggDay'));
+    });
+    var cup = art.querySelector('.cup-hit');
+    if (cup) cup.addEventListener('click', function () {
+      var n = teaCount(true);
+      cup.classList.remove('refill');
+      void cup.getBoundingClientRect();
+      cup.classList.add('refill');
+      MG.audio.play('tick');
+      MG.toast(MG.t('hub.tea', { n: n }));
+    });
+
     return sec;
   }
+
 
   function buildGameCard(def, index) {
     var best = store.bestOf(def.id);

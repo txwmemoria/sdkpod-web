@@ -1095,3 +1095,172 @@ body {
 .mem-card .front svg { width: 62%; height: 62%; display: block; }
 .ms-cell svg { width: 78%; height: 78%; display: block; margin: auto; }
 .ms-cell.bee { display: grid; place-items: center; }
+
+/* =========================================================================
+   窗外的天气与季节（大厅主视觉）
+   ========================================================================= */
+.hub-hero {
+  --cloud-2: rgba(255, 255, 255, .72);
+  --veil: rgba(150, 160, 165, .0);
+  --cap: rgba(255, 255, 255, .9);
+  --fog: rgba(255, 255, 255, .55);
+  --rain: rgba(110, 135, 160, .45);
+  --snow: rgba(255, 255, 255, .95);
+}
+[data-theme="dark"] .hub-hero {
+  --cloud-2: rgba(160, 175, 185, .12);
+  --cap: rgba(220, 228, 235, .5);
+  --fog: rgba(190, 205, 215, .1);
+  --rain: rgba(170, 195, 215, .32);
+  --snow: rgba(230, 236, 240, .75);
+}
+
+/* 图层默认都关着，由 data-weather / data-season 打开 */
+.wx-clouds, .wx-veil, .wx-fog, .wx-rain, .wx-snow, .wx-caps { display: none; }
+.hub-hero[data-weather="cloudy"] .wx-clouds { display: inline; opacity: .7; }
+.hub-hero[data-weather="overcast"] .wx-clouds,
+.hub-hero[data-weather="rain"] .wx-clouds,
+.hub-hero[data-weather="storm"] .wx-clouds,
+.hub-hero[data-weather="snow"] .wx-clouds { display: inline; }
+.hub-hero[data-weather="overcast"] .wx-veil,
+.hub-hero[data-weather="fog"] .wx-veil,
+.hub-hero[data-weather="rain"] .wx-veil,
+.hub-hero[data-weather="storm"] .wx-veil,
+.hub-hero[data-weather="snow"] .wx-veil { display: inline; }
+.hub-hero[data-weather="overcast"] { --veil: rgba(170, 178, 180, .28); }
+.hub-hero[data-weather="fog"] { --veil: rgba(225, 228, 226, .45); }
+.hub-hero[data-weather="rain"] { --veil: rgba(150, 162, 170, .32); --cloud-2: rgba(225, 230, 232, .85); }
+.hub-hero[data-weather="storm"] { --veil: rgba(110, 120, 130, .42); --cloud-2: rgba(170, 178, 185, .9); }
+.hub-hero[data-weather="snow"] { --veil: rgba(230, 235, 238, .3); }
+[data-theme="dark"] .hub-hero[data-weather] { --veil: rgba(10, 14, 18, .25); }
+.hub-hero[data-weather="fog"] .wx-fog { display: inline; }
+.hub-hero[data-weather="rain"] .wx-rain,
+.hub-hero[data-weather="storm"] .wx-rain { display: inline; }
+.hub-hero[data-weather="snow"] .wx-snow,
+.hub-hero[data-weather="snow"] .wx-caps,
+.hub-hero[data-season="winter"] .wx-caps { display: inline; }
+.hub-hero[data-weather="overcast"] .sun-hit,
+.hub-hero[data-weather="fog"] .sun-hit { opacity: .45; }
+.hub-hero[data-weather="rain"] .sun-hit,
+.hub-hero[data-weather="storm"] .sun-hit,
+.hub-hero[data-weather="snow"] .sun-hit { opacity: .2; }
+.hub-hero[data-weather="rain"] .steam,
+.hub-hero[data-weather="snow"] .steam { stroke-width: 3.6; }
+
+/* 雨丝很慢、很淡；雪花慢慢飘。没有闪电，没有闪光 */
+.wx-rain line { animation: rainfall 1.6s linear infinite; }
+@keyframes rainfall {
+  0% { transform: translate(0, -20px); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(-14px, 90px); opacity: 0; }
+}
+.hub-hero[data-weather="storm"] .wx-rain line { animation-duration: 1.2s; }
+.wx-snow circle { animation: snowfall 10s linear infinite; }
+@keyframes snowfall {
+  0% { transform: translate(0, -20px); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate(18px, 150px); }
+  100% { transform: translate(-6px, 330px); opacity: 0; }
+}
+.wx-fog { animation: fogdrift 40s ease-in-out infinite alternate; }
+@keyframes fogdrift { to { transform: translateX(-50px); } }
+
+/* 季节：只换树和近处的山色 */
+.hub-hero[data-season="spring"] { --tree: #86b98c; --tree-2: #e8b9c2; }
+.hub-hero[data-season="autumn"] { --tree: #c99258; --tree-2: #dcb57e; --hill-1: #9fb38c; }
+.hub-hero[data-season="winter"] { --tree: #8e9f97; --tree-2: #b9c6c0; --hill-1: #a3b5a8; --hill-2: #bccbc0; }
+[data-theme="dark"] .hub-hero[data-season="spring"] { --tree: #24382c; --tree-2: #4a3640; }
+[data-theme="dark"] .hub-hero[data-season="autumn"] { --tree: #4a3a26; --tree-2: #3d3324; --hill-1: #1b2620; }
+[data-theme="dark"] .hub-hero[data-season="winter"] { --tree: #26302c; --tree-2: #2c3632; }
+
+/* 可以点的太阳和茶杯 */
+.sun-hit, .cup-hit { cursor: pointer; pointer-events: auto; }
+.sun-hit { transition: opacity .6s ease; }
+.cup-hit.refill .steam { animation: refill 1.8s ease-out; }
+@keyframes refill {
+  0% { opacity: 0; transform: translateY(6px); }
+  30% { opacity: 1; transform: translateY(-2px); }
+  100% { opacity: .5; transform: translateY(-8px); }
+}
+
+/* 文案区的新元素 */
+.hub-kicker { flex-wrap: wrap; }
+.wx-chip {
+  display: inline-flex; align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  color: var(--ink-2);
+  letter-spacing: .04em;
+}
+[data-theme="dark"] .wx-chip { background: rgba(27, 36, 32, .7); }
+.wx-locate {
+  width: 24px; height: 24px;
+  display: inline-grid; place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.wx-locate:hover { background: rgba(255, 255, 255, .55); }
+.wx-locate svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.hub-poem {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+  margin-top: 18px;
+  font-family: var(--serif);
+  color: var(--ink-2);
+}
+.poem-line { font-size: 15px; letter-spacing: .12em; }
+[data-lang="en"] .poem-line { letter-spacing: .08em; }
+.poem-src { font-size: 12px; opacity: .75; letter-spacing: .02em; }
+.hub-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.amb-btn {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 54, 49, .14);
+  background: rgba(255, 255, 255, .45);
+  color: var(--ink-2);
+  font-size: 12px;
+  cursor: pointer;
+}
+.amb-btn.on { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+[data-theme="dark"] .amb-btn { background: rgba(27, 36, 32, .6); border-color: var(--line); }
+
+.foot { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.foot a { color: inherit; text-decoration: none; }
+.foot a:hover { color: var(--ink); }
+
+/* 真实的夜晚：浅色主题下主视觉也换成月夜，文字随之变浅 */
+.hub-hero[data-night="1"] {
+  --sky-1: #1d2a36; --sky-2: #223129;
+  --sun: #cfd9e0; --sun-core: #e3e9ec;
+  --cloud: rgba(200, 215, 225, .1); --cloud-2: rgba(170, 185, 195, .16);
+  --hill-4: #24332f; --hill-3: #22332d; --hill-2: #1e2d27; --hill-1: #1a2822;
+  --tree: #1b2b24; --tree-2: #22342b;
+  --house: #3a3a35; --roof: #4d3a33; --window: #f0c27a;
+  --field: rgba(255, 255, 255, .04); --fence: rgba(160, 150, 130, .3);
+  --bird: transparent; --star: rgba(235, 240, 245, .8);
+  --desk: #2e2924; --cup: #d8d2c6; --cup-band: #8e7458; --pot: #8a5f4b; --leaf: #46775c;
+  --steam: rgba(220, 230, 235, .4);
+  --fog: rgba(190, 205, 215, .12); --cap: rgba(220, 228, 235, .5);
+  --rain: rgba(170, 195, 215, .35); --snow: rgba(235, 240, 244, .8);
+  --veil: rgba(10, 14, 18, .2);
+  --ink: #e4ebe6; --ink-2: #c3cec7;
+  color: var(--ink);
+}
+.hub-hero[data-night="1"][data-season="autumn"] { --tree: #4a3a26; --tree-2: #3d3324; }
+.hub-hero[data-night="1"][data-season="spring"] { --tree-2: #4a3640; }
+.hub-hero[data-night="1"] .hub-copy::before { opacity: .5; }
+.hub-hero[data-night="1"] .daily-btn,
+.hub-hero[data-night="1"] .wx-chip,
+.hub-hero[data-night="1"] .amb-btn,
+.hub-hero[data-night="1"] .hub-hint { background: rgba(20, 28, 25, .55); border-color: rgba(255, 255, 255, .12); color: var(--ink); }
+.hub-hero[data-night="1"] .btn.primary { color: #fff; }
+
+/* 手机上主视觉变高：文字下面留出桌沿，茶杯和盆栽不压字 */
+@media (max-width: 720px) {
+  .hub-copy { padding-bottom: 150px; }
+}

@@ -83,9 +83,31 @@
     if (on && play && play.state === 'running') pauseGame();
     els.fake.hidden = !on;
     document.body.classList.toggle('faking', on);
+    disguiseTab(on);
+  }
+
+  /* 假装工作时，连浏览器标签的标题和图标都换成表格 */
+  var favicon = document.getElementById('favicon');
+  var realIcon = favicon ? favicon.getAttribute('href') : '';
+  var SHEET_ICON = 'data:image/svg+xml,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="3" y="4" width="26" height="24" rx="3" fill="#217346"/>' +
+    '<path d="M3 11h26M3 17h26M3 23h26M12 4v24M21 4v24" stroke="#fff" stroke-opacity=".55" stroke-width="1.4"/></svg>');
+  function disguiseTab(on) {
+    if (on) {
+      document.title = MG.t('fake.tab');
+      if (favicon) favicon.setAttribute('href', SHEET_ICON);
+    } else {
+      document.title = MG.t('app.title');
+      if (favicon) favicon.setAttribute('href', realIcon);
+    }
   }
 
   /* ------------------------------------------------------------ 摸鱼计时 */
+
+  /* 护眼 20-20-20：连续玩 20 分钟，停下来看 6 米外 20 秒 */
+  var EYE_EVERY = 20 * 60 * 1000;
+  var sessionMs = 0;
+  var nextEye = EYE_EVERY;
 
   function settle() {
     if (!play || play.state !== 'running' || !play.mark) return;
@@ -94,10 +116,44 @@
     if (!(delta > 0)) return;
     play.mark = now;
     play.playedMs += delta;
+    sessionMs += delta;
     store.addWork(delta);
     store.save();
     refreshWorkTime();
+    if (sessionMs >= nextEye) {
+      nextEye = sessionMs + EYE_EVERY;
+      setTimeout(eyeBreak, 0);
+    }
   }
+
+  function eyeBreak() {
+    if (!play || play.state !== 'running') return;
+    pauseGame();
+    var panel = MG.h('div', 'panel panel-eye');
+    panel.appendChild(artBox('panel-head', MG.art.html('leaf'), ''));
+    panel.appendChild(MG.h('h3', null, MG.t('eye.title')));
+    panel.appendChild(MG.h('p', null, MG.t('eye.text')));
+    var count = MG.h('div', 'eye-count', '20');
+    panel.appendChild(count);
+    var actions = MG.h('div', 'actions');
+    var go = button(MG.t('panel.resume'), '', resumeGame);
+    actions.appendChild(go);
+    panel.appendChild(actions);
+    showOverlay(panel, 'eye');
+    var left = 20;
+    var timer = setInterval(function () {
+      if (!play || play.overlayKind !== 'eye') { clearInterval(timer); return; }
+      left--;
+      count.textContent = left > 0 ? String(left) : MG.t('eye.done');
+      if (left <= 0) {
+        clearInterval(timer);
+        go.classList.add('primary');
+        MG.audio.play('good');
+      }
+    }, 1000);
+  }
+  MG.shell = MG.shell || {};
+  MG.shell.eyeBreak = eyeBreak;
 
   setInterval(settle, 10000);
   w.addEventListener('beforeunload', function () { settle(); store.save(); });
@@ -166,6 +222,21 @@
     return '<circle cx="' + Math.round(a * 1200) + '" cy="' + Math.round(b * 300 - 40) + '" r="' + (1.4 + c * 2).toFixed(1) + '" style="animation-delay:-' + (c * 9).toFixed(2) + 's;animation-duration:' + (8 + a * 5).toFixed(1) + 's"/>';
   });
 
+  var LEAF_FILLS = ['#d79a5c', '#c9824c', '#e2b26a', '#b8794a'];
+  var DRIFT_LEAVES = scatter(9, 23, function (a, b, c, i) {
+    var x = Math.round(380 + a * 800), y = Math.round(30 + b * 120);
+    return '<g style="animation-delay:-' + (c * 16).toFixed(1) + 's;animation-duration:' + (15 + a * 8).toFixed(1) + 's">' +
+      '<path transform="translate(' + x + ' ' + y + ') rotate(' + Math.round(c * 360) + ')" d="M0 -6 C5 -4 6 2 0 7 C-6 2 -5 -4 0 -6Z" fill="' + LEAF_FILLS[i % 4] + '" opacity=".85"/></g>';
+  });
+  var DRIFT_PETALS = scatter(10, 31, function (a, b, c) {
+    var x = Math.round(380 + a * 800), y = Math.round(30 + b * 120);
+    return '<g style="animation-delay:-' + (c * 16).toFixed(1) + 's;animation-duration:' + (16 + a * 8).toFixed(1) + 's">' +
+      '<ellipse cx="' + x + '" cy="' + y + '" rx="3.6" ry="2.4" fill="#f1c4cb" opacity=".9"/></g>';
+  });
+  var FIREFLIES = scatter(12, 41, function (a, b, c) {
+    return '<circle cx="' + Math.round(420 + a * 760) + '" cy="' + Math.round(250 + b * 80) + '" r="2.2" fill="#f4e3a1" style="animation-delay:-' + (c * 5).toFixed(1) + 's"/>';
+  });
+
   var SCENE = [
     '<svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">',
     '<defs>',
@@ -201,7 +272,8 @@
     '<ellipse cx="820" cy="96" rx="150" ry="28"/><ellipse cx="880" cy="76" rx="80" ry="26"/><ellipse cx="760" cy="86" rx="60" ry="20"/>',
     '<ellipse cx="1130" cy="60" rx="110" ry="22"/><ellipse cx="1080" cy="48" rx="56" ry="18"/>',
     '</g>',
-    '<g fill="none" stroke="var(--bird)" stroke-width="1.8" stroke-linecap="round">',
+    '<g class="birds" fill="none" stroke="var(--bird)" stroke-width="1.8" stroke-linecap="round">',
+    '<rect x="996" y="62" width="80" height="44" fill="transparent" stroke="none"/>',
     '<path d="M1010 92 q6 -6 12 0 q6 -6 12 0"/><path d="M1042 78 q5 -5 10 0 q5 -5 10 0"/>',
     '</g>',
     '<rect class="wx-veil" width="1200" height="380" fill="var(--veil)"/>',
@@ -215,10 +287,10 @@
     '<g fill="var(--tree-2)">', trees([[150, 222, 9], [168, 226, 7], [610, 206, 10], [632, 210, 8], [650, 205, 9], [990, 208, 8], [1008, 212, 6]]), '</g>',
     '<path d="M0 292 C140 256 260 266 380 282 S600 254 740 268 S960 252 1080 270 S1170 278 1200 272 V380 H0Z" fill="var(--hill-2)"/>',
     /* 农舍 */
-    '<g transform="translate(700 236)">',
+    '<g class="house-hit" transform="translate(700 236)">',
     '<rect x="0" y="12" width="46" height="26" fill="var(--house)"/>',
     '<path d="M-6 14 L23 -6 L52 14Z" fill="var(--roof)"/>',
-    '<rect x="8" y="20" width="10" height="9" rx="1.5" fill="var(--window)"/>',
+    '<rect class="house-window" x="8" y="20" width="10" height="9" rx="1.5" fill="var(--window)"/>',
     '<rect x="28" y="22" width="9" height="16" rx="1.5" fill="var(--roof)" opacity=".75"/>',
     '<rect x="34" y="-6" width="5" height="10" fill="var(--roof)"/>',
     '</g>',
@@ -241,6 +313,9 @@
     '<path d="M420 352 q2 -10 6 -14 M426 352 q0 -9 -4 -15 M432 352 q3 -8 8 -11"/>',
     '<path d="M610 350 q2 -10 6 -14 M616 350 q0 -9 -4 -15"/>',
     '</g>',
+    '<g class="drift drift-leaves">', DRIFT_LEAVES, '</g>',
+    '<g class="drift drift-petals">', DRIFT_PETALS, '</g>',
+    '<g class="drift drift-flies">', FIREFLIES, '</g>',
     '<g class="wx-rain" stroke="var(--rain)" stroke-width="1.6" stroke-linecap="round">', RAIN, '</g>',
     '<g class="wx-snow" fill="var(--snow)">', SNOW, '</g>',
     /* 桌沿：茶杯 + 小盆栽 */
@@ -432,17 +507,51 @@
     return 'late';
   }
 
-  /* 都出自《诗经》，和主站的「如切如磋」一脉；英文是自己译的大意 */
+  /* 都出自《诗经》，和主站的「如切如磋」一脉；英文是自己译的大意。每种心情一小组，按日子轮换，点一下换一句 */
   var POEMS = {
-    rain:   ['风雨如晦，鸡鸣不已。', '《诗经·郑风·风雨》', 'Wind and rain, dark as dusk — still the rooster calls.'],
-    storm:  ['风雨凄凄，鸡鸣喈喈。', '《诗经·郑风·风雨》', 'Cold wind and rain; the rooster calls on.'],
-    snow:   ['今我来思，雨雪霏霏。', '《诗经·小雅·采薇》', 'Now that I return, the snow falls thick.'],
-    fog:    ['蒹葭苍苍，白露为霜。', '《诗经·秦风·蒹葭》', 'Reeds grey-green, white dew turned to frost.'],
-    night:  ['月出皎兮，佼人僚兮。', '《诗经·陈风·月出》', 'The moon comes out so bright.'],
-    spring: ['桃之夭夭，灼灼其华。', '《诗经·周南·桃夭》', 'The young peach tree, its blossoms ablaze.'],
-    summer: ['习习谷风，维风及雨。', '《诗经·小雅·谷风》', 'A gentle valley wind, and with it, rain.'],
-    autumn: ['八月剥枣，十月获稻。', '《诗经·豳风·七月》', 'Dates in the eighth month, rice in the tenth.'],
-    winter: ['北风其凉，雨雪其雱。', '《诗经·邶风·北风》', 'The north wind is cold; the snow comes down.']
+    rain: [
+      ['风雨如晦，鸡鸣不已。', '《郑风·风雨》', 'Wind and rain, dark as dusk — still the rooster calls.'],
+      ['习习谷风，以阴以雨。', '《邶风·谷风》', 'A soft valley wind brings cloud, then rain.']
+    ],
+    storm: [
+      ['风雨凄凄，鸡鸣喈喈。', '《郑风·风雨》', 'Cold wind and rain; the rooster calls on.'],
+      ['殷其雷，在南山之阳。', '《召南·殷其雷》', 'Thunder rumbles on the sunny side of the southern hill.']
+    ],
+    snow: [
+      ['今我来思，雨雪霏霏。', '《小雅·采薇》', 'Now that I return, the snow falls thick.'],
+      ['北风其凉，雨雪其雱。', '《邶风·北风》', 'The north wind is cold; the snow comes down.']
+    ],
+    fog: [
+      ['蒹葭苍苍，白露为霜。', '《秦风·蒹葭》', 'Reeds grey-green, white dew turned to frost.'],
+      ['蒹葭萋萋，白露未晞。', '《秦风·蒹葭》', 'Reeds lush and thick; the dew not yet dry.']
+    ],
+    night: [
+      ['月出皎兮，佼人僚兮。', '《陈风·月出》', 'The moon comes out so bright.'],
+      ['嘒彼小星，三五在东。', '《召南·小星》', 'Faint little stars, three or five in the east.']
+    ],
+    spring: [
+      ['桃之夭夭，灼灼其华。', '《周南·桃夭》', 'The young peach tree, its blossoms ablaze.'],
+      ['春日载阳，有鸣仓庚。', '《豳风·七月》', 'Spring days grow warm; the orioles sing.'],
+      ['采采芣苢，薄言采之。', '《周南·芣苢》', 'Gather, gather the plantain — let us gather it.']
+    ],
+    summer: [
+      ['呦呦鹿鸣，食野之苹。', '《小雅·鹿鸣》', 'Deer call to each other, grazing in the wild.'],
+      ['绵绵葛藟，在河之浒。', '《王风·葛藟》', 'Long kudzu vines along the riverbank.']
+    ],
+    autumn: [
+      ['八月剥枣，十月获稻。', '《豳风·七月》', 'Dates in the eighth month, rice in the tenth.'],
+      ['七月流火，九月授衣。', '《豳风·七月》', 'The Fire Star sinks in the seventh month; warm clothes come out in the ninth.']
+    ],
+    winter: [
+      ['二之日凿冰冲冲。', '《豳风·七月》', 'In the deep of winter we cut ice — chip, chip.'],
+      ['北风其喈，雨雪其霏。', '《邶风·北风》', 'The north wind howls; the snow drifts down.']
+    ],
+    any: [
+      ['如切如磋，如琢如磨。', '《卫风·淇奥》', 'As cut, as filed; as chiselled, as polished.'],
+      ['投我以木瓜，报之以琼琚。', '《卫风·木瓜》', 'You gave me a quince; I gave you a jade pendant.'],
+      ['青青子衿，悠悠我心。', '《郑风·子衿》', 'Blue, blue your collar; long, long my longing.'],
+      ['昔我往矣，杨柳依依。', '《小雅·采薇》', 'When I set out, the willows swayed.']
+    ]
   };
 
   function poemKey(wx, season) {
@@ -450,6 +559,56 @@
     var dp = daypart();
     if ((wx && !wx.isDay) || dp === 'evening' || dp === 'late') return 'night';
     return season;
+  }
+
+  /* 当前心情那组在前，通用的几句在后；起点按日期轮换 */
+  function poemList(key) { return (POEMS[key] || []).concat(POEMS.any); }
+  var poemShift = 0;
+
+  /* ---------- 二十四节气（寿星公式，适用于 2001–2099） ---------- */
+  var TERMS = [
+    [1, 5.4055, '小寒', 'Minor Cold', '天渐寒，尚未大冷', 'cold, not yet bitter'],
+    [1, 20.12, '大寒', 'Major Cold', '一年中最冷的时候', 'the coldest stretch of the year'],
+    [2, 3.87, '立春', 'Start of Spring', '东风解冻，春天开始', 'the east wind thaws the ice'],
+    [2, 18.73, '雨水', 'Rain Water', '冰雪化开，散而为雨', 'snow melts and falls as rain'],
+    [3, 5.63, '惊蛰', 'Awakening of Insects', '春雷乍动，惊醒蛰虫', 'spring thunder wakes the sleeping insects'],
+    [3, 20.646, '春分', 'Spring Equinox', '昼夜平分', 'day and night in balance'],
+    [4, 4.81, '清明', 'Clear and Bright', '万物洁齐而清明', 'everything washed clean and bright'],
+    [4, 20.1, '谷雨', 'Grain Rain', '雨生百谷', 'rain that grows the grain'],
+    [5, 5.52, '立夏', 'Start of Summer', '万物至此皆长大', 'everything grows tall'],
+    [5, 21.04, '小满', 'Grain Buds', '麦粒渐满，尚未全熟', 'the grain fills, not yet ripe'],
+    [6, 5.678, '芒种', 'Grain in Ear', '有芒之谷，可以播种', 'time to sow the bearded grain'],
+    [6, 21.37, '夏至', 'Summer Solstice', '白昼最长', 'the longest day'],
+    [7, 7.108, '小暑', 'Minor Heat', '暑气渐盛', 'the heat builds'],
+    [7, 22.83, '大暑', 'Major Heat', '一年中最热的时候', 'the hottest stretch of the year'],
+    [8, 7.5, '立秋', 'Start of Autumn', '凉风至', 'the cool wind arrives'],
+    [8, 23.13, '处暑', 'End of Heat', '暑气至此而止', 'the heat finally ends'],
+    [9, 7.646, '白露', 'White Dew', '露凝而白', 'dew turns white'],
+    [9, 23.042, '秋分', 'Autumn Equinox', '昼夜又一次平分', 'day and night in balance again'],
+    [10, 8.318, '寒露', 'Cold Dew', '露气寒冷，将凝结', 'the dew grows cold'],
+    [10, 23.438, '霜降', 'Frost’s Descent', '气肃而凝，露结为霜', 'dew turns to frost'],
+    [11, 7.438, '立冬', 'Start of Winter', '水始冰，地始冻', 'water begins to freeze'],
+    [11, 22.36, '小雪', 'Minor Snow', '气寒而将雪，雪未盛', 'cold enough for the first light snow'],
+    [12, 7.18, '大雪', 'Major Snow', '至此而雪盛', 'the heavy snows begin'],
+    [12, 21.94, '冬至', 'Winter Solstice', '白昼最短，阳气始生', 'the shortest day; light begins to return']
+  ];
+
+  function termDate(year, t) {
+    var y = year % 100;
+    var leap = t[0] <= 2 ? Math.floor((y - 1) / 4) : Math.floor(y / 4);
+    return new Date(year, t[0] - 1, Math.floor(y * 0.2422 + t[1]) - leap);
+  }
+
+  /* 今天是节气，或者三天内就到 → 返回 { t, days } */
+  function nearTerm() {
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    for (var k = 0; k < TERMS.length; k++) {
+      var d = termDate(today.getFullYear(), TERMS[k]);
+      var days = Math.round((d - today) / 86400000);
+      if (days >= 0 && days <= 3) return { t: TERMS[k], days: days, date: d };
+    }
+    return null;
   }
 
   /* ---------- 环境声：WebAudio 现场合成，不加载任何音频文件 ---------- */
@@ -531,6 +690,17 @@
     locate.setAttribute('aria-label', MG.t('hub.locate'));
     locate.hidden = true;
     kicker.appendChild(locate);
+    var term = nearTerm();
+    if (term) {
+      var en = MG.i18n.lang === 'en';
+      var name = en ? term.t[3] : term.t[2];
+      var label = term.days === 0
+        ? MG.t('hub.termToday', { name: name })
+        : MG.t('hub.termSoon', { name: name, n: term.days });
+      var tchip = MG.h('span', 'term-chip', label);
+      tchip.title = (en ? term.t[5] : term.t[4]) + ' · ' + (term.date.getMonth() + 1) + '/' + term.date.getDate();
+      kicker.appendChild(tchip);
+    }
     copy.appendChild(kicker);
 
     copy.appendChild(MG.h('h1', null, MG.t('hub.h1')));
@@ -577,11 +747,20 @@
       amb.classList.toggle('on', ambient.on);
     }
     function paintPoem() {
-      var p = POEMS[poemKey(current, season)] || POEMS.autumn;
+      var list = poemList(poemKey(current, season));
+      var p = list[(MG.dayNumber() + poemShift) % list.length];
       poem.textContent = '';
       poem.appendChild(MG.h('span', 'poem-line', p[0]));
-      poem.appendChild(MG.h('span', 'poem-src', MG.i18n.lang === 'en' ? p[2] + ' — Book of Songs' : p[1]));
+      poem.appendChild(MG.h('span', 'poem-src', MG.i18n.lang === 'en' ? p[2] + ' — Book of Songs' : '《诗经·' + p[1].slice(1)));
+      poem.title = MG.t('hub.poemMore');
     }
+    poem.addEventListener('click', function () {
+      poemShift++;
+      poem.classList.remove('turn');
+      void poem.offsetWidth;
+      poem.classList.add('turn');
+      paintPoem();
+    });
 
     function applyWx(wx) {
       if (!wx || !sec.isConnected) return;
@@ -627,6 +806,18 @@
     if (sun) sun.addEventListener('click', function () {
       els.btnTheme.click();
       MG.toast(MG.t(store.data.theme === 'dark' ? 'hub.eggNight' : 'hub.eggDay'));
+    });
+    var birds = art.querySelector('.birds');
+    if (birds) birds.addEventListener('click', function () {
+      if (birds.classList.contains('away')) return;
+      birds.classList.add('away');
+      MG.toast(MG.t('hub.birds'));
+      setTimeout(function () { birds.classList.remove('away'); }, 30000);
+    });
+    var house = art.querySelector('.house-hit');
+    if (house) house.addEventListener('click', function () {
+      var dark = house.classList.toggle('lights-off');
+      MG.toast(MG.t(dark ? 'hub.houseOff' : 'hub.houseOn'));
     });
     var cup = art.querySelector('.cup-hit');
     if (cup) cup.addEventListener('click', function () {
@@ -1135,7 +1326,11 @@
   function showOver(result, silent) {
     var panel = MG.h('div', 'panel panel-over');
     panel.appendChild(artBox('panel-head', MG.art.html(result.record ? 'ribbon' : 'sprout'), ''));
-    if (result.record) panel.appendChild(MG.h('span', 'record-ribbon', 'NEW BEST'));
+    if (result.record) {
+      var seal = MG.h('span', 'seal');
+      seal.appendChild(MG.h('span', null, MG.t('panel.seal')));
+      panel.appendChild(seal);
+    }
     panel.appendChild(MG.h('h3', null, MG.t(result.record ? 'panel.record' : 'panel.over')));
 
     panel.appendChild(MG.h('div', 'big-label', MG.t('panel.gained')));
@@ -1308,6 +1503,7 @@
   });
 
   document.addEventListener('visibilitychange', function () {
+    if (!fakeOn) document.title = document.hidden ? MG.t('app.awayTitle') : MG.t('app.title');
     if (document.hidden && play && play.state === 'running') pauseGame();
   });
 
@@ -1363,6 +1559,12 @@
       }
     })(t0);
   }
+
+  /* 打开开发者工具的人，也送一句 */
+  try {
+    console.log('%c如切如磋，如琢如磨。', 'font: 600 18px "Songti SC", serif; color: #4f8a6f; padding: 6px 0');
+    console.log('%c《诗经·卫风·淇奥》 · SDK Pods · https://sdkpod.com', 'color: #7f8c85');
+  } catch (e) {}
 
   /* 供自测页读取的只读状态 */
   MG.shell = MG.shell || {};

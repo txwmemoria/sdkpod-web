@@ -1287,3 +1287,97 @@ body {
   .rules-label { display: none; }
   .rules-btn { width: 38px; padding: 0; }
 }
+
+/* =========================================================================
+   小惊喜
+   ========================================================================= */
+
+/* 节气 */
+.term-chip {
+  display: inline-flex; align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #b9806a 45%, transparent);
+  color: #9a5f48;
+  font-family: var(--serif);
+  letter-spacing: .08em;
+  cursor: help;
+}
+[data-theme="dark"] .term-chip,
+.hub-hero[data-night="1"] .term-chip { color: #e3b29a; border-color: rgba(227, 178, 154, .4); }
+
+/* 诗：点一下换一句 */
+.hub-poem { cursor: pointer; width: fit-content; border-radius: 8px; }
+.hub-poem:hover .poem-line { text-decoration: underline dotted; text-underline-offset: 5px; text-decoration-color: currentColor; }
+.hub-poem.turn { animation: poemTurn .6s ease; }
+@keyframes poemTurn { from { opacity: 0; transform: translateY(4px); } }
+
+/* 季节飘落物：落叶、花瓣、萤火虫 */
+.drift { display: none; }
+.hub-hero[data-season="autumn"] .drift-leaves,
+.hub-hero[data-season="spring"] .drift-petals { display: inline; }
+.hub-hero[data-season="summer"][data-night="1"] .drift-flies { display: inline; }
+.hub-hero[data-weather="rain"] .drift,
+.hub-hero[data-weather="storm"] .drift,
+.hub-hero[data-weather="snow"] .drift { display: none; }
+.drift-leaves > g, .drift-petals > g { animation: leafFall 18s linear infinite; }
+@keyframes leafFall {
+  0% { transform: translate(0, -40px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  30% { transform: translate(-30px, 40px) rotate(60deg); }
+  55% { transform: translate(10px, 110px) rotate(140deg); }
+  80% { transform: translate(-25px, 180px) rotate(220deg); opacity: .9; }
+  100% { transform: translate(-5px, 240px) rotate(300deg); opacity: 0; }
+}
+.drift-flies circle { animation: glow 5s ease-in-out infinite; }
+@keyframes glow {
+  0%, 100% { opacity: .15; transform: translate(0, 0); }
+  50% { opacity: .9; transform: translate(6px, -8px); }
+}
+
+/* 鸟会飞走，农舍会熄灯 */
+.birds, .house-hit { cursor: pointer; pointer-events: auto; }
+.birds { transition: transform 4s cubic-bezier(.4, 0, .6, 1), opacity 3s ease; }
+.birds.away { transform: translate(260px, -140px); opacity: 0; }
+.house-window { transition: fill .6s ease; }
+.house-hit.lights-off .house-window { fill: #6b6a62; }
+
+/* 破纪录：一枚朱砂印 */
+.seal {
+  position: absolute;
+  top: 16px; right: 18px;
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  border: 2.5px solid #b8463a;
+  border-radius: 6px;
+  color: #b8463a;
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  writing-mode: vertical-rl;
+  transform: rotate(-8deg);
+  opacity: .88;
+  background: rgba(184, 70, 58, .06);
+  animation: stamp .5s cubic-bezier(.2, .9, .3, 1.2) .25s both;
+}
+[data-lang="en"] .seal { writing-mode: horizontal-tb; font-size: 13px; letter-spacing: .06em; }
+@keyframes stamp {
+  from { transform: rotate(-8deg) scale(1.6); opacity: 0; }
+  to { transform: rotate(-8deg) scale(1); opacity: .88; }
+}
+
+/* 护眼提醒 */
+.eye-count {
+  margin: 12px 0 2px;
+  font-family: var(--serif);
+  font-size: 46px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift { display: none !important; }
+}
+.drift-leaves > g, .drift-petals > g, .drift-flies circle { transform-box: fill-box; transform-origin: center; }

@@ -1264,3 +1264,26 @@ body {
 @media (max-width: 720px) {
   .hub-copy { padding-bottom: 150px; }
 }
+
+/* ---------- 对局中的玩法 ---------- */
+.rules-btn { gap: 6px; }
+.rules-btn > span:first-child {
+  width: 18px; height: 18px;
+  display: inline-grid; place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+[data-theme="dark"] .rules-btn > span:first-child { color: var(--accent); }
+.play-howto {
+  max-width: 60em;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+@media (max-width: 620px) {
+  .rules-label { display: none; }
+  .rules-btn { width: 38px; padding: 0; }
+}

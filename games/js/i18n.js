@@ -109,6 +109,10 @@
       'play.dailyRunning': '进行中',
       'patart.start': '准备好了吗',
       'play.back': '回大厅',
+      'play.rules': '玩法',
+      'play.rulesTitle': '看规则（会先暂停）· 快捷键 ?',
+      'panel.rules': '怎么玩',
+      'panel.gotIt': '知道了',
 
       /* ---------- 遮罩 ---------- */
       'panel.ready': '准备好了吗？',
@@ -467,6 +471,10 @@
       'play.dailyChip': 'Daily',
       'play.dailyRunning': 'live',
       'play.back': 'Back to hub',
+      'play.rules': 'How to play',
+      'play.rulesTitle': 'Show the rules (pauses the game) · shortcut ?',
+      'panel.rules': 'How to play',
+      'panel.gotIt': 'Got it',
 
       /* ---------- panels ---------- */
       'panel.ready': 'Ready?',

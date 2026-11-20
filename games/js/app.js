@@ -875,7 +875,12 @@
     var meta = document.createElement('div');
     meta.id = 'meta';
     var pauseBtn = button(MG.t('play.pause'), '', function () { togglePause(); });
+    var rulesBtn = button('', 'rules-btn', function () { toggleRules(); });
+    rulesBtn.innerHTML = '<span aria-hidden="true">?</span> <span class="rules-label"></span>';
+    rulesBtn.querySelector('.rules-label').textContent = MG.t('play.rules');
+    rulesBtn.title = MG.t('play.rulesTitle');
     actions.appendChild(meta);
+    actions.appendChild(rulesBtn);
     actions.appendChild(pauseBtn);
 
     head.appendChild(back);
@@ -885,6 +890,7 @@
 
     var stage = MG.h('div', 'stage');
 
+    var howto = MG.h('p', 'play-howto', T.howto || '');
     var hint = MG.h('div', 'play-hint');
     (T.controls || []).forEach(function (c) {
       if (Object.prototype.toString.call(c) === '[object Array]') hint.appendChild(controlRow(c[0], c[1]));
@@ -894,10 +900,12 @@
         hint.appendChild(span);
       }
     });
+    hint.appendChild(controlRow('?', MG.t('play.rules')));
     hint.appendChild(controlRow('Esc', MG.t('app.bossKey')));
 
     wrap.appendChild(head);
     wrap.appendChild(stage);
+    wrap.appendChild(howto);
     wrap.appendChild(hint);
     view.appendChild(wrap);
 
@@ -909,7 +917,8 @@
       bestLabel: bestLabel,
       back: back,
       meta: meta,
-      pause: pauseBtn
+      pause: pauseBtn,
+      rules: rulesBtn
     };
   }
 
@@ -920,6 +929,8 @@
     play.els.scoreLabel.textContent = MG.t('play.score');
     play.els.bestLabel.textContent = MG.t('play.best');
     play.els.back.title = MG.t('play.back');
+    play.els.rules.querySelector('.rules-label').textContent = MG.t('play.rules');
+    play.els.rules.title = MG.t('play.rulesTitle');
   }
 
   function makeHost() {
@@ -1055,6 +1066,56 @@
     panel.appendChild(actions);
 
     showOverlay(panel, 'start');
+  }
+
+  function keysBox(T) {
+    var keys = MG.h('div', 'keys');
+    (T.controls || []).forEach(function (c) {
+      if (Object.prototype.toString.call(c) === '[object Array]') keys.appendChild(controlRow(c[0], c[1]));
+      else keys.appendChild(MG.h('span', null, String(c)));
+    });
+    return keys;
+  }
+
+  /* 对局中随时看规则：正在玩就先暂停，看完回到原来的状态 */
+  function showRules() {
+    if (!play) return;
+    var from = play.overlayKind;
+    if (from === 'rules') return;
+    if (play.state === 'running') { pauseGame(); from = 'paused'; }
+    play.rulesFrom = from;
+
+    var T = MG.gtext(play.def);
+    var panel = MG.h('div', 'panel panel-rules');
+    panel.appendChild(artBox('panel-head', MG.art.gameIcon(play.def), play.def.icon));
+    panel.appendChild(MG.h('h3', null, MG.t('panel.rules')));
+    panel.appendChild(MG.h('p', null, T.howto || ''));
+    panel.appendChild(keysBox(T));
+
+    var actions = MG.h('div', 'actions');
+    if (play.state === 'paused') actions.appendChild(button(MG.t('panel.resume'), 'primary', resumeGame));
+    else if (play.state === 'idle') actions.appendChild(button(MG.t('panel.start'), 'primary', startGame));
+    actions.appendChild(button(MG.t('panel.gotIt'), play.state === 'over' ? 'primary' : '', closeRules));
+    panel.appendChild(actions);
+
+    showOverlay(panel, 'rules');
+  }
+
+  function closeRules() {
+    if (!play || play.overlayKind !== 'rules') return;
+    var from = play.rulesFrom;
+    play.rulesFrom = null;
+    if (play.state === 'paused') showPaused();
+    else if (play.state === 'idle') showStart();
+    else if (play.state === 'over' && play.lastResult) showOver(play.lastResult, true);
+    else clearOverlay();
+    return from;
+  }
+
+  function toggleRules() {
+    if (!play) return;
+    if (play.overlayKind === 'rules') closeRules();
+    else showRules();
   }
 
   function showPaused() {
@@ -1234,6 +1295,12 @@
       return;
     }
 
+    if (e.key === '?' || e.key === 'h' || e.key === 'H') {
+      e.preventDefault();
+      toggleRules();
+      return;
+    }
+
     if (e.key === 'p' || e.key === 'P') {
       if (play.state === 'running') pauseGame();
       else if (play.state === 'paused') resumeGame();
@@ -1265,6 +1332,7 @@
       refreshPlayChrome();
       if (play.overlayKind === 'start') showStart();
       else if (play.overlayKind === 'paused') showPaused();
+      else if (play.overlayKind === 'rules') { play.overlayKind = null; showRules(); }
       else if (play.overlayKind === 'over' && play.lastResult) showOver(play.lastResult, true);
     } else {
       renderHub();

@@ -6,7 +6,7 @@
   'use strict';
   var MG = w.MG;
 
-  var SYMBOLS = ['☕', '🐟', '📎', '📊', '🍪', '🧾', '✏️', '🪴'];
+  var SYMBOLS = ['teacup', 'sunflower', 'carrot', 'mushroom', 'leaf', 'apple', 'honey', 'strawberry'];
   var FULL_SCORE = 1200;
 
   MG.register({
@@ -69,8 +69,10 @@
           card.setAttribute('aria-label', '卡片 ' + (idx + 1));
 
           var inner = MG.h('div', 'inner');
-          inner.appendChild(MG.h('div', 'face back', '🐟'));
-          inner.appendChild(MG.h('div', 'face front', sym));
+          inner.appendChild(MG.h('div', 'face back'));
+          var front = MG.h('div', 'face front');
+          front.innerHTML = MG.art.html(sym);
+          inner.appendChild(front);
           card.appendChild(inner);
 
           grid.appendChild(card);

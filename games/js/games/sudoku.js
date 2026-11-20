@@ -279,8 +279,9 @@
         var W = stage.clientWidth, H = stage.clientHeight;
         var wide = W / H > 1.2;
         wrap.classList.toggle('wide', wide);
-        var side = wide ? Math.min(H - 36, W - 230) : Math.min(W - 28, H - 120);
-        side = Math.max(220, Math.floor(side / 9) * 9);
+        /* 竖排时按数字键盘的实际高度留位置，不同屏幕上键盘高度不一样 */
+        var side = wide ? Math.min(H - 36, W - 230) : Math.min(W - 20, H - pad.offsetHeight - 44);
+        side = Math.max(200, Math.floor(side / 9) * 9);
         grid.style.width = side + 'px';
         grid.style.height = side + 'px';
         grid.style.fontSize = Math.round(side / 9 * 0.52) + 'px';

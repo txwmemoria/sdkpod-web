@@ -12,12 +12,12 @@
   var DURATION = 60000;
 
   var TYPES = [
-    { icon: '🧾', color: '#7d9cc4', name: '发票' },
-    { icon: '🚕', color: '#d9ad62', name: '打车' },
-    { icon: '☕', color: '#b08a66', name: '咖啡' },
-    { icon: '🍩', color: '#d98f7a', name: '下午茶' },
-    { icon: '🥤', color: '#7fae94', name: '奶茶' },
-    { icon: '🍱', color: '#a291c8', name: '便当' }
+    { art: 'receipt', icon: '🧾', color: '#7d9cc4', name: '发票' },
+    { art: 'taxi', icon: '🚕', color: '#d9ad62', name: '打车' },
+    { art: 'coffee', icon: '☕', color: '#b08a66', name: '咖啡' },
+    { art: 'donut', icon: '🍩', color: '#d98f7a', name: '下午茶' },
+    { art: 'milktea', icon: '🥤', color: '#7fae94', name: '奶茶' },
+    { art: 'bento', icon: '🍱', color: '#a291c8', name: '便当' }
   ];
 
   function cssVar(name, fallback) {
@@ -369,10 +369,16 @@
           MG.roundRect(c, pad, pad, size, size, cs * 0.24);
           c.stroke();
 
-          c.font = Math.round(cs * 0.58) + 'px "Segoe UI Emoji","Apple Color Emoji",system-ui';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(meta.icon, cs / 2, cs / 2 + 1);
+          var img = MG.art && MG.art.image(meta.art);
+          if (img && img.complete && img.naturalWidth) {
+            var s = cs * 0.78;
+            c.drawImage(img, (cs - s) / 2, (cs - s) / 2, s, s);
+          } else {
+            c.font = Math.round(cs * 0.58) + 'px "Segoe UI Emoji","Apple Color Emoji",system-ui';
+            c.textAlign = 'center';
+            c.textBaseline = 'middle';
+            c.fillText(meta.icon, cs / 2, cs / 2 + 1);
+          }
           return cv;
         });
       }
@@ -547,6 +553,8 @@
           draw();
         });
       }
+
+      if (MG.art) MG.art.ready(function () { sprites = []; spriteCs = 0; S.dirty = true; draw(); });
 
       view = MG.fitCanvas(canvas);
       playableBoard();

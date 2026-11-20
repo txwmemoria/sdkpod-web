@@ -852,6 +852,15 @@ table.fake-grid tbody tr:nth-child(5) th { background: #eef6f1; font-weight: 600
   .confetti { display: none; }
 }
 
+/* 手机上这两款需要更高的舞台：数独底下要放数字键，扫雷换成竖版 8×10 */
+@media (max-width: 620px) {
+  .stage[data-game="sudoku"] { aspect-ratio: 4 / 5; }
+  .stage[data-game="sweep"] { aspect-ratio: 4 / 5; }
+  .su-wrap { padding: 10px 8px; gap: 10px; }
+  .stage .su-pad { grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .stage .su-key { height: 40px; font-size: 18px; }
+}
+
 /* =========================================================================
    田园细节
    ========================================================================= */
@@ -959,7 +968,7 @@ body {
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   background: transparent;
-  color: var(--ga, var(--accent));
+  color: #4f7a5c;
   font-size: 1em;
   font-weight: 500;
   line-height: 1;
@@ -972,9 +981,11 @@ body {
 .su-cell.br { border-right: 2px solid color-mix(in srgb, var(--ink) 30%, transparent); }
 .su-cell.bb { border-bottom: 2px solid color-mix(in srgb, var(--ink) 30%, transparent); }
 .su-cell.given { color: var(--ink); font-weight: 650; }
-.su-cell.peer { background: color-mix(in srgb, var(--ga, var(--accent)) 7%, transparent); }
-.su-cell.same { background: color-mix(in srgb, var(--ga, var(--accent)) 20%, transparent); }
-.su-cell.sel { background: color-mix(in srgb, var(--ga, var(--accent)) 30%, transparent); }
+.su-cell.peer { background: color-mix(in srgb, var(--accent) 11%, transparent); }
+.su-cell.same { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+.su-cell.sel { background: color-mix(in srgb, var(--accent) 34%, transparent); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 70%, transparent); }
+[data-theme="dark"] .su-cell { color: #9fd0b4; }
+[data-theme="dark"] .su-cell.given { color: var(--ink); }
 .su-cell.wrong { color: var(--danger); text-decoration: underline wavy color-mix(in srgb, var(--danger) 50%, transparent); text-underline-offset: 4px; }
 .su-notes {
   position: absolute; inset: 2px;
@@ -1009,8 +1020,6 @@ body {
 .ms-board { position: absolute; inset: 0; display: grid; place-items: center; padding: 50px 14px 14px; }
 .ms-grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(8, 1fr);
   gap: 3px;
   padding: 6px;
   border-radius: 14px;
@@ -1078,3 +1087,11 @@ body {
   font-size: 12.5px;
 }
 .ms-flagmode.on { background: var(--accent-soft); border-color: var(--ga, var(--accent)); color: var(--ink); }
+
+/* ---------- 插画尺寸 ---------- */
+.card-icon svg { width: 26px; height: 26px; display: block; }
+.panel-head svg { width: 36px; height: 36px; display: block; }
+.badge-icon svg { width: 24px; height: 24px; display: block; }
+.mem-card .front svg { width: 62%; height: 62%; display: block; }
+.ms-cell svg { width: 78%; height: 78%; display: block; margin: auto; }
+.ms-cell.bee { display: grid; place-items: center; }

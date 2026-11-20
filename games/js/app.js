@@ -465,6 +465,21 @@
     return wrap;
   }
 
+  /* 成就 → 插画 */
+  var ACH_ART = {
+    first: 'sprout', six: 'basket', memory20: 'g_memory', daily: 'calendar', streak3: 'sunflower',
+    receipt3000: 'receipt', golf5: 'g_golf', tetris10: 'g_tetris', lightsPar: 'g_lights',
+    cupsClean: 'g_cups', slide40: 'g_slide', sudokuClean: 'g_sudoku', sweepWin: 'bee'
+  };
+
+  /* 有插画就放插画，没有就退回 emoji */
+  function artBox(cls, svgHtml, fallback) {
+    var el = MG.h('span', cls);
+    if (svgHtml) el.innerHTML = svgHtml;
+    else el.textContent = fallback || '';
+    return el;
+  }
+
   function buildBadges() {
     var wrap = MG.h('section', 'badges');
     var head = MG.h('div', 'shelf-head');
@@ -477,7 +492,7 @@
       var on = store.hasAch(a.id);
       var txt = MG.achText(a);
       var item = MG.h('div', 'badge' + (on ? ' on' : ''));
-      item.appendChild(MG.h('span', 'badge-icon', a.icon));
+      item.appendChild(artBox('badge-icon', ACH_ART[a.id] ? MG.art.html(ACH_ART[a.id]) : '', a.icon));
       var t = MG.h('div', 'badge-text');
       t.appendChild(MG.h('b', null, txt.name));
       t.appendChild(MG.h('span', null, txt.desc));
@@ -610,7 +625,7 @@
     back.addEventListener('click', function () { location.hash = ''; });
 
     var title = MG.h('div', 'play-title');
-    title.appendChild(MG.h('span', 'card-icon', def.icon || '🎮'));
+    title.appendChild(artBox('card-icon', MG.art.gameIcon(def), def.icon));
     title.appendChild(MG.h('h2', null, T.name));
 
     var scoreBox = MG.h('div', 'play-score');
@@ -762,8 +777,8 @@
     p.els.pause.textContent = MG.t('play.pause');
     renderMeta();
 
-    p.inst = p.def.mount(p.stage, makeHost()) || {};
     p.stage.dataset.game = p.def.id;
+    p.inst = p.def.mount(p.stage, makeHost()) || {};
 
     if (autoStart) startGame();
     else showStart();
@@ -791,7 +806,7 @@
   function showStart() {
     var T = MG.gtext(play.def);
     var panel = MG.h('div', 'panel panel-start');
-    panel.appendChild(MG.h('div', 'panel-head', play.def.icon || '🎮'));
+    panel.appendChild(artBox('panel-head', MG.art.gameIcon(play.def), play.def.icon));
     panel.appendChild(MG.h('h3', null, MG.t('panel.ready')));
     panel.appendChild(MG.h('p', null, T.howto || ''));
 
@@ -816,7 +831,7 @@
 
   function showPaused() {
     var panel = MG.h('div', 'panel panel-paused');
-    panel.appendChild(MG.h('div', 'panel-head', '⏸'));
+    panel.appendChild(artBox('panel-head', MG.art.html('pause'), '⏸'));
     panel.appendChild(MG.h('h3', null, MG.t('panel.paused')));
     panel.appendChild(MG.h('p', null, MG.t('panel.pausedText')));
 
@@ -830,7 +845,7 @@
 
   function showOver(result, silent) {
     var panel = MG.h('div', 'panel panel-over');
-    panel.appendChild(MG.h('div', 'panel-head', result.record ? '🎉' : '🐟'));
+    panel.appendChild(artBox('panel-head', MG.art.html(result.record ? 'ribbon' : 'sprout'), ''));
     if (result.record) panel.appendChild(MG.h('span', 'record-ribbon', 'NEW BEST'));
     panel.appendChild(MG.h('h3', null, MG.t(result.record ? 'panel.record' : 'panel.over')));
 

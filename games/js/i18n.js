@@ -165,7 +165,7 @@
       'g.boss.note': '{reason} · 最高连击 {combo}',
 
       'game.snake.name': '工位贪吃蛇',
-      'game.snake.tagline': '在工位之间蛇形走位，把同事的零食全吃光。',
+      'game.snake.tagline': '在菜地里慢慢游，吃苹果、胡萝卜和草莓，顺便喝口茶。',
       'game.snake.howto': '吃零食变长，撞到自己就下班。屏幕边缘是通的，从另一边钻回来。',
       'game.snake.duration': '无尽',
       'game.snake.tags': ['键盘', '无尽'],
@@ -187,7 +187,7 @@
       'g.timing.note': '最高连击 {n}',
 
       'game.memory.name': '工位配对',
-      'game.memory.tagline': '记住谁爱喝什么，是职场第一课。',
+      'game.memory.tagline': '菜园里收来的小东西，翻两张，凑一对。',
       'game.memory.howto': '翻开两张相同的卡片即可配对。步数和用时越少，得分越高。',
       'game.memory.duration': '约 1 分钟',
       'game.memory.tags': ['记忆', '点击'],
@@ -490,7 +490,7 @@
       'g.boss.note': '{reason} · best combo {combo}',
 
       'game.snake.name': 'Cubicle Snake',
-      'game.snake.tagline': 'Slither between desks and eat every snack in the office.',
+      'game.snake.tagline': 'Wander the garden rows eating apples, carrots and strawberries — with a sip of tea.',
       'game.snake.howto': 'Eat snacks to grow. Hit yourself and you’re done. The screen wraps, so you can slip out one side and back in the other.',
       'game.snake.duration': 'Endless',
       'game.snake.tags': ['Keyboard', 'Endless'],
@@ -512,7 +512,7 @@
       'g.timing.note': 'Best combo {n}',
 
       'game.memory.name': 'Desk Match',
-      'game.memory.tagline': 'Knowing who drinks what is lesson one of office politics.',
+      'game.memory.tagline': 'Little things from the garden. Flip two, find a pair.',
       'game.memory.howto': 'Flip two matching cards to pair them. Fewer moves and less time means a higher score.',
       'game.memory.duration': '~1 min',
       'game.memory.tags': ['Memory', 'Click'],

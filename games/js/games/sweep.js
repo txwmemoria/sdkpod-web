@@ -8,8 +8,6 @@
   'use strict';
   var MG = w.MG;
 
-  var COLS = 10;
-  var ROWS = 8;
   var BEES = 12;
 
   MG.register({
@@ -34,7 +32,14 @@
       flagBtn.type = 'button';
       stage.appendChild(flagBtn);
 
+      /* 横屏 10×8；手机竖着拿时换成 8×10，格子大一些、好点 */
+      var tall = stage.clientHeight > stage.clientWidth * 1.05;
+      var COLS = tall ? 8 : 10;
+      var ROWS = tall ? 10 : 8;
+      grid.style.gridTemplateColumns = 'repeat(' + COLS + ', 1fr)';
+      grid.style.gridTemplateRows = 'repeat(' + ROWS + ', 1fr)';
       var N = COLS * ROWS;
+      var BEE = '\u2022bee';
       var bee = new Array(N).fill(false);
       var near = new Array(N).fill(0);
       var open = new Array(N).fill(false);
@@ -85,16 +90,20 @@
         var txt = '';
         if (open[i]) {
           cls += ' open';
-          if (bee[i]) { cls += ' bee hit'; txt = '🐝'; }
+          if (bee[i]) { cls += ' bee hit'; txt = BEE; }
           else if (near[i]) { cls += ' n' + near[i]; txt = String(near[i]); }
         } else if (reveal && bee[i]) {
           cls += ' bee' + (flag[i] ? ' flagged' : '');
-          txt = '🐝';
+          txt = BEE;
         } else if (flag[i]) {
           cls += ' flagged' + (reveal ? ' wrongflag' : '');
         }
         if (c.className !== cls) c.className = cls;
-        if (c.textContent !== txt) c.textContent = txt;
+        if (c.dataset.t !== txt) {
+          c.dataset.t = txt;
+          if (txt === BEE) c.innerHTML = MG.art.html('bee');
+          else c.textContent = txt;
+        }
       }
       function paint(reveal) {
         for (var i = 0; i < N; i++) paintCell(i, reveal);
@@ -166,7 +175,7 @@
         if (!S.running) return;
         paint(false);
         hud();
-        host.score(winScore());
+        host.score(S.opened * 8);
         if (S.opened === N - BEES) end(true);
       }
 
@@ -176,9 +185,11 @@
         var c = e.target && e.target.closest ? e.target.closest('.ms-cell') : null;
         if (!c || e.pointerType === 'mouse') return;
         var idx = Number(c.dataset.i);
-        press = { i: idx, fired: false, timer: setTimeout(function () {
+        if (press) clearTimeout(press.timer);
+        press = { i: idx, fired: false, firedAt: 0, timer: setTimeout(function () {
           if (!press) return;
           press.fired = true;
+          press.firedAt = Date.now();
           act(idx, true);
         }, 420) };
       });
@@ -186,15 +197,29 @@
       var offUp = MG.on(grid, 'pointerup', cancelPress);
       var offCancel = MG.on(grid, 'pointercancel', function () { cancelPress(); press = null; });
 
-      var offClick = MG.on(grid, 'click', function (e) {
+      /* 点在格子之间的缝隙上也算：按坐标换算到最近的那一格 */
+      function cellFrom(e) {
         var c = e.target && e.target.closest ? e.target.closest('.ms-cell') : null;
+        if (c) return c;
+        var r = grid.getBoundingClientRect();
+        if (!r.width || e.clientX === undefined) return null;
+        var col = Math.floor((e.clientX - r.left) / r.width * COLS);
+        var row = Math.floor((e.clientY - r.top) / r.height * ROWS);
+        if (col < 0 || col >= COLS || row < 0 || row >= ROWS) return null;
+        return cells[row * COLS + col];
+      }
+
+      var offClick = MG.on(grid, 'click', function (e) {
+        var c = cellFrom(e);
         if (!c) return;
-        if (press && press.fired) { press = null; return; }
+        /* 长按刚插过旗，这次 click 是同一下手指抬起，不要再翻开 */
+        var p = press;
         press = null;
+        if (p && p.fired && Date.now() - p.firedAt < 800) return;
         act(Number(c.dataset.i), S.flagMode);
       });
       var offCtx = MG.on(grid, 'contextmenu', function (e) {
-        var c = e.target && e.target.closest ? e.target.closest('.ms-cell') : null;
+        var c = cellFrom(e);
         if (!c) return;
         e.preventDefault();
         /* 触屏长按时浏览器也会发 contextmenu，已经由长按计时器处理过了 */
@@ -212,7 +237,7 @@
       });
 
       function fit() {
-        var W = stage.clientWidth - 28, H = stage.clientHeight - 64;
+        var W = stage.clientWidth - 24, H = stage.clientHeight - 60;
         var cell = Math.floor(Math.min(W / COLS, H / ROWS));
         cell = Math.max(24, Math.min(cell, 64));
         grid.style.width = (cell * COLS) + 'px';

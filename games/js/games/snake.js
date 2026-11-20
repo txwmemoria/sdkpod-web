@@ -11,10 +11,10 @@
   var ROWS = 15;
 
   var FOODS = [
-    { icon: '🐟', pts: 10 },
-    { icon: '🍪', pts: 12 },
-    { icon: '☕', pts: 15, fast: true },
-    { icon: '🥤', pts: 15, fast: true }
+    { icon: 'apple', pts: 10 },
+    { icon: 'carrot', pts: 12 },
+    { icon: 'strawberry', pts: 15, fast: true },
+    { icon: 'teacup', pts: 15, fast: true }
   ];
 
   var DIRS = {
@@ -233,11 +233,9 @@
         cv.width = px;
         cv.height = px;
         var c = cv.getContext('2d');
-        c.font = Math.round(px * 0.82) + 'px "Segoe UI Emoji","Apple Color Emoji",system-ui';
-        c.textAlign = 'center';
-        c.textBaseline = 'middle';
-        c.fillText(icon, px / 2, px * 0.54);
-        spriteCache = {};
+        var img = MG.art.image(icon);
+        if (!img.complete || !img.naturalWidth) return cv;   /* 还没解码好：这一帧先空着，下一帧再画 */
+        c.drawImage(img, 0, 0, px, px);
         spriteCache[key] = cv;
         return cv;
       }

@@ -394,8 +394,14 @@
         if (S.acc >= S.dropMs) {
           S.acc = 0;
           stepDown(false);
+          S.dirty = true;
         }
-        draw();
+        /* 性能：画面没变就不重画（方块大部分时间是静止的） */
+        var busy = fx.count() > 0;
+        if (S.dirty || busy) {
+          draw();
+          S.dirty = busy;
+        }
       }
 
       /* ---------- 输入 ---------- */
@@ -412,7 +418,7 @@
           case ' ': hardDrop(); break;
           default: handled = false;
         }
-        if (handled) e.preventDefault();
+        if (handled) { e.preventDefault(); S.dirty = true; }
       }
 
       var offKey = MG.on(window, 'keydown', onKey);
@@ -430,13 +436,13 @@
         b.textContent = spec.text;
         b.style.gridColumn = String(spec.col);
         b.style.gridRow = String(spec.row);
-        b.addEventListener('click', function (e) { e.preventDefault(); spec.fn(); });
+        b.addEventListener('click', function (e) { e.preventDefault(); spec.fn(); S.dirty = true; });
         pad.appendChild(b);
       });
 
       var offResize;
       if (w.ResizeObserver) {
-        var ro = new w.ResizeObserver(function () { view = MG.fitCanvas(canvas); draw(); });
+        var ro = new w.ResizeObserver(function () { view = MG.fitCanvas(canvas); draw(); S.dirty = true; });
         ro.observe(canvas);
         offResize = function () { ro.disconnect(); };
       } else {

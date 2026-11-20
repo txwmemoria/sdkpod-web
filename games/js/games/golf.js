@@ -104,6 +104,7 @@
       }
 
       function resetHole() {
+        S.dirty = true;
         S.ball.x = FW / 2;
         S.ball.y = FH - 90;
         S.ball.vx = 0;
@@ -407,7 +408,13 @@
         }
         fx.update(dt);
 
-        draw();
+        /* 性能：球停着、没在瞄准、没有粒子时不重画 */
+        var b = S.ball;
+        var active = !!(b.vx || b.vy || S.aiming || S.sunk || fx.count());
+        if (active || S.dirty) {
+          draw();
+          S.dirty = active;
+        }
         if (performance.now() - S.hudAt > 250) {
           S.hudAt = performance.now();
           hud();
@@ -452,6 +459,7 @@
           view = MG.fitCanvas(canvas);
           layout();
           draw();
+          S.dirty = true;
         });
         ro.observe(canvas);
         offResize = function () { ro.disconnect(); };

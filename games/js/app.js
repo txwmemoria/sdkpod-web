@@ -27,39 +27,17 @@
   var FAKE_FIRST = /(^|[?&])fake=1(&|$)/.test(location.search);
   var THEME_OVERRIDE = /(^|[?&])theme=(dark|light)(&|$)/.exec(location.search);
 
-  var HERO_ART = [
-    '<svg viewBox="0 0 260 190" role="img" aria-label="工位插画">',
-    '<defs><linearGradient id="mg-g" x1="0" y1="0" x2="1" y2="1">',
-    '<stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent-2)"/>',
-    '</linearGradient></defs>',
-    '<path d="M8 152h244" stroke="currentColor" stroke-opacity=".16" stroke-width="2.5" stroke-linecap="round"/>',
-    '<rect x="50" y="26" width="152" height="96" rx="10" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".26" stroke-width="2.5"/>',
-    '<rect x="58" y="34" width="136" height="72" rx="5" fill="url(#mg-g)" opacity=".12"/>',
-    '<path d="M118 76c7-11 23-14 31-4 2.5 3 1.5 7.5-2 9.5-9 5.5-24 4-29-5.5z" fill="url(#mg-g)"/>',
-    '<path d="M118 76l-11-8v16z" fill="url(#mg-g)"/>',
-    '<circle cx="139" cy="72" r="2.2" fill="#fff"/>',
-    '<circle cx="157" cy="60" r="3" fill="none" stroke="var(--accent)" stroke-opacity=".65" stroke-width="1.6"/>',
-    '<circle cx="165" cy="51" r="2" fill="none" stroke="var(--accent)" stroke-opacity=".4" stroke-width="1.4"/>',
-    '<path d="M118 122v13h18v-13" stroke="currentColor" stroke-opacity=".26" stroke-width="2.5" fill="none"/>',
-    '<path d="M96 152h62" stroke="currentColor" stroke-opacity=".26" stroke-width="4" stroke-linecap="round"/>',
-    '<path d="M204 126h26l-3 18a8 8 0 0 1-8 7h-4a8 8 0 0 1-8-7z" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".26" stroke-width="2.2"/>',
-    '<path d="M230 131h5a6 6 0 0 1 0 12h-5" fill="none" stroke="currentColor" stroke-opacity=".26" stroke-width="2.2"/>',
-    '<path d="M211 118c3-5-3-8 0-13M219 118c3-5-3-8 0-13" stroke="var(--accent)" stroke-opacity=".5" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
-    '<rect x="76" y="154" width="96" height="13" rx="4" fill="var(--panel-2)" stroke="currentColor" stroke-opacity=".2" stroke-width="2"/>',
-    '</svg>'
-  ].join('');
-
   /* ------------------------------------------------------------ 顶栏与偏好 */
 
   function applyTheme() {
     document.documentElement.dataset.theme = store.data.theme;
-    els.btnTheme.textContent = store.data.theme === 'dark' ? '☀️' : '🌙';
+    els.btnTheme.innerHTML = MG.icons[store.data.theme === 'dark' ? 'sun' : 'moon'];
     els.btnTheme.setAttribute('title', MG.t(store.data.theme === 'dark' ? 'app.themeLight' : 'app.themeDark'));
     if (MG.refreshTheme) MG.refreshTheme();
   }
 
   function applySound() {
-    els.btnSound.textContent = store.data.sound ? '🔊' : '🔇';
+    els.btnSound.innerHTML = MG.icons[store.data.sound ? 'soundOn' : 'soundOff'];
     els.btnSound.setAttribute('title', MG.t(store.data.sound ? 'app.soundOn' : 'app.soundOff'));
   }
 
@@ -140,73 +118,6 @@
 
   /* ---------------------------------------------------------------- 大厅 */
 
-  /* 一局能不能在 1 分钟内玩完：用来做「只有一点点时间」的筛选 */
-  var QUICK_GAMES = { receipt: 1, memory: 1, golf: 1 };
-  var hubFilter = 'all';
-
-  function statPill(value, label) {
-    var el = MG.h('span', 'stat-pill');
-    el.appendChild(MG.h('b', null, value));
-    el.appendChild(MG.h('span', null, label));
-    return el;
-  }
-
-  function buildQuickStart() {
-    var sec = MG.h('section', 'hero hero-compact');
-    var main = MG.h('div', 'hero-main');
-
-    var days = Math.max(1, Math.floor((Date.now() - store.data.since) / 86400000) + 1);
-    var pill = MG.h('div', 'hero-pill');
-    pill.appendChild(MG.h('span', 'dot'));
-    pill.appendChild(MG.h('span', null, MG.t('hub.day', { n: days })));
-    main.appendChild(pill);
-
-    main.appendChild(MG.h('h1', null, MG.t('hub.h1')));
-    main.appendChild(MG.h('p', 'lede', MG.t('hub.lede')));
-    if (!store.data.seen) main.appendChild(MG.h('p', 'first-hint', MG.t('hub.hintFirst')));
-
-    var stats = MG.h('div', 'stat-inline');
-    stats.appendChild(statPill(String(store.totalPlays()), MG.t('hub.stat2')));
-    stats.appendChild(statPill(store.bestCount() + ' / ' + MG.games.length, MG.t('hub.stat3')));
-    main.appendChild(stats);
-
-    var actions = MG.h('div', 'quick-actions');
-
-    var randomBtn = button('🎲 ' + MG.t('hub.random'), 'primary', playRandom);
-    randomBtn.setAttribute('title', MG.t('hub.randomHint'));
-    actions.appendChild(randomBtn);
-
-    var def = MG.dailyGame();
-    if (def) {
-      var d = store.syncDaily(def.id);
-      var daily = MG.h('div', 'daily daily-quick');
-      daily.style.setProperty('--ga', def.accent || '#0f8b74');
-      daily.style.setProperty('--ga-soft', MG.hexToRgba(def.accent || '#0f8b74', 0.14));
-      daily.appendChild(button(MG.t('hub.dailyChip', { name: MG.gtext(def).name }), '', function () { startDaily(def.id); }));
-      daily.appendChild(MG.h('span', 'daily-cap',
-        (d.best ? MG.t('daily.best', { n: MG.fmtScore(d.best) }) : MG.t('daily.none')) +
-        ' · ' + MG.t('daily.streak', { n: d.streak || 0 })));
-      actions.appendChild(daily);
-    }
-
-    var last = store.data.lastGame ? MG.gameById(store.data.lastGame) : null;
-    if (last) {
-      var resume = button('↩ ' + MG.t('hub.resume', { name: MG.gtext(last).name }), 'ghost', function () {
-        location.hash = '#/g/' + last.id;
-      });
-      resume.classList.add('resume-btn');
-      actions.appendChild(resume);
-    }
-
-    var art = MG.h('div', 'hero-art hero-art-sm');
-    art.innerHTML = HERO_ART;
-
-    sec.appendChild(main);
-    sec.appendChild(actions);
-    sec.appendChild(art);
-    return sec;
-  }
-
   function playRandom() {
     var pool = MG.games.filter(function (g) { return g.id !== store.data.lastGame; });
     if (!pool.length) pool = MG.games;
@@ -214,110 +125,287 @@
     location.hash = '#/g/' + pick.id;
   }
 
-  function buildFilterRow() {
-    var row = MG.h('div', 'filter-row');
-
-    var options = [
-      { id: 'all', label: MG.t('hub.filterAll') },
-      { id: 'quick', label: MG.t('hub.filterQuick') },
-      { id: 'endless', label: MG.t('hub.filterEndless') }
-    ];
-
-    options.forEach(function (o) {
-      var chip = MG.h('button', 'filter-chip' + (hubFilter === o.id ? ' on' : ''), o.label);
-      chip.type = 'button';
-      chip.addEventListener('click', function () {
-        if (hubFilter === o.id) return;
-        hubFilter = o.id;
-        renderHub();
-      });
-      row.appendChild(chip);
-    });
-
-    row.appendChild(MG.h('span', 'filter-hint', MG.t('hub.gamesHint')));
-    return row;
-  }
-
-  function matchesFilter(def) {
-    if (hubFilter === 'quick') return !!QUICK_GAMES[def.id];
-    if (hubFilter === 'endless') return !QUICK_GAMES[def.id];
-    return true;
-  }
-
-  function buildCard(def, index) {
-    var best = store.bestOf(def.id);
-    var accent = def.accent || '#0f8b74';
-    var T = MG.gtext(def);
-
-    var card = document.createElement('button');
-    card.type = 'button';
-    card.className = 'card';
-    card.dataset.id = def.id;
-    card.style.setProperty('--ga', accent);
-    card.style.setProperty('--ga-soft', MG.hexToRgba(accent, 0.13));
-    card.style.setProperty('--ga-line', MG.hexToRgba(accent, 0.42));
-    card.style.animationDelay = (index * 45) + 'ms';
-
-    var top = MG.h('div', 'card-top');
-    top.appendChild(MG.h('span', 'card-icon', def.icon || '🎮'));
-    if (T.duration) top.appendChild(MG.h('span', 'card-time', T.duration));
-    card.appendChild(top);
-
-    card.appendChild(MG.h('h3', null, T.name));
-    card.appendChild(MG.h('p', 'tagline', T.tagline || ''));
-
-    var tags = MG.h('div', 'tags');
-    (T.tags || []).forEach(function (t) { tags.appendChild(MG.h('span', 'chip', t)); });
-    card.appendChild(tags);
-
-    var foot = MG.h('div', 'card-foot');
-    foot.appendChild(MG.h('span', 'best', best > 0 ? MG.t('hub.best', { n: MG.fmtScore(best) }) : MG.t('hub.noBest')));
-    var go = MG.h('span', 'go');
-    go.appendChild(document.createTextNode(MG.t('hub.play')));
-    go.appendChild(MG.h('span', 'go-arrow', '→'));
-    foot.appendChild(go);
-    card.appendChild(foot);
-
-    card.addEventListener('click', function () {
-      location.hash = '#/g/' + def.id;
-    });
-    return card;
-  }
-
-  function buildPlaceholder() {
-    var card = MG.h('div', 'card placeholder');
-    card.appendChild(MG.h('div', 'card-icon', '＋'));
-    card.appendChild(MG.h('h3', null, MG.t('hub.placeholderTitle')));
-    card.appendChild(MG.h('p', 'tagline', MG.t('hub.placeholderText')));
-    var foot = MG.h('div', 'card-foot');
-    foot.appendChild(MG.h('span', null, MG.t('hub.placeholderFoot')));
-    card.appendChild(foot);
-    return card;
-  }
-
   function renderHub() {
     teardownPlay();
     view.textContent = '';
 
-    view.appendChild(buildQuickStart());
-    view.appendChild(buildFilterRow());
-    view.appendChild(buildGrid());
-    view.appendChild(buildAchievements());
-    view.appendChild(MG.h('p', 'section-note', MG.t('hub.note')));
+    view.appendChild(buildHero());
+    view.appendChild(buildShelf());
+    view.appendChild(buildBadges());
   }
 
-  function buildGrid() {
-    var grid = MG.h('div', 'grid');
-    var list = MG.games.filter(matchesFilter);
+  /* ===================================================== v5 大厅（场景化） */
 
-    if (!list.length) {
-      grid.appendChild(MG.h('p', 'empty-filter', MG.t('hub.emptyFilter')));
-      return grid;
+  /* 主视觉：窗外的远山与天光，桌角一杯茶。颜色全部走 CSS 变量，夜间自动换成月夜。 */
+  var SCENE = [
+    '<svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">',
+    '<defs>',
+    '<linearGradient id="sc-sky" x1="0" y1="0" x2="0" y2="1">',
+    '<stop offset="0" stop-color="var(--sky-1)"/><stop offset="1" stop-color="var(--sky-2)"/>',
+    '</linearGradient>',
+    '<radialGradient id="sc-sun" cx=".5" cy=".5" r=".5">',
+    '<stop offset="0" stop-color="var(--sun)" stop-opacity=".95"/><stop offset=".55" stop-color="var(--sun)" stop-opacity=".35"/>',
+    '<stop offset="1" stop-color="var(--sun)" stop-opacity="0"/>',
+    '</radialGradient>',
+    '</defs>',
+    '<rect width="1200" height="380" fill="url(#sc-sky)"/>',
+    '<circle cx="900" cy="150" r="120" fill="url(#sc-sun)"/>',
+    '<circle cx="900" cy="150" r="34" fill="var(--sun-core)"/>',
+    '<g fill="var(--cloud)">',
+    '<ellipse cx="300" cy="96" rx="92" ry="13"/><ellipse cx="360" cy="84" rx="54" ry="12"/>',
+    '<ellipse cx="700" cy="70" rx="70" ry="9"/><ellipse cx="1080" cy="110" rx="64" ry="9"/>',
+    '</g>',
+    '<path d="M0 250 C120 205 220 215 330 232 S540 200 650 214 S860 190 980 212 S1130 226 1200 214 V380 H0Z" fill="var(--hill-3)"/>',
+    '<path d="M0 290 C140 252 260 262 380 280 S600 250 740 266 S960 248 1080 268 S1170 276 1200 270 V380 H0Z" fill="var(--hill-2)"/>',
+    '<path d="M0 330 C160 300 300 312 470 324 S760 300 920 318 S1120 326 1200 318 V380 H0Z" fill="var(--hill-1)"/>',
+    /* 桌角：茶杯 + 小盆栽 */
+    '<rect x="0" y="352" width="1200" height="28" fill="var(--desk)"/>',
+    '<g class="scene-desk" transform="translate(-110 0)">',
+    '<path d="M1010 318 h44 l-4 30 a8 8 0 0 1 -8 6 h-20 a8 8 0 0 1 -8 -6z" fill="var(--cup)"/>',
+    '<path d="M1054 324 h7 a9 9 0 0 1 0 18 h-6" fill="none" stroke="var(--cup)" stroke-width="5"/>',
+    '<path class="steam" d="M1024 308 c-6 -10 6 -14 0 -26 M1040 308 c-6 -10 6 -14 0 -26" fill="none" stroke="var(--steam)" stroke-width="3" stroke-linecap="round"/>',
+    '<path d="M1110 326 h40 l-5 28 h-30z" fill="var(--pot)"/>',
+    '<path d="M1130 326 c-2 -22 -18 -30 -28 -34 c14 0 26 10 28 22 c2 -16 14 -30 30 -32 c-14 8 -24 22 -30 44z" fill="var(--leaf)"/>',
+    '</g>',
+    '</svg>'
+  ].join('');
+
+  /* 每款游戏一张封面小画：画的就是这款游戏本身 */
+  var COVERS = {
+    snake: [
+      '<g fill="var(--cv-dot)">', dots(320, 180, 20), '</g>',
+      '<path d="M60 130 H140 V70 H220 V110" fill="none" stroke="var(--ga)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>',
+      '<circle cx="220" cy="110" r="11" fill="var(--ga-deep)"/>',
+      '<circle cx="216" cy="114" r="2.2" fill="#fff"/><circle cx="224" cy="114" r="2.2" fill="#fff"/>',
+      '<circle cx="262" cy="70" r="9" fill="var(--cv-warm)"/>'
+    ].join(''),
+    memory: (function () {
+      var out = '';
+      for (var r = 0; r < 2; r++) {
+        for (var c = 0; c < 4; c++) {
+          var x = 46 + c * 60;
+          var y = 34 + r * 62;
+          var up = (r === 0 && c === 1) || (r === 1 && c === 2);
+          out += '<rect x="' + x + '" y="' + y + '" width="48" height="52" rx="9" fill="' + (up ? 'var(--cv-paper)' : 'var(--ga)') + '" opacity="' + (up ? 1 : 0.32 + ((r + c) % 2) * 0.12) + '"/>';
+          if (up) out += '<circle cx="' + (x + 24) + '" cy="' + (y + 26) + '" r="10" fill="var(--cv-warm)"/>';
+        }
+      }
+      return out;
+    })(),
+    receipt: (function () {
+      var palette = ['var(--ga)', 'var(--cv-warm)', 'var(--cv-cool)', 'var(--cv-rose)'];
+      var grid = [[0, 1, 2, 3, 1], [2, 3, 3, 3, 0], [1, 0, 2, 1, 2]];
+      var out = '';
+      for (var r = 0; r < 3; r++) {
+        for (var c = 0; c < 5; c++) {
+          var hot = r === 1 && c >= 1 && c <= 3;
+          out += '<rect x="' + (52 + c * 46) + '" y="' + (30 + r * 42) + '" width="38" height="36" rx="9" fill="' + palette[grid[r][c]] + '" opacity="' + (hot ? 0.95 : 0.42) + '"/>';
+        }
+      }
+      out += '<rect x="94" y="68" width="142" height="44" rx="12" fill="none" stroke="var(--cv-ink)" stroke-opacity=".35" stroke-width="2" stroke-dasharray="5 5"/>';
+      return out;
+    })(),
+    tetris: (function () {
+      var cells = [
+        [0, 5], [1, 5], [2, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5],
+        [0, 4], [1, 4], [3, 4], [4, 4], [6, 4], [7, 4], [8, 4],
+        [0, 3], [5, 3], [6, 3]
+      ];
+      var out = '<rect x="84" y="14" width="152" height="152" rx="10" fill="var(--cv-paper)" opacity=".55"/>';
+      cells.forEach(function (p, i) {
+        out += '<rect x="' + (90 + p[0] * 16) + '" y="' + (70 + p[1] * 16) + '" width="14" height="14" rx="3.5" fill="' + (i % 3 === 0 ? 'var(--cv-cool)' : 'var(--ga)') + '" opacity="' + (0.5 + (i % 4) * 0.12) + '"/>';
+      });
+      /* 正在下落的一块 */
+      [[3, 0], [4, 0], [5, 0], [4, 1]].forEach(function (p) {
+        out += '<rect x="' + (90 + p[0] * 16) + '" y="' + (26 + p[1] * 16) + '" width="14" height="14" rx="3.5" fill="var(--cv-warm)"/>';
+      });
+      return out;
+    })(),
+    lights: (function () {
+      var on = { 1: 1, 5: 1, 6: 1, 7: 1, 11: 1, 13: 1, 17: 1 };
+      var out = '';
+      for (var r = 0; r < 3; r++) {
+        for (var c = 0; c < 6; c++) {
+          var i = r * 6 + c;
+          var x = 50 + c * 38;
+          var y = 30 + r * 42;
+          if (on[i]) out += '<circle cx="' + (x + 15) + '" cy="' + (y + 16) + '" r="20" fill="var(--cv-warm)" opacity=".28"/>';
+          out += '<rect x="' + x + '" y="' + y + '" width="30" height="34" rx="7" fill="var(--cv-paper)" opacity="' + (on[i] ? 1 : 0.6) + '"/>';
+          out += '<path d="M' + (x + 8) + ' ' + (y + 17) + ' q7 -10 14 0z" fill="' + (on[i] ? 'var(--cv-warm)' : 'var(--cv-ink)') + '" opacity="' + (on[i] ? 1 : 0.18) + '"/>';
+        }
+      }
+      return out;
+    })(),
+    cups: (function () {
+      var cols = [['--cv-rose', '--cv-warm', '--ga'], ['--cv-cool', '--cv-cool'], ['--ga', '--cv-rose', '--cv-warm', '--cv-cool'], ['--cv-warm'], [], ['--ga', '--ga', '--cv-rose']];
+      var out = '';
+      cols.forEach(function (col, i) {
+        var x = 34 + i * 44;
+        out += '<rect x="' + x + '" y="34" width="36" height="120" rx="8" fill="var(--cv-paper)" opacity=".55"/>';
+        col.forEach(function (v, j) {
+          var y = 128 - j * 27;
+          out += '<rect x="' + (x + 6) + '" y="' + y + '" width="20" height="21" rx="4" fill="var(' + v + ')"/>';
+          out += '<path d="M' + (x + 26) + ' ' + (y + 5) + ' h3 a5 5 0 0 1 0 10 h-3" fill="none" stroke="var(' + v + ')" stroke-width="2.5"/>';
+        });
+      });
+      return out;
+    })(),
+    slide: (function () {
+      var order = [1, 2, 3, 4, 6, 0, 7, 5, 8];
+      var tabs = ['', '--cv-rose', '--cv-warm', '--cv-warm', '--ga', '--ga', '--cv-cool', '--cv-cool', '--cv-rose'];
+      var out = '<rect x="96" y="12" width="128" height="156" rx="12" fill="var(--cv-paper)" opacity=".5"/>';
+      order.forEach(function (n, p) {
+        if (!n) return;
+        var x = 104 + (p % 3) * 40;
+        var y = 22 + Math.floor(p / 3) * 48;
+        out += '<rect x="' + x + '" y="' + y + '" width="34" height="42" rx="7" fill="var(--cv-paper)"/>';
+        out += '<rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="12" height="4" rx="2" fill="var(' + tabs[n] + ')"/>';
+        out += '<text x="' + (x + 17) + '" y="' + (y + 30) + '" text-anchor="middle" font-size="14" font-family="Georgia,serif" fill="var(--cv-ink)" opacity=".7">' + n + '</text>';
+      });
+      return out;
+    })(),
+    golf: [
+      '<rect x="30" y="22" width="260" height="136" rx="22" fill="var(--ga)" opacity=".3"/>',
+      '<rect x="120" y="86" width="84" height="16" rx="6" fill="var(--cv-ink)" opacity=".22"/>',
+      '<ellipse cx="226" cy="58" rx="13" ry="6" fill="var(--cv-ink)" opacity=".55"/>',
+      '<path d="M226 58 V24" stroke="var(--cv-ink)" stroke-opacity=".6" stroke-width="2.5"/>',
+      '<path d="M226 25 l20 7 -20 7z" fill="var(--cv-rose)"/>',
+      '<path d="M96 132 Q110 70 220 60" fill="none" stroke="var(--cv-paper)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>',
+      '<circle cx="96" cy="134" r="8" fill="var(--cv-paper)"/>'
+    ].join('')
+  };
+
+  function dots(wid, hei, step) {
+    var s = '';
+    for (var y = step; y < hei; y += step) {
+      for (var x = step; x < wid; x += step) s += '<circle cx="' + x + '" cy="' + y + '" r="1.4"/>';
+    }
+    return s;
+  }
+
+  function coverSvg(id) {
+    return '<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + (COVERS[id] || '') + '</svg>';
+  }
+
+  /* 简单的线条图标，替换顶栏里的 emoji */
+  var ICONS = {
+    sun: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+    soundOn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+    soundOff: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
+    sheet: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9.5 9.5v10"/></svg>'
+  };
+  MG.icons = ICONS;
+
+  function buildHero() {
+    var sec = MG.h('section', 'hub-hero');
+    var art = MG.h('div', 'hub-scene');
+    art.innerHTML = SCENE;
+    sec.appendChild(art);
+
+    var copy = MG.h('div', 'hub-copy');
+    copy.appendChild(MG.h('p', 'hub-kicker', MG.t('hub.kicker')));
+    copy.appendChild(MG.h('h1', null, MG.t('hub.h1')));
+    copy.appendChild(MG.h('p', 'hub-lede', MG.t('hub.lede')));
+
+    var row = MG.h('div', 'hub-actions');
+    var go = button(MG.t('hub.random'), 'primary', playRandom);
+    go.setAttribute('title', MG.t('hub.randomHint'));
+    row.appendChild(go);
+
+    var def = MG.dailyGame();
+    if (def) {
+      var d = store.syncDaily(def.id);
+      var daily = button(MG.t('hub.dailyChip', { name: MG.gtext(def).name }), 'ghost', function () { startDaily(def.id); });
+      daily.classList.add('daily-btn');
+      row.appendChild(daily);
+      copy.appendChild(row);
+      copy.appendChild(MG.h('p', 'hub-meta',
+        (d.best ? MG.t('daily.best', { n: MG.fmtScore(d.best) }) : MG.t('daily.none')) +
+        ' · ' + MG.t('daily.streak', { n: d.streak || 0 }) +
+        ' · ' + MG.t('hub.slacked', { t: MG.durationText(store.data.workMs) })));
+    } else {
+      copy.appendChild(row);
     }
 
-    list.forEach(function (def, i) { grid.appendChild(buildCard(def, i)); });
-    if (hubFilter === 'all') grid.appendChild(buildPlaceholder());
-    return grid;
+    if (!store.data.seen) copy.appendChild(MG.h('p', 'hub-hint', MG.t('hub.hintFirst')));
+    sec.appendChild(copy);
+    return sec;
+  }
+
+  function buildGameCard(def, index) {
+    var best = store.bestOf(def.id);
+    var T = MG.gtext(def);
+    var accent = def.accent || '#4f8a6f';
+
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'gcard';
+    card.dataset.id = def.id;
+    card.style.setProperty('--ga', accent);
+    card.style.setProperty('--ga-soft', MG.hexToRgba(accent, 0.16));
+    card.style.animationDelay = (index * 50) + 'ms';
+
+    var cover = MG.h('div', 'gcard-cover');
+    cover.innerHTML = coverSvg(def.id);
+    card.appendChild(cover);
+
+    var body = MG.h('div', 'gcard-body');
+    var title = MG.h('div', 'gcard-title');
+    title.appendChild(MG.h('h3', null, T.name));
+    if (T.duration) title.appendChild(MG.h('span', 'gcard-time', T.duration));
+    body.appendChild(title);
+    body.appendChild(MG.h('p', null, T.tagline || ''));
+    body.appendChild(MG.h('span', 'gcard-best' + (best > 0 ? ' has' : ''),
+      best > 0 ? MG.t('hub.best', { n: MG.fmtScore(best) }) : MG.t('hub.noBest')));
+    card.appendChild(body);
+
+    card.addEventListener('click', function () { location.hash = '#/g/' + def.id; });
+    return card;
+  }
+
+  function buildShelf() {
+    var wrap = MG.h('section', 'shelf');
+    var head = MG.h('div', 'shelf-head');
+    head.appendChild(MG.h('h2', null, MG.t('hub.games')));
+    head.appendChild(MG.h('span', null, MG.t('hub.gamesHint')));
+    wrap.appendChild(head);
+
+    var grid = MG.h('div', 'shelf-grid');
+    MG.games.forEach(function (def, i) { grid.appendChild(buildGameCard(def, i)); });
+    var soon = MG.h('div', 'gcard gcard-soon');
+    soon.appendChild(MG.h('div', 'gcard-cover', ''));
+    var sb = MG.h('div', 'gcard-body');
+    sb.appendChild(MG.h('h3', null, MG.t('hub.placeholderTitle')));
+    sb.appendChild(MG.h('p', null, MG.t('hub.placeholderText')));
+    soon.appendChild(sb);
+    grid.appendChild(soon);
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  function buildBadges() {
+    var wrap = MG.h('section', 'badges');
+    var head = MG.h('div', 'shelf-head');
+    head.appendChild(MG.h('h2', null, MG.t('hub.ach')));
+    head.appendChild(MG.h('span', null, store.achCount() + ' / ' + MG.achievements.length));
+    wrap.appendChild(head);
+
+    var list = MG.h('div', 'badge-list');
+    MG.achievements.forEach(function (a) {
+      var on = store.hasAch(a.id);
+      var txt = MG.achText(a);
+      var item = MG.h('div', 'badge' + (on ? ' on' : ''));
+      item.appendChild(MG.h('span', 'badge-icon', a.icon));
+      var t = MG.h('div', 'badge-text');
+      t.appendChild(MG.h('b', null, txt.name));
+      t.appendChild(MG.h('span', null, txt.desc));
+      item.appendChild(t);
+      list.appendChild(item);
+    });
+    wrap.appendChild(list);
+    wrap.appendChild(MG.h('p', 'hub-note', MG.t('hub.note')));
+    return wrap;
   }
 
   /* ------------------------------------------------------------ 今日挑战 */
@@ -337,35 +425,6 @@
     else location.hash = '#/g/' + id;
   }
 
-  /* -------------------------------------------------------------- 成就墙 */
-
-  function buildAchievements() {
-    var wrap = MG.h('section', 'ach');
-    var head = MG.h('div', 'section-head');
-    var title = MG.h('div', 'section-title');
-    title.appendChild(MG.h('h2', null, MG.t('hub.ach')));
-    title.appendChild(MG.h('span', 'count-chip', store.achCount() + ' / ' + MG.achievements.length));
-    head.appendChild(title);
-    head.appendChild(MG.h('p', 'section-hint', MG.t('hub.achHint')));
-    wrap.appendChild(head);
-
-    var strip = MG.h('div', 'ach-strip');
-    MG.achievements.forEach(function (a) {
-      var on = store.hasAch(a.id);
-      var txt = MG.achText(a);
-      var item = MG.h('div', 'ach-item' + (on ? ' on' : ''));
-      item.appendChild(MG.h('span', 'ach-icon', a.icon));
-      var text = MG.h('div', 'ach-text');
-      text.appendChild(MG.h('b', null, txt.name));
-      text.appendChild(MG.h('span', null, txt.desc));
-      item.appendChild(text);
-      item.title = txt.name + ' · ' + txt.desc;
-      strip.appendChild(item);
-    });
-    wrap.appendChild(strip);
-    return wrap;
-  }
-
   function evaluateAchievements(run) {
     var unlocked = [];
     function grant(id) { if (store.unlockAch(id)) unlocked.push(id); }
@@ -380,6 +439,9 @@
     if (run.gameId === 'receipt' && run.score >= 3000) grant('receipt3000');
     if (run.gameId === 'golf' && (m.strokes || 99) <= 5) grant('golf5');
     if (run.gameId === 'tetris' && (m.lines || 0) >= 10) grant('tetris10');
+    if (run.gameId === 'lights' && m.moves && m.moves <= m.par) grant('lightsPar');
+    if (run.gameId === 'cups' && m.moves && m.undos === 0) grant('cupsClean');
+    if (run.gameId === 'slide' && m.moves && m.moves <= 40) grant('slide40');
 
     if (unlocked.length) {
       var last = MG.achById(unlocked[unlocked.length - 1]);

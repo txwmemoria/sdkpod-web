@@ -476,7 +476,10 @@
     { id: 'streak3', icon: '🗓️', name: '连续摸鱼', desc: '连续 3 天完成今日挑战' },
     { id: 'receipt3000', icon: '🧾', name: '报销达人', desc: '《报销单消消乐》单局 3000 分' },
     { id: 'golf5', icon: '⛳', name: '午休选手', desc: '《午休一杆进洞》三洞 ≤ 5 杆' },
-    { id: 'tetris10', icon: '🧱', name: '文件柜', desc: '《工位叠方块》消除 10 行' }
+    { id: 'tetris10', icon: '🧱', name: '文件柜', desc: '《工位叠方块》消除 10 行' },
+    { id: 'lightsPar', icon: '💡', name: '一步不多', desc: '《关灯下班》用最少步数关完' },
+    { id: 'cupsClean', icon: '☕', name: '不用撤销', desc: '《茶水间收杯子》一次撤销都没用' },
+    { id: 'slide40', icon: '🗂️', name: '归档专家', desc: '《整理文件柜》40 步内完成' }
   ];
 
   MG.achById = function (id) {

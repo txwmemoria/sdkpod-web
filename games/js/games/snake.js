@@ -222,6 +222,26 @@
 
       /* ---------- 绘制 ---------- */
 
+      /* 性能：emoji 文字每帧光栅化很贵，按格子尺寸缓存成位图 */
+      var spriteCache = {};
+      function foodSprite(icon, cs) {
+        var key = icon + '@' + Math.round(cs);
+        if (spriteCache[key]) return spriteCache[key];
+        var dpr = Math.min(w.devicePixelRatio || 1, 2);
+        var px = Math.max(8, Math.round(cs * dpr));
+        var cv = document.createElement('canvas');
+        cv.width = px;
+        cv.height = px;
+        var c = cv.getContext('2d');
+        c.font = Math.round(px * 0.82) + 'px "Segoe UI Emoji","Apple Color Emoji",system-ui';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText(icon, px / 2, px * 0.54);
+        spriteCache = {};
+        spriteCache[key] = cv;
+        return cv;
+      }
+
       function draw() {
         if (!view) return;
         var ctx = view.ctx;
@@ -241,15 +261,13 @@
 
         /* 零食 */
         if (S.food) {
-          var pulse = 1 + Math.sin(performance.now() / 240) * 0.07;
-          ctx.save();
-          ctx.font = Math.round(g.cs * 0.8 * pulse) + 'px "Segoe UI Emoji","Apple Color Emoji",system-ui';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(S.food.icon,
-            g.x + (S.food.x + 0.5) * g.csx,
-            g.y + (S.food.y + 0.55) * g.csy);
-          ctx.restore();
+          var pulse = 1 + Math.sin(performance.now() / 480) * 0.05;
+          var spr = foodSprite(S.food.icon, g.cs);
+          var fs = g.cs * 0.9 * pulse;
+          ctx.drawImage(spr,
+            g.x + (S.food.x + 0.5) * g.csx - fs / 2,
+            g.y + (S.food.y + 0.5) * g.csy - fs / 2,
+            fs, fs);
         }
 
         /* 蛇身 */

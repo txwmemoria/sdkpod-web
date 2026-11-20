@@ -332,6 +332,7 @@
         if (e.target && e.target.closest && e.target.closest('.overlay, button')) return;
         var cell = cellAt(e.clientX, e.clientY);
         if (!cell) return;
+        S.dirty = true;
 
         if (!S.selected) { select(cell); return; }
         if (S.selected.r === cell.r && S.selected.c === cell.c) { S.selected = null; return; }
@@ -487,12 +488,13 @@
         var dt = Math.min(64, t - S.last) / 1000;
         S.last = t;
         fx.update(dt);
-        var g = geometry();
         var k = Math.min(1, dt * 16);
+        var moving = false;
 
         for (var r = 0; r < ROWS; r++) {
           for (var c = 0; c < COLS; c++) {
             var a = anim[r][c];
+            if (a.ox || a.oy || a.dying) moving = true;
             a.ox += (0 - a.ox) * k;
             a.oy += (0 - a.oy) * k;
             if (Math.abs(a.ox) < 0.4) a.ox = 0;
@@ -501,8 +503,11 @@
           }
         }
 
-        /* 新掉落/新生成的格子已经在 collapse() 里换算成像素偏移 */
-        draw();
+        /* 性能：没有动画、粒子、飘字时跳过这一帧 */
+        if (moving || S.dirty || S.busy || fx.count() || S.popups.length || S.banner) {
+          draw();
+          S.dirty = moving;
+        }
 
         var now = performance.now();
         if (now - S.lastHud > 150) {
@@ -532,6 +537,7 @@
         var ro = new w.ResizeObserver(function () {
           view = MG.fitCanvas(canvas);
           draw();
+          S.dirty = true;
         });
         ro.observe(canvas);
         offResize = function () { ro.disconnect(); };

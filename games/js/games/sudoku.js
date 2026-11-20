@@ -135,6 +135,7 @@
           ((i % 9) % 3 === 2 && i % 9 !== 8 ? ' br' : '') +
           (Math.floor(i / 9) % 3 === 2 && i < 72 ? ' bb' : '');
         b.dataset.i = String(i);
+        b.setAttribute('aria-label', MG.t('g.sudoku.cell', { r: Math.floor(i / 9) + 1, c: i % 9 + 1 }));
         grid.appendChild(b);
         cells.push(b);
       }

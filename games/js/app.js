@@ -33,12 +33,14 @@
     document.documentElement.dataset.theme = store.data.theme;
     els.btnTheme.innerHTML = MG.icons[store.data.theme === 'dark' ? 'sun' : 'moon'];
     els.btnTheme.setAttribute('title', MG.t(store.data.theme === 'dark' ? 'app.themeLight' : 'app.themeDark'));
+    els.btnTheme.setAttribute('aria-label', els.btnTheme.getAttribute('title'));
     if (MG.refreshTheme) MG.refreshTheme();
   }
 
   function applySound() {
     els.btnSound.innerHTML = MG.icons[store.data.sound ? 'soundOn' : 'soundOff'];
     els.btnSound.setAttribute('title', MG.t(store.data.sound ? 'app.soundOn' : 'app.soundOff'));
+    els.btnSound.setAttribute('aria-label', els.btnSound.getAttribute('title'));
   }
 
   function refreshWorkTime() {
@@ -61,6 +63,7 @@
   els.btnSound.addEventListener('click', function () {
     MG.audio.setOn(!store.data.sound);
     if (!store.data.sound && MG.ambientStop) MG.ambientStop();
+    if (!store.data.sound && MG.music) MG.music.pause();
     applySound();
     MG.audio.play('click');
     MG.toast(MG.t(store.data.sound ? 'app.toastSound' : 'app.toastMuted'));
@@ -74,6 +77,35 @@
     });
   }
 
+  /* -------------------------------------------------------------- 音乐 */
+
+  var musicEls = {
+    box: document.getElementById('music'),
+    btn: document.getElementById('btnMusic'),
+    next: document.getElementById('btnMusicNext'),
+    label: document.querySelector('#btnMusic .music-label'),
+    credit: document.getElementById('footMusic')
+  };
+  var musicBeforeFake = false;
+
+  function paintMusic(st) {
+    if (!musicEls.btn || !MG.music) return;
+    st = st || MG.music.state;
+    musicEls.box.classList.toggle('playing', !!st.playing);
+    musicEls.box.classList.toggle('loading', !!st.loading);
+    musicEls.next.hidden = !st.file;
+    musicEls.label.textContent = st.loading ? MG.t('music.loading') : (st.file ? st.title : MG.t('music.play'));
+    musicEls.btn.title = st.file ? st.title + ' · ' + MG.t(st.playing ? 'music.pause' : 'music.resume') : MG.t('music.title');
+    musicEls.btn.setAttribute('aria-label', musicEls.btn.title);
+    if (st.file && musicEls.credit) musicEls.credit.hidden = false;
+  }
+
+  if (MG.music && musicEls.btn) {
+    MG.music.onChange(paintMusic);
+    musicEls.btn.addEventListener('click', function () { MG.music.toggle(); });
+    musicEls.next.addEventListener('click', function () { MG.music.next(); });
+  }
+
   /* -------------------------------------------------------------- 假装工作 */
 
   function toggleFake(force) {
@@ -81,6 +113,10 @@
     if (on === fakeOn) return;
     fakeOn = on;
     if (on && play && play.state === 'running') pauseGame();
+    if (MG.music) {
+      if (on) { musicBeforeFake = MG.music.state.playing; MG.music.pause(); }
+      else if (musicBeforeFake) { musicBeforeFake = false; MG.music.resume(); }
+    }
     els.fake.hidden = !on;
     document.body.classList.toggle('faking', on);
     disguiseTab(on);
@@ -188,6 +224,8 @@
 
     view.appendChild(buildHero());
     view.appendChild(buildShelf());
+    var hubAd = MG.ads && MG.ads.block('hub');
+    if (hubAd) view.appendChild(hubAd);
     view.appendChild(buildBadges());
   }
 
@@ -1098,6 +1136,8 @@
     wrap.appendChild(stage);
     wrap.appendChild(howto);
     wrap.appendChild(hint);
+    var playAd = MG.ads && MG.ads.block('play');
+    if (playAd) wrap.appendChild(playAd);
     view.appendChild(wrap);
 
     play.stage = stage;
@@ -1520,6 +1560,7 @@
 
   MG.i18n.onChange = function () {
     applyLangButton();
+    if (MG.music) { MG.music.retitle(); paintMusic(); }
     applyTheme();
     applySound();
     refreshWorkTime();

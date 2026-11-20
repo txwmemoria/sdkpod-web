@@ -351,7 +351,7 @@
         ctx.font = '600 ' + small + 'px -apple-system,"Segoe UI","Microsoft YaHei",system-ui';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        ctx.fillText('NEXT', panelX, panelY);
+        ctx.fillText(MG.t('g.tetris.next'), panelX, panelY);
         ctx.globalAlpha = 1;
 
         var nb = S.next;
@@ -369,8 +369,8 @@
         var statsY = panelY + small + 14 + g.cell * 3.4;
         ctx.globalAlpha = 0.55;
         ctx.font = '600 ' + small + 'px -apple-system,"Segoe UI","Microsoft YaHei",system-ui';
-        ctx.fillText('LEVEL', panelX, statsY);
-        ctx.fillText('LINES', panelX, statsY + small * 3.2);
+        ctx.fillText(MG.t('ui.level'), panelX, statsY);
+        ctx.fillText(MG.t('ui.lines'), panelX, statsY + small * 3.2);
         ctx.globalAlpha = 1;
         ctx.font = '700 ' + Math.round(small * 1.5) + 'px -apple-system,"Segoe UI",system-ui';
         ctx.fillText(String(S.level), panelX, statsY + small * 1.35);

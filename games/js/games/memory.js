@@ -66,7 +66,7 @@
           card.type = 'button';
           card.className = 'mem-card';
           card.dataset.symbol = sym;
-          card.setAttribute('aria-label', '卡片 ' + (idx + 1));
+          card.setAttribute('aria-label', MG.t('g.memory.card', { n: idx + 1 }));
 
           var inner = MG.h('div', 'inner');
           inner.appendChild(MG.h('div', 'face back'));

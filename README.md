@@ -55,3 +55,14 @@ npx wrangler deploy
 ```
 
 `_headers` sets a few response headers there; GitHub Pages ignores it.
+
+## Games: music and ads
+
+- **Music** (`games/js/music.js`): shuffles quiet pieces from Musopen's Complete Chopin Collection on the Internet Archive (CC0, public domain), streamed from archive.org. It never autoplays, and pauses for the boss key and when the site is muted.
+- **Google AdSense** (`games/js/ads.js`): off until configured. In `games/index.html` fill in:
+
+  ```html
+  <script>window.MG_ADS = { client: 'ca-pub-XXXXXXXXXXXXXXXX', hub: '1234567890', play: '0987654321' };</script>
+  ```
+
+  `hub` is shown between the game list and the achievements; `play` under the rules on each game page. Both are labelled and kept away from game controls and pop-up panels. Also add an `ads.txt` at the site root with your publisher line, which AdSense gives you.

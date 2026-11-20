@@ -9,13 +9,13 @@
 <link rel="icon" id="favicon" href="../assets/img/mark.svg" type="image/svg+xml">
 <title>摸鱼司 · 内部效率平台</title>
 <script>try{var d=JSON.parse(localStorage.getItem("mg.v1")||"{}"),t=d.theme||localStorage.getItem("theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}</script>
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
 <div class="app">
   <header class="topbar">
-    <a class="brand" href="./" aria-label="摸鱼司">
+    <a class="brand" href="./" aria-label="摸鱼司" data-i18n-aria="app.brand">
       <span class="brand-mark" aria-hidden="true" data-i18n="app.mark">摸</span>
       <span data-i18n="app.brand">摸鱼司</span>
     </a>
@@ -23,6 +23,15 @@
     <span class="spacer"></span>
 
     <div class="top-actions">
+      <div class="music" id="music">
+        <button class="music-btn" id="btnMusic" type="button" data-i18n-title="music.title">
+          <span class="music-ico" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="music-label" data-i18n="music.play">音乐</span>
+        </button>
+        <button class="icon-btn music-next" id="btnMusicNext" type="button" data-i18n-title="music.next" data-i18n-aria="music.next" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l8 6-8 6zM17 6v12"/></svg>
+        </button>
+      </div>
       <button class="btn btn-quiet" id="btnFake" type="button" data-i18n-title="app.bossKey">
         <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9.5 9.5v10"/></svg></span>
         <span class="btn-label" data-i18n="app.bossKey">假装工作</span>
@@ -42,6 +51,7 @@
 
   <footer class="foot">
     <a href="../" data-i18n="app.footer">SDK Pods · 歇一会儿</a>
+    <span class="foot-wx" id="footMusic" hidden>· <a href="https://archive.org/details/musopen-chopin" target="_blank" rel="noopener noreferrer" data-i18n="music.credit">音乐 Musopen · 公共领域</a></span>
     <span class="foot-wx" id="footWx" hidden>· <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" data-i18n="app.wxCredit">天气 Open-Meteo</a></span>
   </footer>
 </div>
@@ -82,10 +92,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr><th>2</th><td data-i18n="fake.east">华东</td><td>王 · 成</td><td>1,284.6</td><td>1,420.0</td><td>90.5%</td><td>+6.2%</td><td>184.2</td><td>—</td></tr>
-        <tr><th>3</th><td data-i18n="fake.south">华南</td><td>李 · 静</td><td>986.2</td><td>1,050.0</td><td>93.9%</td><td>+4.8%</td><td>142.7</td><td data-i18n="fake.pending">待复核</td></tr>
-        <tr><th>4</th><td data-i18n="fake.north">华北</td><td>张 · 磊</td><td>1,102.4</td><td>1,180.0</td><td>93.4%</td><td>+3.1%</td><td>151.0</td><td>—</td></tr>
-        <tr><th>5</th><td data-i18n="fake.west">西南</td><td>陈 · 曦</td><td>612.8</td><td>700.0</td><td>87.5%</td><td>+2.4%</td><td>96.4</td><td data-i18n="fake.adjusted">口径调整</td></tr>
+        <tr><th>2</th><td data-i18n="fake.east">华东</td><td data-i18n="fake.o1">王 · 成</td><td>1,284.6</td><td>1,420.0</td><td>90.5%</td><td>+6.2%</td><td>184.2</td><td>—</td></tr>
+        <tr><th>3</th><td data-i18n="fake.south">华南</td><td data-i18n="fake.o2">李 · 静</td><td>986.2</td><td>1,050.0</td><td>93.9%</td><td>+4.8%</td><td>142.7</td><td data-i18n="fake.pending">待复核</td></tr>
+        <tr><th>4</th><td data-i18n="fake.north">华北</td><td data-i18n="fake.o3">张 · 磊</td><td>1,102.4</td><td>1,180.0</td><td>93.4%</td><td>+3.1%</td><td>151.0</td><td>—</td></tr>
+        <tr><th>5</th><td data-i18n="fake.west">西南</td><td data-i18n="fake.o4">陈 · 曦</td><td>612.8</td><td>700.0</td><td>87.5%</td><td>+2.4%</td><td>96.4</td><td data-i18n="fake.adjusted">口径调整</td></tr>
         <tr><th>6</th><td data-i18n="fake.total">合计</td><td>—</td><td>3,986.0</td><td>4,350.0</td><td>91.6%</td><td>+4.4%</td><td>574.3</td><td>—</td></tr>
         <tr><th>7</th><td data-i18n="fake.memo">备注</td><td colspan="7" data-i18n="fake.memoText">口径与上月一致；渠道费用待财务复核</td></tr>
       </tbody>
@@ -119,20 +129,24 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/core.js?v=14"></script>
-<script src="js/i18n.js?v=14"></script>
-<script src="js/art.js?v=14"></script>
-<script src="js/weather.js?v=14"></script>
-<script src="js/games/memory.js?v=14"></script>
-<script src="js/games/lights.js?v=14"></script>
-<script src="js/games/cups.js?v=14"></script>
-<script src="js/games/slide.js?v=14"></script>
-<script src="js/games/sudoku.js?v=14"></script>
-<script src="js/games/sweep.js?v=14"></script>
-<script src="js/games/receipt.js?v=14"></script>
-<script src="js/games/golf.js?v=14"></script>
-<script src="js/games/tetris.js?v=14"></script>
-<script src="js/games/snake.js?v=14"></script>
-<script src="js/app.js?v=14"></script>
+<!-- Google AdSense：填好 client（ca-pub-…）和两个广告单元 id 就会出现；留空则不加载任何广告代码 -->
+<script>window.MG_ADS = { client: '', hub: '', play: '' };</script>
+<script src="js/core.js?v=15"></script>
+<script src="js/i18n.js?v=15"></script>
+<script src="js/art.js?v=15"></script>
+<script src="js/weather.js?v=15"></script>
+<script src="js/music.js?v=15"></script>
+<script src="js/ads.js?v=15"></script>
+<script src="js/games/memory.js?v=15"></script>
+<script src="js/games/lights.js?v=15"></script>
+<script src="js/games/cups.js?v=15"></script>
+<script src="js/games/slide.js?v=15"></script>
+<script src="js/games/sudoku.js?v=15"></script>
+<script src="js/games/sweep.js?v=15"></script>
+<script src="js/games/receipt.js?v=15"></script>
+<script src="js/games/golf.js?v=15"></script>
+<script src="js/games/tetris.js?v=15"></script>
+<script src="js/games/snake.js?v=15"></script>
+<script src="js/app.js?v=15"></script>
 </body>
 </html>

@@ -136,7 +136,20 @@
 
   /* ===================================================== v5 大厅（场景化） */
 
-  /* 主视觉：窗外的远山与天光，桌角一杯茶。颜色全部走 CSS 变量，夜间自动换成月夜。 */
+  /* 主视觉：田园午后（夜间是月夜，农舍亮灯、天上有星）。颜色全部走 CSS 变量。 */
+  function trees(list) {
+    return list.map(function (t) {
+      return '<ellipse cx="' + t[0] + '" cy="' + t[1] + '" rx="' + t[2] + '" ry="' + (t[2] * 1.15).toFixed(1) + '"/>' +
+        '<rect x="' + (t[0] - 1.5) + '" y="' + (t[1] + t[2] * 0.9).toFixed(1) + '" width="3" height="' + (t[2] * 0.7).toFixed(1) + '"/>';
+    }).join('');
+  }
+  function fence(x0, x1, yAt) {
+    var out = '';
+    for (var x = x0; x <= x1; x += 26) out += '<rect x="' + x + '" y="' + (yAt(x) - 16) + '" width="3.4" height="18" rx="1.2"/>';
+    out += '<path d="M' + x0 + ' ' + (yAt(x0) - 11) + ' Q ' + ((x0 + x1) / 2) + ' ' + (yAt((x0 + x1) / 2) - 13) + ' ' + (x1 + 3) + ' ' + (yAt(x1) - 11) + '" fill="none" stroke-width="2.2"/>';
+    out += '<path d="M' + x0 + ' ' + (yAt(x0) - 4) + ' Q ' + ((x0 + x1) / 2) + ' ' + (yAt((x0 + x1) / 2) - 6) + ' ' + (x1 + 3) + ' ' + (yAt(x1) - 4) + '" fill="none" stroke-width="2.2"/>';
+    return out;
+  }
   var SCENE = [
     '<svg class="scene" viewBox="0 0 1200 380" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">',
     '<defs>',
@@ -144,28 +157,67 @@
     '<stop offset="0" stop-color="var(--sky-1)"/><stop offset="1" stop-color="var(--sky-2)"/>',
     '</linearGradient>',
     '<radialGradient id="sc-sun" cx=".5" cy=".5" r=".5">',
-    '<stop offset="0" stop-color="var(--sun)" stop-opacity=".95"/><stop offset=".55" stop-color="var(--sun)" stop-opacity=".35"/>',
+    '<stop offset="0" stop-color="var(--sun)" stop-opacity=".9"/><stop offset=".5" stop-color="var(--sun)" stop-opacity=".3"/>',
     '<stop offset="1" stop-color="var(--sun)" stop-opacity="0"/>',
     '</radialGradient>',
+    '<clipPath id="sc-near"><path d="M0 318 C160 292 300 304 470 314 S760 292 920 308 S1120 316 1200 308 V380 H0Z"/></clipPath>',
     '</defs>',
     '<rect width="1200" height="380" fill="url(#sc-sky)"/>',
-    '<circle cx="900" cy="150" r="120" fill="url(#sc-sun)"/>',
-    '<circle cx="900" cy="150" r="34" fill="var(--sun-core)"/>',
-    '<g fill="var(--cloud)">',
-    '<ellipse cx="300" cy="96" rx="92" ry="13"/><ellipse cx="360" cy="84" rx="54" ry="12"/>',
-    '<ellipse cx="700" cy="70" rx="70" ry="9"/><ellipse cx="1080" cy="110" rx="64" ry="9"/>',
+    /* 星星：白天透明 */
+    '<g fill="var(--star)">',
+    '<circle cx="120" cy="60" r="1.4"/><circle cx="260" cy="40" r="1.1"/><circle cx="420" cy="74" r="1.3"/><circle cx="610" cy="38" r="1"/>',
+    '<circle cx="700" cy="96" r="1.2"/><circle cx="1010" cy="52" r="1.3"/><circle cx="1120" cy="84" r="1"/><circle cx="1160" cy="30" r="1.2"/>',
+    '<circle cx="540" cy="120" r="1"/><circle cx="330" cy="118" r="1"/>',
     '</g>',
-    '<path d="M0 250 C120 205 220 215 330 232 S540 200 650 214 S860 190 980 212 S1130 226 1200 214 V380 H0Z" fill="var(--hill-3)"/>',
-    '<path d="M0 290 C140 252 260 262 380 280 S600 250 740 266 S960 248 1080 268 S1170 276 1200 270 V380 H0Z" fill="var(--hill-2)"/>',
-    '<path d="M0 330 C160 300 300 312 470 324 S760 300 920 318 S1120 326 1200 318 V380 H0Z" fill="var(--hill-1)"/>',
-    /* 桌角：茶杯 + 小盆栽 */
-    '<rect x="0" y="352" width="1200" height="28" fill="var(--desk)"/>',
+    '<circle cx="880" cy="138" r="130" fill="url(#sc-sun)"/>',
+    '<circle cx="880" cy="138" r="32" fill="var(--sun-core)"/>',
+    '<g class="clouds" fill="var(--cloud)">',
+    '<ellipse cx="260" cy="92" rx="96" ry="12"/><ellipse cx="318" cy="80" rx="52" ry="12"/>',
+    '<ellipse cx="660" cy="64" rx="74" ry="9"/><ellipse cx="700" cy="56" rx="34" ry="8"/>',
+    '<ellipse cx="1060" cy="104" rx="66" ry="9"/>',
+    '</g>',
+    '<g fill="none" stroke="var(--bird)" stroke-width="1.8" stroke-linecap="round">',
+    '<path d="M1010 92 q6 -6 12 0 q6 -6 12 0"/><path d="M1042 78 q5 -5 10 0 q5 -5 10 0"/>',
+    '</g>',
+    /* 最远的山 */
+    '<path d="M0 232 L90 196 L170 214 L280 170 L380 206 L470 188 L560 210 L700 176 L820 204 L930 184 L1040 206 L1130 190 L1200 200 V380 H0Z" fill="var(--hill-4)"/>',
+    '<path d="M0 252 C120 210 220 220 330 236 S540 206 650 218 S860 196 980 216 S1130 230 1200 218 V380 H0Z" fill="var(--hill-3)"/>',
+    '<g fill="var(--tree-2)">', trees([[150, 222, 9], [168, 226, 7], [610, 206, 10], [632, 210, 8], [650, 205, 9], [990, 208, 8], [1008, 212, 6]]), '</g>',
+    '<path d="M0 292 C140 256 260 266 380 282 S600 254 740 268 S960 252 1080 270 S1170 278 1200 272 V380 H0Z" fill="var(--hill-2)"/>',
+    /* 农舍 */
+    '<g transform="translate(700 236)">',
+    '<rect x="0" y="12" width="46" height="26" fill="var(--house)"/>',
+    '<path d="M-6 14 L23 -6 L52 14Z" fill="var(--roof)"/>',
+    '<rect x="8" y="20" width="10" height="9" rx="1.5" fill="var(--window)"/>',
+    '<rect x="28" y="22" width="9" height="16" rx="1.5" fill="var(--roof)" opacity=".75"/>',
+    '<rect x="34" y="-6" width="5" height="10" fill="var(--roof)"/>',
+    '</g>',
+    '<g fill="var(--tree)">', trees([[300, 262, 13], [324, 266, 10], [760, 252, 11], [850, 258, 14], [876, 262, 10], [470, 268, 9]]), '</g>',
+    '<path d="M0 332 C160 296 300 308 470 318 S760 296 920 312 S1120 320 1200 312 V380 H0Z" fill="var(--hill-1)"/>',
+    /* 近处田垄 */
+    '<g clip-path="url(#sc-near)" fill="none" stroke="var(--field)" stroke-width="3" stroke-linecap="round">',
+    '<path d="M-20 340 Q300 312 700 330"/><path d="M-20 352 Q320 324 740 342"/><path d="M-20 364 Q340 336 780 354"/>',
+    '<path d="M560 330 Q820 306 1220 322"/><path d="M600 344 Q860 320 1220 336"/>',
+    '</g>',
+    '<g fill="var(--fence)" stroke="var(--fence)">', fence(600, 800, function (x) { return 322 - Math.sin(x / 260) * 4; }), '</g>',
+    /* 草丛 */
+    '<g fill="none" stroke="var(--leaf)" stroke-width="2" stroke-linecap="round" opacity=".8">',
+    '<path d="M420 352 q2 -10 6 -14 M426 352 q0 -9 -4 -15 M432 352 q3 -8 8 -11"/>',
+    '<path d="M610 350 q2 -10 6 -14 M616 350 q0 -9 -4 -15"/>',
+    '</g>',
+    /* 桌沿：茶杯 + 小盆栽 */
+    '<rect x="0" y="356" width="1200" height="24" fill="var(--desk)"/>',
+    '<rect x="0" y="356" width="1200" height="2" fill="#fff" opacity=".18"/>',
     '<g class="scene-desk" transform="translate(-110 0)">',
-    '<path d="M1010 318 h44 l-4 30 a8 8 0 0 1 -8 6 h-20 a8 8 0 0 1 -8 -6z" fill="var(--cup)"/>',
-    '<path d="M1054 324 h7 a9 9 0 0 1 0 18 h-6" fill="none" stroke="var(--cup)" stroke-width="5"/>',
-    '<path class="steam" d="M1024 308 c-6 -10 6 -14 0 -26 M1040 308 c-6 -10 6 -14 0 -26" fill="none" stroke="var(--steam)" stroke-width="3" stroke-linecap="round"/>',
-    '<path d="M1110 326 h40 l-5 28 h-30z" fill="var(--pot)"/>',
+    '<ellipse cx="1032" cy="356" rx="30" ry="4" fill="#000" opacity=".08"/>',
+    '<path d="M1010 320 h44 l-4 30 a8 8 0 0 1 -8 6 h-20 a8 8 0 0 1 -8 -6z" fill="var(--cup)"/>',
+    '<path d="M1012 326 h40" stroke="var(--cup-band)" stroke-width="4"/>',
+    '<path d="M1054 326 h7 a9 9 0 0 1 0 18 h-6" fill="none" stroke="var(--cup)" stroke-width="5"/>',
+    '<path class="steam" d="M1024 310 c-6 -10 6 -14 0 -26 M1040 310 c-6 -10 6 -14 0 -26" fill="none" stroke="var(--steam)" stroke-width="3" stroke-linecap="round"/>',
+    '<path d="M1110 328 h40 l-5 28 h-30z" fill="var(--pot)"/>',
+    '<path d="M1108 328 h44" stroke="var(--pot)" stroke-width="5" stroke-linecap="round"/>',
     '<path d="M1130 326 c-2 -22 -18 -30 -28 -34 c14 0 26 10 28 22 c2 -16 14 -30 30 -32 c-14 8 -24 22 -30 44z" fill="var(--leaf)"/>',
+    '<path d="M1130 326 c0 -14 4 -26 12 -40 c-2 14 -6 26 -12 40z" fill="var(--leaf)" opacity=".7"/>',
     '</g>',
     '</svg>'
   ].join('');
@@ -262,6 +314,35 @@
         out += '<rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="12" height="4" rx="2" fill="var(' + tabs[n] + ')"/>';
         out += '<text x="' + (x + 17) + '" y="' + (y + 30) + '" text-anchor="middle" font-size="14" font-family="Georgia,serif" fill="var(--cv-ink)" opacity=".7">' + n + '</text>';
       });
+      return out;
+    })(),
+    sudoku: (function () {
+      var digits = { 0: 5, 2: 3, 4: 7, 10: 9, 12: 1, 14: 6, 19: 4, 21: 8, 24: 2, 28: 6, 30: 3, 33: 9 };
+      var out = '<rect x="88" y="14" width="144" height="144" rx="10" fill="var(--cv-paper)"/>';
+      for (var k = 1; k < 9; k++) {
+        var thick = k % 3 === 0;
+        var p = 88 + k * 16;
+        out += '<path d="M' + p + ' 16 V156 M90 ' + (14 + k * 16) + ' H230" stroke="var(--cv-ink)" stroke-opacity="' + (thick ? 0.35 : 0.1) + '" stroke-width="' + (thick ? 1.6 : 1) + '"/>';
+      }
+      for (var i in digits) {
+        var x = 96 + (i % 9) * 16, y = 27 + Math.floor(i / 9) * 16;
+        out += '<text x="' + x + '" y="' + y + '" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="' + (i % 5 ? 'var(--cv-ink)' : 'var(--ga)') + '" opacity=".75">' + digits[i] + '</text>';
+      }
+      out += '<rect x="136" y="62" width="16" height="16" fill="var(--ga)" opacity=".25"/>';
+      return out;
+    })(),
+    sweep: (function () {
+      var openSet = { 13: 1, 14: 2, 15: 0, 16: 0, 17: 1, 23: 1, 24: 0, 25: 0, 26: 0, 27: 1, 33: 2, 34: 1, 35: 0, 36: 1, 37: 2 };
+      var nc = { 1: '#5b84b8', 2: '#5f9474' };
+      var out = '';
+      for (var i = 0; i < 40; i++) {
+        var x = 50 + (i % 10) * 22, y = 40 + Math.floor(i / 10) * 26;
+        var o = i in openSet;
+        out += '<rect x="' + x + '" y="' + y + '" width="20" height="23" rx="4" fill="' + (o ? '#eadfcb' : 'var(--ga)') + '" opacity="' + (o ? 0.95 : 0.55) + '"/>';
+        if (o && openSet[i]) out += '<text x="' + (x + 10) + '" y="' + (y + 16) + '" text-anchor="middle" font-size="12" font-weight="700" font-family="Georgia,serif" fill="' + nc[openSet[i]] + '">' + openSet[i] + '</text>';
+      }
+      out += '<path d="M' + (50 + 8 * 22 + 8) + ' ' + (40 + 5) + ' v14" stroke="#7b5b45" stroke-width="2"/><path d="M' + (50 + 8 * 22 + 9) + ' ' + (40 + 5) + ' l8 4 -8 4z" fill="#d7807a"/>';
+      out += '<path d="M' + (50 + 2 * 22 + 8) + ' ' + (40 + 3 * 26 + 5) + ' v14" stroke="#7b5b45" stroke-width="2"/><path d="M' + (50 + 2 * 22 + 9) + ' ' + (40 + 3 * 26 + 5) + ' l8 4 -8 4z" fill="#d7807a"/>';
       return out;
     })(),
     golf: [
@@ -442,6 +523,8 @@
     if (run.gameId === 'lights' && m.moves && m.moves <= m.par) grant('lightsPar');
     if (run.gameId === 'cups' && m.moves && m.undos === 0) grant('cupsClean');
     if (run.gameId === 'slide' && m.moves && m.moves <= 40) grant('slide40');
+    if (run.gameId === 'sudoku' && m.mistakes === 0) grant('sudokuClean');
+    if (run.gameId === 'sweep' && m.won) grant('sweepWin');
 
     if (unlocked.length) {
       var last = MG.achById(unlocked[unlocked.length - 1]);
@@ -854,7 +937,7 @@
     showOver({
       score: score,
       best: res.best,
-      record: res.record && score > 0,
+      record: res.record && score > 0 && !(payload.meta && payload.meta.won === false),
       note: payload.note || '',
       daily: !!play.daily
     });

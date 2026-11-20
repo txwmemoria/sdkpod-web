@@ -209,7 +209,7 @@
           S.ball.vx = 0;
           S.ball.vy = 0;
           MG.audio.play('perfect');
-          fx.burst(S.cup.x, S.cup.y, '#e0b03f', 24, 340);
+          fx.burst(S.cup.x, S.cup.y, '#d9ad62', 24, 340);
           fx.shake(7);
         }
       }
@@ -281,7 +281,7 @@
           ctx.fillStyle = 'rgba(30,38,48,.10)';
           MG.roundRect(ctx, d.x + 3, d.y + 5, d.w, d.h, 10);
           ctx.fill();
-          ctx.fillStyle = 'rgba(120,133,148,.55)';
+          ctx.fillStyle = 'rgba(112,140,118,.55)';
           MG.roundRect(ctx, d.x, d.y, d.w, d.h, 10);
           ctx.fill();
           ctx.strokeStyle = 'rgba(255,255,255,.25)';
@@ -365,7 +365,7 @@
         ctx.arc(S.ball.x, S.ball.y, R * shrink, 0, 6.2832);
         ctx.fill();
         ctx.restore();
-        ctx.strokeStyle = 'rgba(120,133,148,.5)';
+        ctx.strokeStyle = 'rgba(112,140,118,.5)';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(S.ball.x, S.ball.y, R * shrink, 0, 6.2832);

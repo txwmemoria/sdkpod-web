@@ -12,12 +12,12 @@
   var DURATION = 60000;
 
   var TYPES = [
-    { icon: '🧾', color: '#3f7fd0', name: '发票' },
-    { icon: '🚕', color: '#d99a2b', name: '打车' },
-    { icon: '☕', color: '#a2703f', name: '咖啡' },
-    { icon: '🍩', color: '#d3663f', name: '下午茶' },
-    { icon: '🥤', color: '#3c9d7c', name: '奶茶' },
-    { icon: '🍱', color: '#7b6fd0', name: '便当' }
+    { icon: '🧾', color: '#7d9cc4', name: '发票' },
+    { icon: '🚕', color: '#d9ad62', name: '打车' },
+    { icon: '☕', color: '#b08a66', name: '咖啡' },
+    { icon: '🍩', color: '#d98f7a', name: '下午茶' },
+    { icon: '🥤', color: '#7fae94', name: '奶茶' },
+    { icon: '🍱', color: '#a291c8', name: '便当' }
   ];
 
   function cssVar(name, fallback) {
@@ -393,7 +393,7 @@
         ctx.translate(off.x, off.y);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(120,133,148,.06)';
+        ctx.fillStyle = 'rgba(112,140,118,.06)';
         MG.roundRect(ctx, g.x - 8, g.y - 8, cs * COLS + 16, cs * ROWS + 16, 18);
         ctx.fill();
         ctx.restore();

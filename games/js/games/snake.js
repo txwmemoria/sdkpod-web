@@ -120,11 +120,11 @@
         c.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         var g = geometry();
-        c.fillStyle = 'rgba(120,133,148,.045)';
+        c.fillStyle = 'rgba(112,140,118,.045)';
         MG.roundRect(c, g.x - 2, g.y - 2, g.w + 4, g.h + 4, 18);
         c.fill();
 
-        c.strokeStyle = 'rgba(120,133,148,.14)';
+        c.strokeStyle = 'rgba(112,140,118,.14)';
         c.lineWidth = 1;
         for (var gx = 0; gx <= COLS; gx++) {
           c.beginPath();
@@ -139,7 +139,7 @@
           c.stroke();
         }
 
-        c.strokeStyle = 'rgba(120,133,148,.25)';
+        c.strokeStyle = 'rgba(112,140,118,.25)';
         c.lineWidth = 2;
         MG.roundRect(c, g.x - 2, g.y - 2, g.w + 4, g.h + 4, 18);
         c.stroke();
@@ -208,7 +208,7 @@
           fx.burst(
             g2.x + (nx + 0.5) * g2.csx,
             g2.y + (ny + 0.5) * g2.csy,
-            S.food.fast ? '#e0b03f' : MG.theme.accent,
+            S.food.fast ? '#d9ad62' : MG.theme.accent,
             S.food.fast ? 16 : 11,
             S.food.fast ? 260 : 190
           );

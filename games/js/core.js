@@ -479,7 +479,9 @@
     { id: 'tetris10', icon: '🧱', name: '文件柜', desc: '《工位叠方块》消除 10 行' },
     { id: 'lightsPar', icon: '💡', name: '一步不多', desc: '《关灯下班》用最少步数关完' },
     { id: 'cupsClean', icon: '☕', name: '不用撤销', desc: '《茶水间收杯子》一次撤销都没用' },
-    { id: 'slide40', icon: '🗂️', name: '归档专家', desc: '《整理文件柜》40 步内完成' }
+    { id: 'slide40', icon: '🗂️', name: '归档专家', desc: '《整理文件柜》40 步内完成' },
+    { id: 'sudokuClean', icon: '🔢', name: '一笔不改', desc: '《午后数独》零失误完成' },
+    { id: 'sweepWin', icon: '🐝', name: '园丁', desc: '《菜园扫雷》清理完整块菜地' }
   ];
 
   MG.achById = function (id) {

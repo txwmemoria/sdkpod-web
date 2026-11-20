@@ -264,6 +264,28 @@
       'g.slide.home': '归位',
       'g.slide.note': '{moves} 步 · 用时 {secs} 秒',
 
+      'game.sudoku.name': '午后数独',
+      'game.sudoku.tagline': '一杯茶的时间，填满九宫格。每道题只有唯一解。',
+      'game.sudoku.howto': '每行、每列、每个 3×3 宫里，1–9 各出现一次。点格子再点数字填入；打开铅笔模式可以先记下候选数。填错的数字会标出来。',
+      'game.sudoku.duration': '约 8 分钟',
+      'game.sudoku.tags': ['解谜', '数字'],
+      'game.sudoku.controls': [['点格子 · 方向键', '选格'], ['1–9', '填数'], ['N / ✎', '铅笔模式'], ['Delete / ⌫', '擦除']],
+      'g.sudoku.left': '待填',
+      'g.sudoku.mistakes': '填错',
+      'g.sudoku.note': '用时 {time} · 填错 {mistakes} 次',
+
+      'game.sweep.name': '菜园扫雷',
+      'game.sweep.tagline': '菜地里藏着几窝蜜蜂。看数字，翻开安全的土，给蜂窝插上小旗。',
+      'game.sweep.howto': '点一下翻开一格土，数字表示周围八格里有几窝蜜蜂。右键、长按或打开插旗模式可以插旗；点数字时，如果周围的旗数刚好够，会把其余格子一起翻开。第一锄一定安全。',
+      'game.sweep.duration': '约 3 分钟',
+      'game.sweep.tags': ['解谜', '推理'],
+      'game.sweep.controls': [['点击', '翻开'], ['右键 / 长按', '插旗'], ['F', '插旗模式'], ['点数字', '一起翻开']],
+      'g.sweep.bees': '蜂窝',
+      'g.sweep.flagOn': '插旗中',
+      'g.sweep.flagOff': '插旗模式',
+      'g.sweep.win': '菜园清理完毕 · 用时 {time}',
+      'g.sweep.lose': '被蜜蜂蛰了一下 · 翻开了 {n} / {total} 格',
+
       'game.printer.name': '打印机排队',
       'game.printer.tagline': '三秒内把单子塞进对的托盘。塞错是卡纸，漏掉是丢单。',
       'game.printer.howto': '单子进入右侧虚线分拣区后，按 1 / 2 / 3 送进对应托盘。卡纸或漏单各扣一条命。',
@@ -304,7 +326,11 @@
       'ach.cupsClean.name': '不用撤销',
       'ach.cupsClean.desc': '《茶水间收杯子》一次撤销都没用',
       'ach.slide40.name': '归档专家',
-      'ach.slide40.desc': '《整理文件柜》40 步内完成'
+      'ach.slide40.desc': '《整理文件柜》40 步内完成',
+      'ach.sudokuClean.name': '一笔不改',
+      'ach.sudokuClean.desc': '《午后数独》零失误完成',
+      'ach.sweepWin.name': '园丁',
+      'ach.sweepWin.desc': '《菜园扫雷》清理完整块菜地'
     },
 
     en: {
@@ -563,6 +589,28 @@
       'g.slide.home': 'In place',
       'g.slide.note': '{moves} moves · {secs}s',
 
+      'game.sudoku.name': 'Afternoon Sudoku',
+      'game.sudoku.tagline': 'Fill the grid over a cup of tea. Every puzzle has exactly one solution.',
+      'game.sudoku.howto': 'Each row, column and 3×3 box holds 1–9 exactly once. Tap a cell, then a number. Pencil mode lets you jot down candidates. Wrong numbers are marked.',
+      'game.sudoku.duration': '~8 min',
+      'game.sudoku.tags': ['Puzzle', 'Numbers'],
+      'game.sudoku.controls': [['Tap · arrow keys', 'select'], ['1–9', 'fill'], ['N / ✎', 'pencil mode'], ['Delete / ⌫', 'erase']],
+      'g.sudoku.left': 'Left',
+      'g.sudoku.mistakes': 'Mistakes',
+      'g.sudoku.note': '{time} · {mistakes} mistakes',
+
+      'game.sweep.name': 'Garden Sweep',
+      'game.sweep.tagline': 'A few beehives hide in the vegetable patch. Read the numbers, dig the safe soil, flag the hives.',
+      'game.sweep.howto': 'Tap to dig a square. A number tells you how many hives touch it. Right-click, long-press or turn on flag mode to plant a flag. Tapping a number whose flags are all placed digs the rest around it. Your first dig is always safe.',
+      'game.sweep.duration': '~3 min',
+      'game.sweep.tags': ['Puzzle', 'Logic'],
+      'game.sweep.controls': [['Click', 'dig'], ['Right-click / hold', 'flag'], ['F', 'flag mode'], ['Tap a number', 'dig around it']],
+      'g.sweep.bees': 'Hives',
+      'g.sweep.flagOn': 'Flagging',
+      'g.sweep.flagOff': 'Flag mode',
+      'g.sweep.win': 'Garden cleared · {time}',
+      'g.sweep.lose': 'Stung by a bee · dug {n} / {total}',
+
       'game.printer.name': 'Printer Rush',
       'game.printer.tagline': 'Three seconds to file each sheet in the right tray. Wrong tray jams, missed sheet is lost.',
       'game.printer.howto': 'When a sheet enters the dashed sorting zone, press 1 / 2 / 3 for the matching tray. Jams and misses each cost a life.',
@@ -603,7 +651,11 @@
       'ach.cupsClean.name': 'No take-backs',
       'ach.cupsClean.desc': 'Finish Mug Shelf without undoing',
       'ach.slide40.name': 'Archivist',
-      'ach.slide40.desc': 'Finish Filing Shuffle in 40 moves or fewer'
+      'ach.slide40.desc': 'Finish Filing Shuffle in 40 moves or fewer',
+      'ach.sudokuClean.name': 'Ink, not pencil',
+      'ach.sudokuClean.desc': 'Finish Afternoon Sudoku with no mistakes',
+      'ach.sweepWin.name': 'Gardener',
+      'ach.sweepWin.desc': 'Clear the whole patch in Garden Sweep'
     }
   };
 

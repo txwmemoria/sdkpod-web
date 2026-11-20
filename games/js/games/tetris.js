@@ -139,7 +139,7 @@
           fx.burst(
             gg.bx + gg.bw / 2,
             gg.by + r * gg.cell + gg.cell / 2,
-            cleared % 2 ? '#e0b03f' : MG.theme.accent,
+            cleared % 2 ? '#d9ad62' : MG.theme.accent,
             16,
             280
           );
@@ -281,11 +281,11 @@
 
         /* 棋盘底 */
         ctx.save();
-        ctx.fillStyle = 'rgba(120,133,148,.08)';
+        ctx.fillStyle = 'rgba(112,140,118,.08)';
         MG.roundRect(ctx, g.bx - 8, g.by - 8, g.bw + 16, g.bh + 16, 18);
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(120,133,148,.16)';
+        ctx.strokeStyle = 'rgba(112,140,118,.16)';
         ctx.lineWidth = 1;
         for (var c = 0; c <= COLS; c++) {
           ctx.beginPath();
@@ -340,7 +340,7 @@
         var small = Math.max(9, g.cell * 0.34);
 
         ctx.save();
-        ctx.fillStyle = 'rgba(120,133,148,.07)';
+        ctx.fillStyle = 'rgba(112,140,118,.07)';
         MG.roundRect(ctx, panelX - 14, panelY - 12, g.cell * 3.6, g.cell * 6.6, 16);
         ctx.fill();
         ctx.restore();

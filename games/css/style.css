@@ -1470,3 +1470,57 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .music.playing .music-ico i { animation: none; height: 10px; }
 }
+
+/* =========================================================================
+   菜园守卫
+   ========================================================================= */
+.stage[data-game="garden"] .gd-field { position: absolute; inset: 0 0 58px 0; }
+.gd-field canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.gd-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 58px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--panel-2);
+  z-index: 6;
+}
+.gd-tools { display: flex; gap: 8px; min-width: 0; }
+.gd-tools[hidden] { display: none; }
+.gd-tool {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 42px; padding: 0 12px 0 6px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--panel); color: var(--ink);
+  font: inherit; font-size: 13px; line-height: 1.1;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, opacity .2s;
+}
+.gd-tool:hover:not(:disabled) { border-color: var(--accent); }
+.gd-tool.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--ga-soft, rgba(127,174,115,.25)); }
+.gd-tool:disabled { opacity: .45; cursor: not-allowed; }
+.gd-ico { display: inline-flex; width: 32px; height: 32px; }
+.gd-ico svg { width: 100%; height: 100%; }
+.gd-txt { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.gd-name { font-weight: 600; white-space: nowrap; }
+.gd-cost { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.gd-cost::first-letter { color: #a4925a; }
+.gd-act { padding: 0 12px; }
+.gd-close { width: 42px; justify-content: center; padding: 0; font-size: 20px; color: var(--muted); }
+.gd-spacer { flex: 1; }
+.gd-speed { min-width: 46px; font-variant-numeric: tabular-nums; }
+.gd-speed.on { border-color: var(--accent); color: var(--accent); }
+.gd-wave { white-space: nowrap; }
+
+@media (max-width: 720px) {
+  .gd-name { display: none; }
+  .gd-act .gd-name { display: inline; }
+  .gd-tool { padding: 0 8px 0 4px; }
+}
+@media (max-width: 620px) {
+  .stage[data-game="garden"] { aspect-ratio: 3 / 5; }
+  .gd-bar { gap: 6px; padding: 8px; }
+  .gd-tools { gap: 5px; }
+  .gd-ico { width: 28px; height: 28px; }
+  .gd-wave { padding: 0 10px; font-size: 13px; }
+  .gd-speed { min-width: 40px; padding: 0 8px; }
+}

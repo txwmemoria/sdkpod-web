@@ -481,7 +481,9 @@
     { id: 'cupsClean', icon: '☕', name: '不用撤销', desc: '《茶水间收杯子》一次撤销都没用' },
     { id: 'slide40', icon: '🗂️', name: '归档专家', desc: '《整理文件柜》40 步内完成' },
     { id: 'sudokuClean', icon: '🔢', name: '一笔不改', desc: '《午后数独》零失误完成' },
-    { id: 'sweepWin', icon: '🐝', name: '园丁', desc: '《菜园扫雷》清理完整块菜地' }
+    { id: 'sweepWin', icon: '🐝', name: '园丁', desc: '《菜园扫雷》清理完整块菜地' },
+    { id: 'gardenWin', icon: '🥬', name: '护菜有功', desc: '《菜园守卫》守住全部 12 波' },
+    { id: 'gardenFull', icon: '🐞', name: '一棵没少', desc: '《菜园守卫》守住 12 波，白菜一棵不少' }
   ];
 
   MG.achById = function (id) {

@@ -167,7 +167,75 @@
       '<path d="M10 36c0-6 6-7 12-7s10-2 10-7-5-6-10-6-8-3-6-6" fill="none" stroke="#8fbf8f" stroke-width="6" stroke-linecap="round"/>' +
       '<circle cx="16.5" cy="9.5" r="5.2" fill="#8fbf8f" ' + SW + '/>' +
       '<circle cx="15.5" cy="8.5" r="1.1" fill="' + O + '"/><circle cx="18.6" cy="9.8" r="1.1" fill="' + O + '"/>' +
-      '<circle cx="38" cy="34" r="4" fill="#d9796c" ' + SW + '/>'
+      '<circle cx="38" cy="34" r="4" fill="#d9796c" ' + SW + '/>',
+
+    /* ---------------- 菜园守卫 ---------------- */
+    cabbage:
+      '<path d="M7 30c0-11 7.5-18 17-18s17 7 17 18c0 7-7.5 11-17 11S7 37 7 30z" fill="#b9da9c" ' + SW + '/>' +
+      '<path d="M12 31c0-7 5-12 12-12s12 5 12 12" fill="#d6ebbd" ' + SW + '/>' +
+      '<path d="M18 27c1.5-3 3.5-4.5 6-4.5s4.5 1.5 6 4.5c-1.5 3-3.5 4-6 4s-4.5-1-6-4z" fill="#eef7df" ' + SW + '/>' +
+      '<path d="M24 31v9M15 33c2 2 4 5 4.5 7.5M33 33c-2 2-4 5-4.5 7.5" fill="none" stroke="#7fae73" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<path d="M13 22c1.5-2.5 3.5-4 6-5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>',
+    snail:
+      '<path d="M5 39c0-2.5 2-4 5-4h22c4 0 6-3 6.5-8.5V22h4.5v5c0 9-4.5 14-11 14H8c-2 0-3-.8-3-2z" fill="#ead6b4" ' + SW + '/>' +
+      '<path d="M40 22l-1.5-8M43 23l2.5-7.5" ' + SW + '/>' +
+      '<circle cx="38.3" cy="13.5" r="1.9" fill="' + O + '"/><circle cx="45.8" cy="15.5" r="1.9" fill="' + O + '"/>' +
+      '<circle cx="21" cy="24" r="12" fill="#d9a07f" ' + SW + '/>' +
+      '<path d="M21 24.5c0-2 2.5-2.5 3.8-1 2 2.2.2 6-3.3 6.2-4.5.3-7-4.2-5.3-8 2-4.6 8.4-5.5 11.6-1.8" fill="none" stroke="' + O + '" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M13 17c2-2 4-3 6.5-3.3" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>' +
+      '<circle cx="40.5" cy="30" r="1.1" fill="' + O + '"/>',
+    caterpillar:
+      '<g ' + SW + '>' +
+      '<circle cx="9" cy="32" r="6" fill="#a9d18e"/><circle cx="17.5" cy="30" r="6.6" fill="#b9da9c"/>' +
+      '<circle cx="26.5" cy="31" r="6.6" fill="#a9d18e"/><circle cx="36" cy="27" r="8" fill="#c7e3ad"/>' +
+      '</g>' +
+      '<path d="M33 19.5l-2-5.5M39 19.5l2-5.5" ' + SW + '/>' +
+      '<circle cx="30.8" cy="13.6" r="1.7" fill="#e59a62" ' + SW + '/><circle cx="41.2" cy="13.6" r="1.7" fill="#e59a62" ' + SW + '/>' +
+      '<circle cx="35" cy="26" r="1.2" fill="' + O + '"/><circle cx="40" cy="26" r="1.2" fill="' + O + '"/>' +
+      '<path d="M35.5 30.5c1.2 1 2.8 1 4 0" fill="none" stroke="' + O + '" stroke-width="1.6" stroke-linecap="round"/>' +
+      '<g fill="' + O + '"><circle cx="9" cy="39.5" r="1.3"/><circle cx="17.5" cy="38" r="1.3"/><circle cx="26.5" cy="39" r="1.3"/></g>',
+    aphid:
+      '<ellipse cx="22" cy="28" rx="13" ry="10" fill="#cfe6a6" ' + SW + '/>' +
+      '<circle cx="35" cy="25" r="6" fill="#bcdc92" ' + SW + '/>' +
+      '<path d="M37 19.5l2.5-5M33 19.5l-.5-5.5M14 37l-3 4M22 38v4.5M30 37l3 4" ' + SW + '/>' +
+      '<circle cx="36.8" cy="24.5" r="1.3" fill="' + O + '"/>' +
+      '<path d="M15 23c2-2.5 4.5-3.5 7-3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>',
+    td_ladybug:
+      '<path d="M10 22 24 9l14 13" fill="#d9796c" ' + SW + '/>' +
+      '<rect x="13" y="21" width="22" height="20" rx="2.5" fill="#e3c39a" ' + SW + '/>' +
+      '<path d="M13 28h22M13 34h22" stroke="' + O + '" stroke-width="1.2" opacity=".35"/>' +
+      '<circle cx="24" cy="29" r="4.2" fill="#6b5545" ' + SW + '/>' +
+      '<path d="M24 41v5" ' + SW + '/>' +
+      '<circle cx="31" cy="13" r="5" fill="#d9675c" ' + SW + '/>' +
+      '<path d="M31 8v10" stroke="' + O + '" stroke-width="1.6"/>' +
+      '<circle cx="29" cy="12" r="1" fill="' + O + '"/><circle cx="33" cy="14.5" r="1" fill="' + O + '"/>',
+    td_scarecrow:
+      '<path d="M24 22v24M10 26h28" ' + SW + ' stroke-width="3"/>' +
+      '<path d="M15 24h18l-2 13H17z" fill="#9cc4a4" ' + SW + '/>' +
+      '<path d="M20 29h3M26 32h3" stroke="#e5b25d" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M10 26l-3 3M10 26l-3-2M38 26l3 3M38 26l3-2" stroke="#e5c36a" stroke-width="2" stroke-linecap="round"/>' +
+      '<circle cx="24" cy="17" r="6" fill="#f2deb4" ' + SW + '/>' +
+      '<circle cx="22" cy="16.5" r="1" fill="' + O + '"/><circle cx="26" cy="16.5" r="1" fill="' + O + '"/>' +
+      '<path d="M22 19.5c1.3.8 2.7.8 4 0" fill="none" stroke="' + O + '" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<path d="M12 12.5c3-1.5 7-2 12-2s9 .5 12 2c-2 1.5-6.5 2-12 2s-10-.5-12-2z" fill="#e5c36a" ' + SW + '/>' +
+      '<path d="M18 11c0-4 2.5-6 6-6s6 2 6 6" fill="#e5c36a" ' + SW + '/>' +
+      '<path d="M18.5 10h11" stroke="#d9796c" stroke-width="2"/>',
+    td_can:
+      '<path d="M12 20h20v16a5 5 0 0 1-5 5H17a5 5 0 0 1-5-5z" fill="#9bb8d8" ' + SW + '/>' +
+      '<path d="M31 25l10-10 3 2-9 13" fill="#9bb8d8" ' + SW + '/>' +
+      '<path d="M40 13.5l5 5" stroke="' + O + '" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M15 20c0-6 3-9 7-9s7 3 7 9" fill="none" ' + SW + '/>' +
+      '<path d="M12 27h20" stroke="#fff" stroke-width="2" opacity=".5"/>' +
+      '<circle cx="17" cy="32" r="2.2" fill="#f0cf7a" ' + SW + '/>' +
+      '<g fill="#9bc7e8"><circle cx="45" cy="25" r="1.5"/><circle cx="41" cy="28" r="1.3"/><circle cx="46" cy="30" r="1.2"/></g>',
+    g_garden:
+      '<path d="M5 33c0-10 7-16 15.5-16S36 23 36 33c0 6.5-7 10-15.5 10S5 39.5 5 33z" fill="#b9da9c" ' + SW + '/>' +
+      '<path d="M10 34c0-6.5 4.5-11 10.5-11S31 27.5 31 34" fill="#d6ebbd" ' + SW + '/>' +
+      '<path d="M20.5 34v8M13 36c2 2 3 4.5 3.5 6.5M28 36c-2 2-3 4.5-3.5 6.5" fill="none" stroke="#7fae73" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<circle cx="35" cy="14" r="8" fill="#d9675c" ' + SW + '/>' +
+      '<path d="M35 6v16" stroke="' + O + '" stroke-width="1.8"/>' +
+      '<path d="M29 9.5c-1.5-1.5-1.5-3.5 0-5M41 9.5c1.5-1.5 1.5-3.5 0-5" fill="none" ' + SW + '/>' +
+      '<g fill="' + O + '"><circle cx="31.5" cy="13" r="1.4"/><circle cx="38.5" cy="16.5" r="1.4"/><circle cx="32" cy="18" r="1.1"/><circle cx="38.5" cy="11" r="1.1"/></g>'
   };
 
   /* 一些别名：游戏图标里直接复用的素材 */
@@ -212,5 +280,5 @@
   };
 
   /* Canvas 游戏要用的几张提前解码 */
-  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup'].forEach(image);
+  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can'].forEach(image);
 })(window);

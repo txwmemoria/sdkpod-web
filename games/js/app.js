@@ -503,6 +503,19 @@
       out += '<path d="M' + (50 + 2 * 22 + 8) + ' ' + (40 + 3 * 26 + 5) + ' v14" stroke="#7b5b45" stroke-width="2"/><path d="M' + (50 + 2 * 22 + 9) + ' ' + (40 + 3 * 26 + 5) + ' l8 4 -8 4z" fill="#d7807a"/>';
       return out;
     })(),
+    garden: (function () {
+      var out = '<path d="M20 44 H110 V130 H200 V60 H262" fill="none" stroke="var(--cv-paper)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>';
+      out += '<rect x="250" y="36" width="54" height="96" rx="10" fill="#b88f6a" opacity=".55"/>';
+      [[264, 56], [288, 56], [264, 84], [288, 84], [264, 112], [288, 112]].forEach(function (c) {
+        out += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="10" fill="#b9da9c"/><circle cx="' + c[0] + '" cy="' + (c[1] + 1) + '" r="5" fill="#eef7df"/>';
+      });
+      out += '<circle cx="150" cy="80" r="40" fill="var(--ga)" opacity=".16"/>';
+      out += '<rect x="138" y="72" width="24" height="22" rx="3" fill="var(--cv-warm)"/><path d="M134 74 L150 60 L166 74z" fill="var(--cv-rose)"/>';
+      out += '<circle cx="62" cy="96" r="7" fill="var(--cv-cool)"/><path d="M58 100 v14 M62 88 v-6" stroke="var(--cv-ink)" stroke-opacity=".4" stroke-width="2"/>';
+      out += '<circle cx="110" cy="104" r="6" fill="#a9d18e"/><circle cx="100" cy="104" r="5" fill="#a9d18e"/><circle cx="91" cy="104" r="4.5" fill="#a9d18e"/>';
+      out += '<circle cx="200" cy="104" r="9" fill="#d9a07f"/><circle cx="182" cy="112" r="3" fill="#d9675c"/>';
+      return out;
+    })(),
     golf: [
       '<rect x="30" y="22" width="260" height="136" rx="22" fill="var(--ga)" opacity=".3"/>',
       '<rect x="120" y="86" width="84" height="16" rx="6" fill="var(--cv-ink)" opacity=".22"/>',
@@ -930,7 +943,8 @@
   var ACH_ART = {
     first: 'sprout', six: 'basket', memory20: 'g_memory', daily: 'calendar', streak3: 'sunflower',
     receipt3000: 'receipt', golf5: 'g_golf', tetris10: 'g_tetris', lightsPar: 'g_lights',
-    cupsClean: 'g_cups', slide40: 'g_slide', sudokuClean: 'g_sudoku', sweepWin: 'bee'
+    cupsClean: 'g_cups', slide40: 'g_slide', sudokuClean: 'g_sudoku', sweepWin: 'bee',
+    gardenWin: 'cabbage', gardenFull: 'td_ladybug'
   };
 
   /* 有插画就放插画，没有就退回 emoji */
@@ -1001,6 +1015,8 @@
     if (run.gameId === 'slide' && m.moves && m.moves <= 40) grant('slide40');
     if (run.gameId === 'sudoku' && m.mistakes === 0) grant('sudokuClean');
     if (run.gameId === 'sweep' && m.won) grant('sweepWin');
+    if (run.gameId === 'garden' && m.won) grant('gardenWin');
+    if (run.gameId === 'garden' && m.won && m.cabbages === 10) grant('gardenFull');
 
     if (unlocked.length) {
       var last = MG.achById(unlocked[unlocked.length - 1]);

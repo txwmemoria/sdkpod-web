@@ -36,30 +36,43 @@
     aphid: { hp: 3, speed: 1.5, seeds: 2, size: 0.56, art: 'aphid', cost: 1, gap: 0.42 },
     caterpillar: { hp: 8, speed: 0.95, seeds: 4, size: 0.86, art: 'caterpillar', cost: 2, gap: 1.0 },
     snail: { hp: 24, speed: 0.5, seeds: 9, size: 0.92, art: 'snail', cost: 5, gap: 1.6 },
-    beetle: { hp: 15, speed: 0.78, seeds: 7, size: 0.84, art: 'beetle', cost: 4, gap: 1.2, armor: 2 },
+    beetle: { hp: 15, speed: 0.78, seeds: 7, size: 0.84, art: 'beetle', cost: 4, gap: 1.2, armor: 2, atk: { dmg: 2, cd: 2.0, range: 1.05 } },
     moth: { hp: 7, speed: 1.25, seeds: 5, size: 0.78, art: 'moth', cost: 3, gap: 0.8, fly: true },
-    mole: { hp: 16, speed: 0.9, seeds: 8, size: 0.86, art: 'mole', cost: 4, gap: 1.2, dig: true },
-    crow: { hp: 75, speed: 0.58, seeds: 40, size: 1.25, art: 'crow', cost: 0, gap: 2.6, fly: true, boss: true, bite: 2 }
+    mole: { hp: 16, speed: 0.9, seeds: 8, size: 0.86, art: 'mole', cost: 4, gap: 1.2, dig: true, quake: { dmg: 3, range: 1.0 } },
+    /* Boss：每只都有自己的本事，头上戴小王冠，底部有血条 */
+    crow: { hp: 65, speed: 0.58, seeds: 40, size: 1.25, art: 'crow', gap: 2.6, fly: true, boss: true, bite: 2, atk: { dmg: 4, cd: 3.5, range: 1.7 } },
+    boar: { hp: 110, speed: 0.45, seeds: 50, size: 1.25, art: 'boar', gap: 3, armor: 3, boss: true, bite: 3, charge: { every: 6, time: 1.2, mul: 3.2, dmg: 6, range: 1.05 } },
+    locust: { hp: 95, speed: 0.55, seeds: 50, size: 1.2, art: 'locust', gap: 3, fly: true, boss: true, bite: 3, swarm: { every: 5, n: 3 } },
+    kingmole: { hp: 140, speed: 0.5, seeds: 60, size: 1.3, art: 'mole', gap: 3, dig: true, boss: true, bite: 3, quake: { dmg: 5, range: 1.6 } }
   };
+  var BOSSES = ['crow', 'boar', 'locust', 'kingmole'];
+  /* 闯关：第 5、10、12 波来 Boss；无尽：每 5 波一只，四只轮流，越往后来得越多 */
+  function bossFor(n, endless) {
+    if (!endless) return { 5: 'crow', 10: 'boar', 12: 'locust' }[n] || null;
+    return n % 5 === 0 ? BOSSES[(n / 5 - 1) % BOSSES.length] : null;
+  }
+  var KO_TIME = 8;
+  var REVIVE = 10;
   /* 第几波第一次出现 */
   var INTRO = { caterpillar: 1, aphid: 2, snail: 4, crow: 5, beetle: 6, moth: 7, mole: 9 };
 
   /* ------------------------------------------------------------ 帮手 */
   var TOWERS = {
-    ladybug: { cost: 20, art: 'td_ladybug', dmg: [2, 3, 5], range: [2.3, 2.6, 2.9], cd: [0.8, 0.68, 0.56], kb: 0.06 },
-    scarecrow: { cost: 25, art: 'td_scarecrow', slow: [0.4, 0.5, 0.6], range: [1.7, 2.0, 2.3] },
-    can: { cost: 35, art: 'td_can', dmg: [2, 3, 4], range: [1.5, 1.75, 2.0], cd: [1.5, 1.35, 1.2], kb: 0.04 },
-    hive: { cost: 40, art: 'td_hive', dmg: [2, 3, 4], range: [2.2, 2.4, 2.6], cd: [1.3, 1.15, 1.0], chain: [3, 4, 5] },
-    frog: { cost: 45, art: 'td_frog', dmg: [9, 14, 22], range: [3.0, 3.4, 3.8], cd: [2.1, 1.9, 1.7], kb: 0.14 },
-    sunflower: { cost: 30, art: 'sunflower', gift: [2, 3, 4], every: 9, bonus: [4, 7, 10] }
+    ladybug: { hp: 10, cost: 20, art: 'td_ladybug', dmg: [2, 3, 5], range: [2.3, 2.6, 2.9], cd: [0.8, 0.68, 0.56], kb: 0.06 },
+    scarecrow: { hp: 16, cost: 25, art: 'td_scarecrow', slow: [0.4, 0.5, 0.6], range: [1.7, 2.0, 2.3] },
+    can: { hp: 12, cost: 35, art: 'td_can', dmg: [2, 3, 4], range: [1.5, 1.75, 2.0], cd: [1.5, 1.35, 1.2], kb: 0.04 },
+    hive: { hp: 12, cost: 40, art: 'td_hive', dmg: [2, 3, 4], range: [2.2, 2.4, 2.6], cd: [1.3, 1.15, 1.0], chain: [3, 4, 5] },
+    frog: { hp: 14, cost: 45, art: 'td_frog', dmg: [9, 14, 22], range: [3.0, 3.4, 3.8], cd: [2.1, 1.9, 1.7], kb: 0.14 },
+    sunflower: { hp: 8, cost: 30, art: 'sunflower', gift: [2, 3, 4], every: 9, bonus: [4, 7, 10] }
   };
   var TOWER_KEYS = ['ladybug', 'scarecrow', 'can', 'hive', 'frog', 'sunflower'];
 
+  function maxHp(t) { return Math.round(TOWERS[t.type].hp * (1 + 0.5 * (t.lv - 1))); }
   function upCost(t) { return TOWERS[t.type].cost * t.lv; }
   function refund(t) { return Math.floor(t.spent * 0.7); }
 
   /* 第 n 波出场名单：按预算随机凑几组（今日挑战下随机数是固定种子），逢 5 来乌鸦 */
-  function waveList(n) {
+  function waveList(n, endless) {
     var pool = [];
     for (var k in INTRO) if (k !== 'crow' && n >= INTRO[k]) pool.push(k);
     var budget = 4 + n * 4 + Math.floor(n * n * 0.2);
@@ -77,8 +90,10 @@
       }
       out[out.length - 1].gap += 0.9;
     }
-    if (n % 5 === 0) {
-      for (var b = 0; b < Math.floor(n / 5); b++) out.push({ k: 'crow', gap: PESTS.crow.gap });
+    var boss = bossFor(n, endless);
+    if (boss) {
+      var count = endless ? 1 + Math.floor((n - 1) / 20) : 1;
+      for (var b = 0; b < count; b++) out.push({ k: boss, gap: PESTS[boss].gap });
     }
     return out;
   }
@@ -141,7 +156,7 @@
     return fl;
   }
 
-  var GAP = { pop: 0.05, splash: 0.12, ribbit: 0.15, buzz: 0.12, shoo: 0.06, seed: 0.07, nibble: 0.2, wave: 0.5, caw: 0.6, place: 0.08, dig: 0.3 };
+  var GAP = { pop: 0.05, splash: 0.12, ribbit: 0.15, buzz: 0.12, shoo: 0.06, seed: 0.07, nibble: 0.2, wave: 0.5, caw: 0.6, place: 0.08, dig: 0.3, chomp: 0.12, thud: 0.3, ko: 0.2, revive: 0.1 };
   function sfx(name) {
     var ctx = MG.audio.ctx && MG.audio.ctx();
     if (!ctx) return;
@@ -183,6 +198,19 @@
         hiss(ctx, out, 'lowpass', 1800, t, 0.05, 0.05);
         break;
       case 'dig': hiss(ctx, out, 'lowpass', 600, t, 0.18, 0.08); break;
+      case 'chomp':
+        hiss(ctx, out, 'lowpass', 1400, t, 0.05, 0.1);
+        hiss(ctx, out, 'lowpass', 1100, t + 0.07, 0.05, 0.08);
+        break;
+      case 'thud':
+        tone(ctx, out, 'sine', 110, 45, t, 0.3, 0.16);
+        hiss(ctx, out, 'lowpass', 400, t, 0.25, 0.08);
+        break;
+      case 'ko': tone(ctx, out, 'triangle', 700, 300, t, 0.32, 0.05); break;
+      case 'revive':
+        tone(ctx, out, 'triangle', 523, 523, t, 0.1, 0.05);
+        tone(ctx, out, 'triangle', 784, 784, t + 0.08, 0.14, 0.05);
+        break;
     }
   }
 
@@ -280,7 +308,7 @@
     tagline: '虫子们排着队来偷白菜。在小路边摆上瓢虫、稻草人、蜂箱和青蛙，把它们劝回去。',
     tags: ['策略', '塔防', '无尽'],
     duration: '约 10 分钟',
-    howto: '先挑一块地和模式。从下方选一样帮手，点路边的草地放下；点已放下的帮手可以升级或收回。赶走虫子得种子。准备好了再放下一波，不催你。',
+    howto: '先挑一块地和模式。有些虫子和 Boss 会打帮手，帮手倒下会躺一会儿再起来。从下方选一样帮手，点路边的草地放下；点已放下的帮手可以升级或收回。赶走虫子得种子。准备好了再放下一波，不催你。',
     controls: [['1–6', '选帮手'], ['点草地', '放下'], ['点帮手', '升级 · 收回'], ['N', '下一波'], ['F', '加速'], ['M', '音乐']],
 
     mount: function (stage, host) {
@@ -813,13 +841,19 @@
         selBox.hidden = !t;
         if (t) {
           var maxed = t.lv >= 3;
-          selName.textContent = MG.t('g.garden.t.' + t.type) + ' · Lv' + t.lv;
+          selName.textContent = MG.t('g.garden.t.' + t.type) + ' · Lv' + t.lv + (t.ko ? ' · ' + MG.t('g.garden.down') : ' · ♥ ' + Math.ceil(t.hp) + '/' + maxHp(t));
           upBtn.innerHTML = '';
           var tx = MG.h('span', 'gd-txt');
-          tx.appendChild(MG.h('span', 'gd-name', maxed ? MG.t('g.garden.maxed') : MG.t('g.garden.upgrade', { n: t.lv + 1 })));
-          tx.appendChild(MG.h('span', 'gd-cost', maxed ? '★★★' : '● ' + upCost(t)));
+          if (t.ko) {
+            tx.appendChild(MG.h('span', 'gd-name', MG.t('g.garden.revive')));
+            tx.appendChild(MG.h('span', 'gd-cost', '● ' + REVIVE));
+            upBtn.disabled = S.seeds < REVIVE;
+          } else {
+            tx.appendChild(MG.h('span', 'gd-name', maxed ? MG.t('g.garden.maxed') : MG.t('g.garden.upgrade', { n: t.lv + 1 })));
+            tx.appendChild(MG.h('span', 'gd-cost', maxed ? '★★★' : '● ' + upCost(t)));
+            upBtn.disabled = maxed || S.seeds < upCost(t);
+          }
           upBtn.appendChild(tx);
-          upBtn.disabled = maxed || S.seeds < upCost(t);
           sellBtn.innerHTML = '';
           var tx2 = MG.h('span', 'gd-txt');
           tx2.appendChild(MG.h('span', 'gd-name', MG.t('g.garden.sell')));
@@ -967,7 +1001,7 @@
         var cost = TOWERS[k].cost;
         if (S.seeds < cost) { MG.toast(MG.t('g.garden.poor')); return; }
         S.seeds -= cost;
-        S.towers.push({ type: k, c: c, r: r, x: c + 0.5, y: r + 0.5, lv: 1, cd: 0.3, spent: cost, sway: 0, pop: 0.0001, kick: 0, gift: TOWERS[k].every || 0, ph: (c * 7 + r * 3) % 6 });
+        S.towers.push({ type: k, c: c, r: r, x: c + 0.5, y: r + 0.5, lv: 1, cd: 0.3, spent: cost, sway: 0, pop: 0.0001, kick: 0, gift: TOWERS[k].every || 0, ph: (c * 7 + r * 3) % 6, hp: TOWERS[k].hp, ko: 0, hurt: 0 });
         burst(c + 0.5, r + 0.85, 'dust', 8);
         sfx('place');
         if (S.seeds < cost) S.armed = null;
@@ -976,17 +1010,55 @@
 
       function upgrade() {
         var t = S.sel;
+        if (t && t.ko) { revive(t); return; }
         if (!t || t.lv >= 3) return;
         var cost = upCost(t);
         if (S.seeds < cost) { MG.toast(MG.t('g.garden.poor')); return; }
         S.seeds -= cost;
         t.spent += cost;
         t.lv++;
+        t.hp = maxHp(t);
         t.pop = 0.0001;
         burst(t.x, t.y, 'leaf', 10);
         burst(t.x, t.y - 0.3, 'star', 8);
         MG.audio.play('perfect');
         changed();
+      }
+
+      /* 扶起倒下的帮手：花一点种子，立刻回到一半血 */
+      function revive(t) {
+        if (S.seeds < REVIVE) { MG.toast(MG.t('g.garden.poor')); return; }
+        S.seeds -= REVIVE;
+        standUp(t);
+        changed();
+      }
+      function standUp(t) {
+        t.ko = 0;
+        t.hp = Math.max(t.hp, Math.ceil(maxHp(t) * 0.5));
+        t.pop = 0.0001;
+        burst(t.x, t.y - 0.3, 'star', 6);
+        sfx('revive');
+      }
+
+      /* 虫子打帮手：掉血、晃一下；血打光就倒下躺一会儿 */
+      function hitTower(t, dmg) {
+        if (t.ko) return;
+        t.hp -= dmg;
+        t.hurt = 0.22;
+        burst(t.x, t.y - 0.3, 'star', 3, '#e8a7a0');
+        floatText(t.x, t.y - 0.75, '-' + dmg, '#d9796c');
+        sfx('chomp');
+        if (t.hp <= 0) {
+          t.hp = 0;
+          t.ko = KO_TIME;
+          burst(t.x, t.y, 'dust', 8);
+          floatText(t.x, t.y - 1, MG.t('g.garden.ko'), '#c47a5a', true);
+          sfx('ko');
+        }
+        changed();
+      }
+      function nearTowers(p, range) {
+        return S.towers.filter(function (t) { return !t.ko && dist2(p, t) <= range * range; });
       }
 
       function sell() {
@@ -1025,13 +1097,13 @@
           floatText(COLS / 2, 1.2, MG.t('g.garden.early'), '#a4925a');
         }
         S.wave++;
-        S.queue = waveList(S.wave);
+        S.queue = waveList(S.wave, mode === 'endless');
         S.spawnT = 0;
         var n = S.wave - 1;
         S.hpMul = 1 + 0.15 * n + 0.03 * n * n;
         var news = null;
         for (var k in INTRO) if (INTRO[k] === S.wave && k !== 'crow') news = k;
-        var boss = S.wave % 5 === 0;
+        var boss = !!bossFor(S.wave, mode === 'endless');
         S.banner = {
           t: 0,
           title: MG.t('g.garden.waveN', { n: S.wave }),
@@ -1058,12 +1130,29 @@
 
       /* -------------------------------------------------- 模拟 */
       function spawn(k) {
-        var d = PESTS[k];
-        var hp = Math.round(d.hp * S.hpMul);
         var route = routes[S.spawnN % routes.length];
         S.spawnN++;
-        S.pests.push({ k: k, route: route, d: -0.4, hp: hp, max: hp, speed: d.speed * MG.rand(0.95, 1.05), slow: 0, hit: 0, flee: 0, x: -5, y: -5, dx: 1, dy: 0, bob: MG.rand(0, 6), dig: d.dig ? MG.rand(1, 3) : 0, under: false });
-        if (d.boss) sfx('caw');
+        var p = spawnAt(k, route, -0.4);
+        var d = PESTS[k];
+        if (d.boss) {
+          p.ab = 3;
+          S.banner = { t: 0, title: MG.t('g.garden.boss', { name: MG.t('g.garden.p.' + k) }), sub: MG.t('g.garden.bd.' + k), boss: true };
+          sfx(k === 'crow' ? 'caw' : 'thud');
+        }
+      }
+      function spawnAt(k, route, d0) {
+        var d = PESTS[k];
+        var n = Math.max(0, S.wave - 1);
+        /* Boss 的血量涨得慢一点，不然后期根本拦不住 */
+        var hp = Math.round(d.hp * (d.boss ? 1 + 0.12 * n + 0.02 * n * n : S.hpMul));
+        var p = { k: k, route: route, d: d0, hp: hp, max: hp, speed: d.speed * MG.rand(0.95, 1.05), slow: 0, hit: 0, flee: 0, x: -5, y: -5, dx: 1, dy: 0, bob: MG.rand(0, 6), dig: d.dig ? MG.rand(1, 3) : 0, under: false, atk: 1, ab: 0, charge: 0, lunge: 0, lx: 0, ly: 0, hitSet: null };
+        if (d0 > 0) { var pos = posAt(route, d0); p.x = pos.x; p.y = pos.y; }
+        S.pests.push(p);
+        return p;
+      }
+      function lunge(p, t) {
+        var dx = t.x - p.x, dy = t.y - p.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
+        p.lunge = 0.28; p.lx = dx / d; p.ly = dy / d;
       }
 
       function targetable(p) { return !p.flee && p.d >= 0 && !p.under; }
@@ -1116,7 +1205,7 @@
         for (i = 0; i < S.pests.length; i++) S.pests[i].slow = 0;
         for (j = 0; j < S.towers.length; j++) {
           t = S.towers[j];
-          if (t.type !== 'scarecrow') continue;
+          if (t.type !== 'scarecrow' || t.ko) continue;
           var R = TOWERS.scarecrow.range[t.lv - 1];
           var near = false;
           for (i = 0; i < S.pests.length; i++) {
@@ -1142,11 +1231,58 @@
             if (p.dig <= 0) {
               p.under = !p.under;
               p.dig = p.under ? 1.6 : MG.rand(2.6, 3.6);
-              burst(p.x, p.y + 0.2, 'dust', 6);
-              sfx('dig');
+              burst(p.x, p.y + 0.2, 'dust', meta.boss ? 14 : 6);
+              sfx(meta.boss && !p.under ? 'thud' : 'dig');
+              /* 钻出来的一下会把旁边的帮手顶一跤 */
+              if (!p.under && meta.quake) {
+                nearTowers(p, meta.quake.range).forEach(function (tw) { hitTower(tw, meta.quake.dmg); });
+                if (meta.boss) S.rings.push({ x: p.x, y: p.y, r: meta.quake.range, t: 0, dirt: true });
+              }
             }
           }
-          p.d += p.speed * (1 - p.slow) * (p.under ? 1.15 : 1) * dt;
+          /* 啃咬 / 啄：路过身边的帮手 */
+          if (meta.atk && !p.under) {
+            p.atk -= dt;
+            if (p.atk <= 0) {
+              var near = nearTowers(p, meta.atk.range);
+              if (near.length) {
+                near.sort(function (a, b2) { return dist2(p, a) - dist2(p, b2); });
+                hitTower(near[0], meta.atk.dmg);
+                lunge(p, near[0]);
+                p.atk = meta.atk.cd;
+              } else p.atk = 0.3;
+            }
+          }
+          if (p.lunge) p.lunge = Math.max(0, p.lunge - dt);
+          /* 野猪：隔一会儿冲一段，撞翻路边的帮手 */
+          var mul = 1;
+          if (meta.charge) {
+            if (p.charge) {
+              p.charge -= dt;
+              mul = meta.charge.mul;
+              nearTowers(p, meta.charge.range).forEach(function (tw) {
+                if (p.hitSet.indexOf(tw) >= 0) return;
+                p.hitSet.push(tw);
+                hitTower(tw, meta.charge.dmg);
+              });
+              if (Math.random() < 0.5) burst(p.x - p.dx * 0.4, p.y + 0.2, 'dust', 1);
+              if (p.charge <= 0) { p.charge = 0; p.ab = meta.charge.every; }
+            } else if (p.d > 0.5) {
+              p.ab -= dt;
+              if (p.ab <= 0) { p.charge = meta.charge.time; p.hitSet = []; sfx('thud'); burst(p.x, p.y + 0.2, 'dust', 8); }
+            }
+          }
+          /* 蝗虫王：一路招来蚜虫 */
+          if (meta.swarm && p.d > 0.5) {
+            p.ab -= dt;
+            if (p.ab <= 0) {
+              p.ab = meta.swarm.every;
+              for (var sw = 0; sw < meta.swarm.n; sw++) spawnAt('aphid', p.route, Math.max(0, p.d - 0.25 - sw * 0.3));
+              burst(p.x, p.y - 0.4, 'leaf', 8, '#b8d270');
+              sfx('buzz');
+            }
+          }
+          p.d += p.speed * (1 - p.slow) * (p.under ? 1.15 : 1) * mul * dt;
           p.hit = Math.max(0, p.hit - dt);
           var pos = posAt(p.route, p.d);
           p.x = pos.x; p.y = pos.y;
@@ -1172,6 +1308,12 @@
           t = S.towers[j];
           if (t.pop) { t.pop += dt; if (t.pop > 0.35) t.pop = 0; }
           if (t.kick) t.kick = Math.max(0, t.kick - dt);
+          if (t.hurt) t.hurt = Math.max(0, t.hurt - dt);
+          if (t.ko) {
+            t.ko -= dt;
+            if (t.ko <= 0) { standUp(t); changed(); }
+            continue;
+          }
           var st = TOWERS[t.type];
           if (t.type === 'scarecrow') continue;
           if (t.type === 'sunflower') {
@@ -1308,6 +1450,7 @@
           S.waveDone = true;
           if (mode !== 'endless' && S.wave >= WAVES) { end(true); return; }
           var bonus = 6 + S.wave;
+          S.towers.forEach(function (tw) { if (tw.ko) standUp(tw); tw.hp = maxHp(tw); });
           S.towers.forEach(function (tw) {
             if (tw.type !== 'sunflower') return;
             var g2 = TOWERS.sunflower.bonus[tw.lv - 1];
@@ -1498,8 +1641,8 @@
           var k = rg.t / 0.7;
           ctx.save();
           ctx.globalAlpha = (1 - k) * 0.85;
-          ctx.strokeStyle = P.ring;
-          ctx.lineWidth = Math.max(1.5, cs * 0.06 * (1 - k * 0.5));
+          ctx.strokeStyle = rg.dirt ? P.dirtEdge : P.ring;
+          ctx.lineWidth = Math.max(1.5, cs * (rg.dirt ? 0.1 : 0.06) * (1 - k * 0.5));
           ctx.setLineDash([cs * 0.08, cs * 0.12]);
           ctx.beginPath();
           ctx.arc(X(rg.x), Y(rg.y), rg.r * cs * (0.25 + 0.75 * k), 0, TAU);
@@ -1617,6 +1760,8 @@
           ctx.restore();
         }
 
+        drawBossBar(ctx, P);
+
         /* 横幅：第 N 波 */
         if (S.banner) {
           var bt = S.banner.t;
@@ -1681,7 +1826,39 @@
         var rot = 0;
         if (t.type === 'scarecrow' && t.sway) rot = Math.sin(t.sway) * 0.09;
         if (t.type === 'sunflower') rot = Math.sin(S.t * 0.8 + t.ph) * 0.07;
-        drawSprite(ctx, st.art, t.x, t.y - 0.06, 0.94, { sx: sx, sy: sy, rot: rot });
+        var shake = t.hurt ? Math.sin(t.hurt * 70) * 0.05 : 0;
+        if (t.ko) {
+          /* 倒下：侧躺、发灰，头顶转着小星星，脚下一圈倒计时 */
+          drawSprite(ctx, st.art, t.x + 0.12, t.y + 0.05, 0.9, { rot: 1.35, alpha: 0.55 });
+          for (var sN = 0; sN < 3; sN++) {
+            var sa = S.t * 3 + sN * 2.1;
+            ctx.fillStyle = '#e5c36a';
+            ctx.beginPath();
+            ctx.arc(X(t.x + Math.cos(sa) * 0.26), Y(t.y - 0.45 + Math.sin(sa) * 0.08), cs * 0.045, 0, TAU);
+            ctx.fill();
+          }
+          ctx.save();
+          ctx.strokeStyle = MG.theme.accent;
+          ctx.globalAlpha = 0.6;
+          ctx.lineWidth = Math.max(2, cs * 0.05);
+          ctx.beginPath();
+          ctx.arc(X(t.x), Y(t.y + 0.1), cs * 0.4, -Math.PI / 2, -Math.PI / 2 + TAU * (1 - t.ko / KO_TIME));
+          ctx.stroke();
+          ctx.restore();
+          return;
+        }
+        drawSprite(ctx, st.art, t.x + shake, t.y - 0.06, 0.94, { sx: sx, sy: sy, rot: rot, flash: t.hurt ? t.hurt / 0.22 * 0.5 : 0 });
+        var mh = maxHp(t);
+        if (t.hp < mh) {
+          var hw = cs * 0.62, hh = Math.max(3, cs * 0.06);
+          var hx = X(t.x) - hw / 2, hy = Y(t.y + 0.47);
+          ctx.fillStyle = 'rgba(60,50,40,.22)';
+          MG.roundRect(ctx, hx, hy, hw, hh, hh / 2);
+          ctx.fill();
+          ctx.fillStyle = t.hp / mh > 0.4 ? '#7fae73' : '#e59a62';
+          MG.roundRect(ctx, hx, hy, Math.max(hh, hw * t.hp / mh), hh, hh / 2);
+          ctx.fill();
+        }
         /* 蜂箱门口转悠的两只小蜜蜂 */
         if (t.type === 'hive') {
           for (var b = 0; b < 2; b++) {
@@ -1716,6 +1893,8 @@
           alpha = 1 - f;
           rot += f * 0.5;
         }
+        if (p.lunge) { var lk = Math.sin(p.lunge / 0.28 * Math.PI) * 0.3; ax += p.lx * lk; ay += p.ly * lk; }
+        if (p.charge) { rot += Math.sin(t * 30) * 0.05; sx *= 1.08; }
         var flash = 0;
         if (p.hit) {
           var k = p.hit / 0.16;
@@ -1739,6 +1918,7 @@
         /* 贴图底边落在 ay + 0.24（地面），飞的再抬高 */
         drawSprite(ctx, meta.art, ax, ay + 0.24 - lift - meta.size / 2, meta.size, { flip: p.dx < 0, alpha: alpha, sx: sx, sy: sy, rot: rot, flash: flash });
         var top = ay + 0.24 - lift - meta.size;
+        if (meta.boss && !p.flee) drawCrown(ctx, ax, Math.max(0.3, top + 0.08), cs * 0.22);
         if (p.slow && !p.flee) {
           ctx.save();
           ctx.fillStyle = '#e5c36a';
@@ -1761,6 +1941,57 @@
           MG.roundRect(ctx, bx, by, Math.max(bh, bw * p.hp / p.max), bh, bh / 2);
           ctx.fill();
         }
+      }
+
+      function drawCrown(ctx, x, y, wpx) {
+        var cx = X(x), cy = Y(y), h = wpx * 0.7;
+        ctx.save();
+        ctx.fillStyle = '#f0c95a';
+        ctx.strokeStyle = '#8a6a3a';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(cx - wpx / 2, cy);
+        ctx.lineTo(cx - wpx / 2, cy - h);
+        ctx.lineTo(cx - wpx / 4, cy - h * 0.55);
+        ctx.lineTo(cx, cy - h * 1.1);
+        ctx.lineTo(cx + wpx / 4, cy - h * 0.55);
+        ctx.lineTo(cx + wpx / 2, cy - h);
+        ctx.lineTo(cx + wpx / 2, cy);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d9796c';
+        ctx.beginPath(); ctx.arc(cx, cy - h * 0.35, wpx * 0.08, 0, TAU); ctx.fill();
+        ctx.restore();
+      }
+
+      /* 场上有 Boss 时，底部一条大血条 */
+      function drawBossBar(ctx, P) {
+        var b = null;
+        for (var i = 0; i < S.pests.length; i++) if (PESTS[S.pests[i].k].boss && !S.pests[i].flee) { b = S.pests[i]; break; }
+        if (!b) return;
+        var bw = Math.min(view.w - 24, cs * 7), bh = Math.max(8, cs * 0.16);
+        var bx = view.w / 2 - bw / 2, by = Y(ROWS) - cs * 0.42;
+        ctx.save();
+        ctx.font = '700 ' + Math.max(11, Math.round(cs * 0.24)) + 'px ' + FONT;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = P.pill;
+        var label = MG.t('g.garden.p.' + b.k) + (b.under ? ' · ' + MG.t('g.garden.underground') : '');
+        ctx.strokeText(label, view.w / 2, by - 3);
+        ctx.fillStyle = P.text;
+        ctx.fillText(label, view.w / 2, by - 3);
+        ctx.fillStyle = 'rgba(60,50,40,.25)';
+        MG.roundRect(ctx, bx, by, bw, bh, bh / 2);
+        ctx.fill();
+        ctx.fillStyle = '#d9796c';
+        MG.roundRect(ctx, bx, by, Math.max(bh, bw * Math.max(0, b.hp) / b.max), bh, bh / 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.5)';
+        ctx.lineWidth = 1;
+        MG.roundRect(ctx, bx, by, bw, bh, bh / 2);
+        ctx.stroke();
+        ctx.restore();
       }
 
       function drawBee(ctx, x, y, dir, scale) {

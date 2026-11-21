@@ -302,6 +302,35 @@
       '<circle cx="39" cy="28" r="6" fill="#a5c35a" ' + SW + '/>' +
       '<circle cx="41" cy="26.6" r="1.6" fill="' + O + '"/><circle cx="41.5" cy="26.2" r=".5" fill="#fff"/>' +
       '<path d="M40 22.5c2-6 5-9 8-10M37.5 22.5c0-6 2-10 4-12.5" fill="none" ' + SW + '/>',
+    spider:
+      '<path d="M18 28l-9-6-4 4M18 31l-11 0-3 4M19 34l-8 6-1 4M30 28l9-6 4 4M30 31l11 0 3 4M29 34l8 6 1 4" fill="none" ' + SW + '/>' +
+      '<ellipse cx="24" cy="31" rx="9" ry="8" fill="#8a7a9a" ' + SW + '/>' +
+      '<circle cx="24" cy="21" r="6" fill="#9a8aaa" ' + SW + '/>' +
+      '<circle cx="21.8" cy="20.5" r="1.7" fill="#fff"/><circle cx="26.2" cy="20.5" r="1.7" fill="#fff"/>' +
+      '<circle cx="22" cy="20.8" r=".9" fill="' + O + '"/><circle cx="26.4" cy="20.8" r=".9" fill="' + O + '"/>' +
+      '<path d="M21 33c2 1.5 4 1.5 6 0" fill="none" stroke="#e8a7a0" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M18.5 27c1.5-2 3.5-3 5.5-3.2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".4"/>',
+    stinkbug:
+      '<path d="M13 37l-3 5M22 38v5M31 37l3 5" ' + SW + '/>' +
+      '<path d="M6 32c0-8 7-14 17-14s14 6 14 14z" fill="#9fb36a" ' + SW + '/>' +
+      '<path d="M21 18l3 14" stroke="' + O + '" stroke-width="1.5" opacity=".45"/>' +
+      '<path d="M11 26l4-1M15 29l4-1M27 24l4 1" stroke="#7d8f4f" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M36 32c0-5 2.5-7.5 5-7.5s4.5 2.5 4.5 6.5v1z" fill="#8a9c58" ' + SW + '/>' +
+      '<path d="M42 25l1.5-5M44 26l3.5-3.5" ' + SW + '/>' +
+      '<circle cx="42" cy="28.5" r="1.2" fill="' + O + '"/>' +
+      '<path d="M5.5 32h40" ' + SW + '/>' +
+      '<path d="M3 22c-1-2 1-3.5 0-5.5M7 18c-1-2 1-3.5 0-5.5" fill="none" stroke="#b5c98a" stroke-width="1.8" stroke-linecap="round"/>',
+    wasp:
+      '<ellipse cx="22" cy="15" rx="7" ry="4" fill="#fff" opacity=".85" ' + SW + ' transform="rotate(-20 22 15)"/>' +
+      '<ellipse cx="29" cy="14" rx="6" ry="3.5" fill="#fff" opacity=".85" ' + SW + ' transform="rotate(15 29 14)"/>' +
+      '<path d="M5 28l-3 1.5 3 1.5" fill="' + O + '" ' + SW + '/>' +
+      '<ellipse cx="15" cy="28" rx="10" ry="6.5" fill="#f0c95a" ' + SW + '/>' +
+      '<path d="M11 22.5v11M16 21.6v12.8M21 22.5v11" stroke="' + O + '" stroke-width="2.4"/>' +
+      '<ellipse cx="29" cy="27" rx="4.5" ry="4" fill="#e5b25d" ' + SW + '/>' +
+      '<circle cx="37" cy="25" r="5.5" fill="#f0c95a" ' + SW + '/>' +
+      '<circle cx="39" cy="24" r="1.4" fill="' + O + '"/>' +
+      '<path d="M38 20c1-4 3-6 5-7M36 20c0-4 1-7 2-8.5" fill="none" ' + SW + '/>' +
+      '<path d="M27 31l-2 6M31 31l1 6" ' + SW + '/>',
     g_garden:
       '<path d="M5 33c0-10 7-16 15.5-16S36 23 36 33c0 6.5-7 10-15.5 10S5 39.5 5 33z" fill="#b9da9c" ' + SW + '/>' +
       '<path d="M10 34c0-6.5 4.5-11 10.5-11S31 27.5 31 34" fill="#d6ebbd" ' + SW + '/>' +
@@ -354,5 +383,5 @@
   };
 
   /* Canvas 游戏要用的几张提前解码 */
-  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can', 'td_frog', 'td_hive', 'sunflower', 'beetle', 'moth', 'mole', 'crow', 'boar', 'locust'].forEach(image);
+  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can', 'td_frog', 'td_hive', 'sunflower', 'beetle', 'moth', 'mole', 'crow', 'boar', 'locust', 'spider', 'stinkbug', 'wasp'].forEach(image);
 })(window);

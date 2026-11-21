@@ -331,6 +331,77 @@
       '<circle cx="39" cy="24" r="1.4" fill="' + O + '"/>' +
       '<path d="M38 20c1-4 3-6 5-7M36 20c0-4 1-7 2-8.5" fill="none" ' + SW + '/>' +
       '<path d="M27 31l-2 6M31 31l1 6" ' + SW + '/>',
+    td_hedgehog:
+      '<path d="M14 39v3.5M27 39v3.5" ' + SW + '/>' +
+      (function () {
+        var d = 'M5 39';
+        for (var i = 0; i <= 10; i++) {
+          var a = Math.PI * (1.02 + i * 0.096);
+          var r = i % 2 ? 13 : 18.5;
+          d += 'L' + (21 + Math.cos(a) * r).toFixed(1) + ' ' + (38 + Math.sin(a) * r).toFixed(1);
+        }
+        return '<path d="' + d + 'L36 39z" fill="#8f735e" ' + SW + '/>';
+      })() +
+      '<path d="M10 33c2-6 6-9 11-10" fill="none" stroke="#b89a80" stroke-width="2" stroke-linecap="round"/>' +
+      '<path d="M29 39c0-6 4-10 9-10 3 0 5 2.5 6 5.5l2 1.2c1.2.8 1 2.6-.6 3.3z" fill="#ead2ab" ' + SW + '/>' +
+      '<circle cx="46.3" cy="36.4" r="1.6" fill="' + O + '"/>' +
+      '<circle cx="37.5" cy="33" r="1.3" fill="' + O + '"/>' +
+      '<ellipse cx="38" cy="36.5" rx="1.8" ry="1.1" fill="#e8a7a0" opacity=".8"/>',
+    td_sparrow:
+      '<path d="M14 27l-8-4 1.5 6z" fill="#8f6c4f" ' + SW + '/>' +
+      '<ellipse cx="23" cy="27" rx="10" ry="8" fill="#b88a5e" ' + SW + '/>' +
+      '<ellipse cx="26.5" cy="30" rx="6" ry="4.2" fill="#f2e2c4"/>' +
+      '<path d="M15 25c4-3 9-2.5 11 1.5-4 3-8 3-11-1.5z" fill="#8f6c4f" ' + SW + '/>' +
+      '<circle cx="31" cy="19.5" r="6" fill="#a87a50" ' + SW + '/>' +
+      '<ellipse cx="32" cy="22" rx="3" ry="2" fill="#f2e2c4"/>' +
+      '<circle cx="32.6" cy="18.4" r="1.3" fill="' + O + '"/>' +
+      '<path d="M36.5 18.5l5.5 1.6-5.5 1.8z" fill="#e5b25d" ' + SW + '/>' +
+      '<path d="M7 33c0 6 7.5 10 17 10s17-4 17-10c-5 2.5-10 3.5-17 3.5S12 35.5 7 33z" fill="#c9a27c" ' + SW + '/>' +
+      '<path d="M11 37l6 2M20 40l7-1M30 38l6-2" stroke="' + O + '" stroke-width="1.3" stroke-linecap="round" opacity=".5"/>',
+    td_mint:
+      '<path d="M14 32h20l-2.5 10a2.5 2.5 0 0 1-2.4 2H18.9a2.5 2.5 0 0 1-2.4-2z" fill="#9bb8d8" ' + SW + '/>' +
+      '<rect x="12" y="29" width="24" height="5" rx="2" fill="#b3cbe3" ' + SW + '/>' +
+      '<path d="M24 29V15M24 22l-6-4M24 19l6-4" ' + SW + '/>' +
+      '<ellipse cx="17" cy="23" rx="6" ry="3.4" fill="#9fd39a" ' + SW + ' transform="rotate(-25 17 23)"/>' +
+      '<ellipse cx="31" cy="23" rx="6" ry="3.4" fill="#9fd39a" ' + SW + ' transform="rotate(25 31 23)"/>' +
+      '<ellipse cx="18" cy="15.5" rx="5.2" ry="3" fill="#b2e0a8" ' + SW + ' transform="rotate(-35 18 15.5)"/>' +
+      '<ellipse cx="30" cy="15" rx="5.2" ry="3" fill="#b2e0a8" ' + SW + ' transform="rotate(35 30 15)"/>' +
+      '<ellipse cx="24" cy="10" rx="3.2" ry="4.6" fill="#c6eabb" ' + SW + '/>' +
+      '<path d="M39 9v6M36 12h6" stroke="#7fc29a" stroke-width="2" stroke-linecap="round"/>',
+    slug:
+      '<path d="M4 38c0-3 3-5 7-5h18c4 0 6-4 7-9 .5-2 2.5-3 4.5-2.5 2.5.6 3.5 3 3.5 5.5 0 8-5 15-13 15H7c-2 0-3-1.5-3-4z" fill="#d9bf8f" ' + SW + '/>' +
+      '<path d="M39 22.5l-1.5-7M43 23.5l3-6.5" ' + SW + '/>' +
+      '<circle cx="37.4" cy="15" r="1.7" fill="' + O + '"/><circle cx="46.2" cy="16.6" r="1.7" fill="' + O + '"/>' +
+      '<path d="M22 33c2-5 7-7 13-6" fill="none" stroke="' + O + '" stroke-width="1.4" opacity=".35"/>' +
+      '<g fill="#bb9d6b"><circle cx="14" cy="37" r="1.4"/><circle cx="20" cy="38.5" r="1.1"/><circle cx="27" cy="37" r="1.3"/></g>' +
+      '<path d="M9 35.5c3-1.4 7-1.8 11-1.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".5"/>',
+    pillbug:
+      '<path d="M10 35l-1 4M16 35v4M22 35v4M28 35v4M34 35l1 4" ' + SW + '/>' +
+      '<path d="M5 35c0-9 8-15 19-15s19 6 19 15z" fill="#9aa3ad" ' + SW + '/>' +
+      '<path d="M12 24v11M18 21.4v13.6M24 20.5v14.5M30 21.4v13.6M36 24v11" stroke="' + O + '" stroke-width="1.4" opacity=".45"/>' +
+      '<path d="M40 35c0-3 2.4-5.5 4.5-5.5S47.5 32 47.5 35z" fill="#7f8893" ' + SW + '/>' +
+      '<path d="M45 29.8l2-5M43 30l-.5-5" ' + SW + '/>' +
+      '<path d="M10 28c3-4 7-6 11-6.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".45"/>',
+    firefly:
+      '<circle cx="12" cy="31" r="9" fill="#f6eaa0" opacity=".55"/>' +
+      '<ellipse cx="21" cy="19" rx="7" ry="4" fill="#fff" opacity=".85" ' + SW + ' transform="rotate(-25 21 19)"/>' +
+      '<ellipse cx="28" cy="18" rx="6" ry="3.5" fill="#fff" opacity=".85" ' + SW + ' transform="rotate(20 28 18)"/>' +
+      '<ellipse cx="14" cy="30.5" rx="6.5" ry="5" fill="#f3e27a" ' + SW + '/>' +
+      '<ellipse cx="25" cy="29" rx="8" ry="5.5" fill="#6f6556" ' + SW + '/>' +
+      '<circle cx="35" cy="27" r="4.6" fill="#e08f7f" ' + SW + '/>' +
+      '<circle cx="36.6" cy="26.2" r="1.2" fill="' + O + '"/>' +
+      '<path d="M37 23c1.5-4 4-6 6.5-6.5M35 22.5c.5-4 2-6.5 4-8" fill="none" ' + SW + '/>' +
+      '<path d="M22 34.5l-1 4M27 34.5l1 4" ' + SW + '/>',
+    centipede:
+      (function () {
+        var s = '', i;
+        for (i = 0; i < 6; i++) s += '<path d="M' + (6 + i * 6) + ' 35l-2 5M' + (8 + i * 6) + ' 35l2 5" ' + SW + '/>';
+        for (i = 0; i < 6; i++) s += '<circle cx="' + (7 + i * 6) + '" cy="32" r="5" fill="' + (i % 2 ? '#d9a07f' : '#c98b6b') + '" ' + SW + '/>';
+        return s;
+      })() +
+      '<circle cx="43" cy="30" r="5.5" fill="#b87a5c" ' + SW + '/>' +
+      '<circle cx="44.6" cy="28.6" r="1.3" fill="' + O + '"/>' +
+      '<path d="M44 25c1-4 2-6 4-7M41 25c-.5-4 .5-7 2-8.5" fill="none" ' + SW + '/>',
     g_garden:
       '<path d="M5 33c0-10 7-16 15.5-16S36 23 36 33c0 6.5-7 10-15.5 10S5 39.5 5 33z" fill="#b9da9c" ' + SW + '/>' +
       '<path d="M10 34c0-6.5 4.5-11 10.5-11S31 27.5 31 34" fill="#d6ebbd" ' + SW + '/>' +
@@ -383,5 +454,5 @@
   };
 
   /* Canvas 游戏要用的几张提前解码 */
-  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can', 'td_frog', 'td_hive', 'sunflower', 'beetle', 'moth', 'mole', 'crow', 'boar', 'locust', 'spider', 'stinkbug', 'wasp'].forEach(image);
+  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can', 'td_frog', 'td_hive', 'sunflower', 'beetle', 'moth', 'mole', 'crow', 'boar', 'locust', 'spider', 'stinkbug', 'wasp', 'td_hedgehog', 'td_sparrow', 'td_mint', 'slug', 'pillbug', 'firefly', 'centipede'].forEach(image);
 })(window);

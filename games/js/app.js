@@ -944,7 +944,7 @@
     first: 'sprout', six: 'basket', memory20: 'g_memory', daily: 'calendar', streak3: 'sunflower',
     receipt3000: 'receipt', golf5: 'g_golf', tetris10: 'g_tetris', lightsPar: 'g_lights',
     cupsClean: 'g_cups', slide40: 'g_slide', sudokuClean: 'g_sudoku', sweepWin: 'bee',
-    gardenWin: 'cabbage', gardenFull: 'td_ladybug'
+    gardenWin: 'cabbage', gardenFull: 'td_ladybug', gardenEndless: 'td_frog'
   };
 
   /* 有插画就放插画，没有就退回 emoji */
@@ -1017,6 +1017,7 @@
     if (run.gameId === 'sweep' && m.won) grant('sweepWin');
     if (run.gameId === 'garden' && m.won) grant('gardenWin');
     if (run.gameId === 'garden' && m.won && m.cabbages === 10) grant('gardenFull');
+    if (run.gameId === 'garden' && m.endless && m.wave >= 20) grant('gardenEndless');
 
     if (unlocked.length) {
       var last = MG.achById(unlocked[unlocked.length - 1]);

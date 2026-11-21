@@ -210,7 +210,7 @@
       '<path d="M31 8v10" stroke="' + O + '" stroke-width="1.6"/>' +
       '<circle cx="29" cy="12" r="1" fill="' + O + '"/><circle cx="33" cy="14.5" r="1" fill="' + O + '"/>',
     td_scarecrow:
-      '<path d="M24 22v24M10 26h28" ' + SW + ' stroke-width="3"/>' +
+      '<path d="M24 22v24M10 26h28" stroke="' + O + '" stroke-width="3" stroke-linecap="round"/>' +
       '<path d="M15 24h18l-2 13H17z" fill="#9cc4a4" ' + SW + '/>' +
       '<path d="M20 29h3M26 32h3" stroke="#e5b25d" stroke-width="2" stroke-linecap="round"/>' +
       '<path d="M10 26l-3 3M10 26l-3-2M38 26l3 3M38 26l3-2" stroke="#e5c36a" stroke-width="2" stroke-linecap="round"/>' +
@@ -228,6 +228,59 @@
       '<path d="M12 27h20" stroke="#fff" stroke-width="2" opacity=".5"/>' +
       '<circle cx="17" cy="32" r="2.2" fill="#f0cf7a" ' + SW + '/>' +
       '<g fill="#9bc7e8"><circle cx="45" cy="25" r="1.5"/><circle cx="41" cy="28" r="1.3"/><circle cx="46" cy="30" r="1.2"/></g>',
+    td_frog:
+      '<ellipse cx="24" cy="40" rx="19" ry="5.5" fill="#8fbf8f" ' + SW + '/>' +
+      '<path d="M37 37l5-3" stroke="' + O + '" stroke-width="1.4" opacity=".5"/>' +
+      '<path d="M9 36c0-10 6.5-16 15-16s15 6 15 16c0 3-2 4.5-5 4.5H14c-3 0-5-1.5-5-4.5z" fill="#a6cf8f" ' + SW + '/>' +
+      '<ellipse cx="24" cy="35" rx="8" ry="4" fill="#dcefc4"/>' +
+      '<circle cx="16" cy="19" r="6" fill="#a6cf8f" ' + SW + '/><circle cx="32" cy="19" r="6" fill="#a6cf8f" ' + SW + '/>' +
+      '<circle cx="16" cy="19" r="3.4" fill="#fff" ' + SW + '/><circle cx="32" cy="19" r="3.4" fill="#fff" ' + SW + '/>' +
+      '<circle cx="16.8" cy="19.6" r="1.6" fill="' + O + '"/><circle cx="32.8" cy="19.6" r="1.6" fill="' + O + '"/>' +
+      '<path d="M18 28.5c4 2.6 8 2.6 12 0" fill="none" stroke="' + O + '" stroke-width="2" stroke-linecap="round"/>' +
+      '<ellipse cx="13.5" cy="28" rx="2.4" ry="1.5" fill="#e8a7a0" opacity=".8"/><ellipse cx="34.5" cy="28" rx="2.4" ry="1.5" fill="#e8a7a0" opacity=".8"/>' +
+      '<path d="M11 40c-1-2 0-4 3-4M37 40c1-2 0-4-3-4" fill="none" ' + SW + '/>',
+    td_hive:
+      '<path d="M12 42h24" ' + SW + '/><path d="M16 42v4M32 42v4" ' + SW + '/>' +
+      '<path d="M10 40c0-15 6-26 14-26s14 11 14 26z" fill="#e8c46e" ' + SW + '/>' +
+      '<path d="M11.5 33h25M13.5 26h21M17.5 19.5h13" stroke="' + O + '" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>' +
+      '<path d="M20 40v-3a4 4 0 0 1 8 0v3z" fill="#6b5545" ' + SW + '/>' +
+      '<path d="M15 24c1-4 3-6.5 5.5-8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>' +
+      '<ellipse cx="36.5" cy="10" rx="2.6" ry="2" fill="#fff" opacity=".85" ' + SW + '/>' +
+      '<ellipse cx="38" cy="14" rx="4.2" ry="3.2" fill="#f0cf7a" ' + SW + '/>' +
+      '<path d="M37 11.2v5.6M39.4 11.2v5.6" stroke="' + O + '" stroke-width="1.4"/>',
+    beetle:
+      '<path d="M5 33c0-9 7-15 16-15s15 6 15 15z" fill="#7d93b8" ' + SW + '/>' +
+      '<path d="M20.5 18v15" stroke="' + O + '" stroke-width="1.6" opacity=".45"/>' +
+      '<path d="M36 33c0-5 2.5-8 5.5-8s4.5 3 4.5 7v1z" fill="#5d6f8f" ' + SW + '/>' +
+      '<path d="M43 25.5l2.5-5.5" ' + SW + '/>' +
+      '<circle cx="42.5" cy="29" r="1.3" fill="#fff"/>' +
+      '<path d="M11 33l-3 6M21 33v6M30 33l3 6" ' + SW + '/>' +
+      '<path d="M4.5 33h41.5" ' + SW + '/>' +
+      '<path d="M10 26c2-3 5-4.6 8-5.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>',
+    moth:
+      '<path d="M24 22C16 10 5 11 6 19c1 6 8 9 18 8z" fill="#e6dcef" ' + SW + '/>' +
+      '<path d="M24 22c8-12 19-11 18-3-1 6-8 9-18 8z" fill="#e6dcef" ' + SW + '/>' +
+      '<path d="M24 27c-7 0-12 3-12 8 0 4 6 4 12-3z" fill="#d4c6e4" ' + SW + '/>' +
+      '<path d="M24 27c7 0 12 3 12 8 0 4-6 4-12-3z" fill="#d4c6e4" ' + SW + '/>' +
+      '<circle cx="13" cy="19" r="2.2" fill="#c3b0d8"/><circle cx="35" cy="19" r="2.2" fill="#c3b0d8"/>' +
+      '<ellipse cx="24" cy="27" rx="3" ry="9" fill="#c2ae95" ' + SW + '/>' +
+      '<path d="M23 18.5c-2-4-5-6-8-6.5M25 18.5c2-4 5-6 8-6.5" fill="none" ' + SW + '/>',
+    mole:
+      '<path d="M2 43c4-4 9-5 14-4 4-3 11-3 16 0 5-2 10-1 14 4z" fill="#c9a27c" ' + SW + '/>' +
+      '<path d="M6 38c0-11 8-19 18-19s16 7 18 14c.8 3-1 5-4 5z" fill="#8f7a6b" ' + SW + '/>' +
+      '<ellipse cx="41.5" cy="33" rx="3" ry="2.4" fill="#e8a7a0" ' + SW + '/>' +
+      '<path d="M32 27c1.2-.9 2.6-.9 3.8 0" fill="none" stroke="' + O + '" stroke-width="1.7" stroke-linecap="round"/>' +
+      '<path d="M29 38c0 3 2 4.5 5 4.5M17 38c0 3 2 4.5 5 4.5" fill="#f2deb4" ' + SW + '/>' +
+      '<path d="M13 27c2-3 5-5 9-5.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".35"/>',
+    crow:
+      '<path d="M10 27L2 21.5l2 11 6.5 1z" fill="#4b505d" ' + SW + '/>' +
+      '<ellipse cx="22" cy="29" rx="14" ry="10" fill="#5d6371" ' + SW + '/>' +
+      '<path d="M20 39v5M26 39v5M17.5 44h5M23.5 44h5" ' + SW + '/>' +
+      '<circle cx="35" cy="20" r="7.5" fill="#5d6371" ' + SW + '/>' +
+      '<path d="M41.5 17.5l6 3-6 2.5z" fill="#e5b25d" ' + SW + '/>' +
+      '<circle cx="36.6" cy="18.5" r="1.9" fill="#fff"/><circle cx="37.1" cy="18.8" r=".95" fill="' + O + '"/>' +
+      '<path d="M13 26c5-4 13-4 17 1-4 6-12 7-17-1z" fill="#4b505d" ' + SW + '/>' +
+      '<path d="M15 23c3-3 7-4 11-3.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".3"/>',
     g_garden:
       '<path d="M5 33c0-10 7-16 15.5-16S36 23 36 33c0 6.5-7 10-15.5 10S5 39.5 5 33z" fill="#b9da9c" ' + SW + '/>' +
       '<path d="M10 34c0-6.5 4.5-11 10.5-11S31 27.5 31 34" fill="#d6ebbd" ' + SW + '/>' +
@@ -280,5 +333,5 @@
   };
 
   /* Canvas 游戏要用的几张提前解码 */
-  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can'].forEach(image);
+  ['receipt', 'taxi', 'coffee', 'donut', 'milktea', 'bento', 'apple', 'strawberry', 'carrot', 'teacup', 'cabbage', 'snail', 'caterpillar', 'aphid', 'td_ladybug', 'td_scarecrow', 'td_can', 'td_frog', 'td_hive', 'sunflower', 'beetle', 'moth', 'mole', 'crow'].forEach(image);
 })(window);

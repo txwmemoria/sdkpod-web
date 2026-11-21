@@ -483,7 +483,8 @@
     { id: 'sudokuClean', icon: '🔢', name: '一笔不改', desc: '《午后数独》零失误完成' },
     { id: 'sweepWin', icon: '🐝', name: '园丁', desc: '《菜园扫雷》清理完整块菜地' },
     { id: 'gardenWin', icon: '🥬', name: '护菜有功', desc: '《菜园守卫》守住全部 12 波' },
-    { id: 'gardenFull', icon: '🐞', name: '一棵没少', desc: '《菜园守卫》守住 12 波，白菜一棵不少' }
+    { id: 'gardenFull', icon: '🐞', name: '一棵没少', desc: '《菜园守卫》守住 12 波，白菜一棵不少' },
+    { id: 'gardenEndless', icon: '🐸', name: '永不收工', desc: '《菜园守卫》无尽模式撑到第 20 波' }
   ];
 
   MG.achById = function (id) {
@@ -537,6 +538,14 @@
 
   MG.audio = {
     isOn: function () { return MG.store.data.sound; },
+
+    /* 给需要自己合成声音的游戏用（声音关着时返回 null） */
+    ctx: function () {
+      if (!MG.store.data.sound) return null;
+      var ctx = audioCtx();
+      if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch (err) {} }
+      return ctx;
+    },
 
     setOn: function (on) {
       MG.store.data.sound = !!on;

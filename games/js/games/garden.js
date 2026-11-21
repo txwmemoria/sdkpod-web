@@ -21,14 +21,26 @@
   /* ------------------------------------------------------------ 地图 */
   /* 横版坐标（格子）。route 是拐角，最后一段走进菜畦；菜畦 2×3 格 */
   var MAPS = [
-    { id: 'ridge', routes: [[[-1, 1], [4, 1], [4, 6], [1, 6], [1, 8], [8, 8], [8, 3], [12, 3], [12, 7], [14.2, 7]]],
+    { id: 'ridge', diff: 1, routes: [[[-1, 1], [4, 1], [4, 6], [1, 6], [1, 8], [8, 8], [8, 3], [12, 3], [12, 7], [14.2, 7]]],
       patch: { c: 14, r: 6 }, trees: [], rocks: [[6, 5], [10, 1], [2, 3], [14, 1]] },
-    { id: 'creek', routes: [[[-1, 7], [3, 7], [3, 2], [7, 2], [7, 7], [11, 7], [11, 2], [14.2, 2]]],
-      patch: { c: 14, r: 1 }, creek: 9, trees: [[1, 4], [13, 8]], rocks: [[5, 5], [15, 6]] },
-    { id: 'orchard', routes: [[[-1, 1], [14, 1], [14, 8], [2, 8], [2, 5], [10.2, 5]]],
+    { id: 'terrace', diff: 1, routes: [[[-1, 1], [13, 1], [13, 4], [2, 4], [2, 7], [13.2, 7]]],
+      patch: { c: 13, r: 6 }, trees: [[15, 3], [0, 5]], rocks: [[7, 9], [9, 0]] },
+    { id: 'spiral', diff: 1, routes: [[[-1, 0], [15, 0], [15, 9], [0, 9], [0, 2], [13, 2], [13, 7], [2, 7], [2, 4], [9.2, 4]]],
+      patch: { c: 9, r: 3 }, trees: [[5, 5]], rocks: [[11, 5]] },
+    { id: 'orchard', diff: 1, routes: [[[-1, 1], [14, 1], [14, 8], [2, 8], [2, 5], [10.2, 5]]],
       patch: { c: 10, r: 4 }, trees: [[5, 3], [8, 3], [12, 6], [6, 6], [0, 4], [12, 3]], rocks: [[15, 4]] },
-    { id: 'fork', routes: [[[-1, 2], [6, 2], [6, 5], [14.2, 5]], [[3, 11], [3, 8], [9, 8], [9, 5], [14.2, 5]]],
-      patch: { c: 14, r: 4 }, trees: [[11, 8], [1, 5], [12, 1]], rocks: [[8, 3]] }
+    { id: 'creek', diff: 2, routes: [[[-1, 7], [3, 7], [3, 2], [7, 2], [7, 7], [11, 7], [11, 2], [14.2, 2]]],
+      patch: { c: 14, r: 1 }, creek: 9, trees: [[1, 4], [13, 8]], rocks: [[5, 5], [15, 6]] },
+    { id: 'pond', diff: 2, routes: [[[-1, 8], [4, 8], [4, 1], [11, 1], [11, 6], [14.2, 6]]],
+      patch: { c: 14, r: 5 }, pond: { x: 7.9, y: 4.9, rx: 2.4, ry: 2.1 }, trees: [[14, 1], [1, 3]], rocks: [[2, 6], [13, 9]] },
+    { id: 'meadow', diff: 2, routes: [[[-1, 5], [5, 5], [5, 2], [10, 2], [10, 7], [14.2, 7]]],
+      patch: { c: 14, r: 6 }, trees: [[2, 2], [7, 8], [13, 3]], rocks: [[8, 5], [3, 8]] },
+    { id: 'hedge', diff: 2, routes: [[[2, -1], [2, 7], [6, 7], [6, 2], [10, 2], [10, 7], [14.2, 7]]],
+      patch: { c: 14, r: 6 }, trees: [[4, 1], [4, 3], [4, 5], [8, 4], [8, 6], [12, 3], [0, 8], [13, 1], [8, 0]], rocks: [[15, 4]] },
+    { id: 'fork', diff: 3, routes: [[[-1, 2], [6, 2], [6, 5], [14.2, 5]], [[3, 11], [3, 8], [9, 8], [9, 5], [14.2, 5]]],
+      patch: { c: 14, r: 4 }, trees: [[11, 8], [1, 5], [12, 1]], rocks: [[8, 3]] },
+    { id: 'triple', diff: 3, routes: [[[-1, 2], [5, 2], [5, 5], [14.2, 5]], [[8, -1], [8, 5], [14.2, 5]], [[3, 11], [3, 8], [11, 8], [11, 5], [14.2, 5]]],
+      patch: { c: 14, r: 4 }, trees: [[1, 5], [12, 1]], rocks: [[6, 7]] }
   ];
 
   /* ------------------------------------------------------------ 虫子 */
@@ -337,7 +349,7 @@
       var music = Music();
 
       /* -------------------------------------------------- 几何 */
-      var tall = null, COLS, ROWS, routes, patch, onPath, blocked, cabbageSpots, map, creekCells, trees, rocks;
+      var tall = null, COLS, ROWS, routes, patch, onPath, blocked, cabbageSpots, map, creekCells, trees, rocks, pond;
       var view = null, cs = 1, ox = 0, oy = 0, bg = null, bgKey = '';
       var spr = {};
       function T(p) { return tall ? [p[1], p[0]] : [p[0], p[1]]; }
@@ -374,6 +386,16 @@
             var cc = T([map.creek, r]);
             creekCells.push(cc);
             blocked[cc[0] + ',' + cc[1]] = 1;
+          }
+        }
+        /* 池塘：椭圆里的格子都不能放 */
+        pond = null;
+        if (map.pond) {
+          var pm = map.pond;
+          pond = tall ? { x: pm.y, y: pm.x, rx: pm.ry, ry: pm.rx } : { x: pm.x, y: pm.y, rx: pm.rx, ry: pm.ry };
+          for (var pr = 0; pr < ROWS; pr++) for (var pcc = 0; pcc < COLS; pcc++) {
+            var ex = (pcc + 0.5 - pond.x) / pond.rx, ey = (pr + 0.5 - pond.y) / pond.ry;
+            if (ex * ex + ey * ey <= 1.05) blocked[pcc + ',' + pr] = 1;
           }
         }
         trees = map.trees.map(T);
@@ -556,6 +578,35 @@
           }
           c.fillStyle = '#f6e6a8';
           c.beginPath(); c.arc(fx * cs, fy * cs, cs * 0.03, 0, TAU); c.fill();
+        }
+
+        /* 池塘：岸、水、高光、荷叶、芦苇 */
+        if (pond) {
+          var pxc = pond.x * cs, pyc = pond.y * cs;
+          c.fillStyle = P.dirtEdge;
+          c.beginPath(); c.ellipse(pxc, pyc, (pond.rx + 0.12) * cs, (pond.ry + 0.12) * cs, 0, 0, TAU); c.fill();
+          c.fillStyle = P.water;
+          c.beginPath(); c.ellipse(pxc, pyc, pond.rx * cs, pond.ry * cs, 0, 0, TAU); c.fill();
+          c.strokeStyle = P.waterHi;
+          c.lineWidth = Math.max(1.5, cs * 0.06);
+          c.lineCap = 'round';
+          c.beginPath(); c.ellipse(pxc - pond.rx * cs * 0.25, pyc - pond.ry * cs * 0.35, pond.rx * cs * 0.45, pond.ry * cs * 0.25, -0.2, Math.PI * 1.1, Math.PI * 1.7); c.stroke();
+          [[0.35, 0.3, 0.32], [-0.45, 0.25, 0.26], [0.1, -0.45, 0.22], [-0.2, 0.55, 0.2]].forEach(function (l) {
+            var lx = pxc + l[0] * pond.rx * cs, ly = pyc + l[1] * pond.ry * cs, lr = l[2] * cs;
+            c.fillStyle = MG.theme.dark ? '#5a7a52' : '#8fbf7f';
+            c.beginPath(); c.moveTo(lx, ly); c.arc(lx, ly, lr, 0.4, TAU - 0.1); c.closePath(); c.fill();
+          });
+          c.fillStyle = '#f2c3c8';
+          c.beginPath(); c.arc(pxc + 0.35 * pond.rx * cs, pyc + 0.3 * pond.ry * cs, cs * 0.09, 0, TAU); c.fill();
+          c.strokeStyle = MG.theme.dark ? '#6f8a5a' : '#7fa06a';
+          c.lineWidth = Math.max(1, cs * 0.035);
+          c.beginPath();
+          for (var rd = 0; rd < 7; rd++) {
+            var ra = 2.2 + rd * 0.18;
+            var rx0 = pxc + Math.cos(ra) * pond.rx * cs * 0.98, ry0 = pyc + Math.sin(ra) * pond.ry * cs * 0.98;
+            c.moveTo(rx0, ry0); c.lineTo(rx0 + (rd % 2 ? 2 : -2), ry0 - cs * (0.3 + (rd % 3) * 0.08));
+          }
+          c.stroke();
         }
 
         /* 小溪：一条弯弯的水带 */
@@ -903,6 +954,7 @@
         var P = palette();
         c.fillStyle = P.grass; c.fillRect(0, 0, W, H);
         if (m.creek !== undefined) { c.fillStyle = P.water; c.fillRect(m.creek * k + 1, 0, k - 2, H); }
+        if (m.pond) { c.fillStyle = P.water; c.beginPath(); c.ellipse(m.pond.x * k, m.pond.y * k, m.pond.rx * k, m.pond.ry * k, 0, 0, TAU); c.fill(); }
         c.strokeStyle = P.dirt; c.lineWidth = k * 0.8; c.lineCap = 'round'; c.lineJoin = 'round';
         m.routes.forEach(function (r) {
           c.beginPath();
@@ -939,18 +991,25 @@
           var tx = MG.h('span', 'gd-map-txt');
           tx.appendChild(MG.h('b', null, MG.t('g.garden.map.' + m.id)));
           tx.appendChild(MG.h('span', null, MG.t('g.garden.mapd.' + m.id)));
+          var lvl = MG.h('i', 'gd-stars', '★★★'.slice(0, m.diff) + '☆☆☆'.slice(m.diff));
+          lvl.title = MG.t('g.garden.diff');
+          tx.firstChild.appendChild(lvl);
           tx.appendChild(MG.h('em', null, bestText(m.id)));
           b.appendChild(tx);
+          b.title = MG.t('g.garden.mapd.' + m.id);
           b.addEventListener('click', function () {
             mapId = m.id;
             maps.querySelectorAll('.gd-map').forEach(function (x) { x.classList.remove('on'); });
             b.classList.add('on');
+            descEl.textContent = MG.t('g.garden.mapd.' + m.id);
             geometry(true); layout(); draw();
             MG.audio.play('click');
           });
           maps.appendChild(b);
         });
         panel.appendChild(maps);
+        var descEl = MG.h('p', 'gd-mapdesc', MG.t('g.garden.mapd.' + mapId));
+        panel.appendChild(descEl);
         var modes = MG.h('div', 'gd-modes');
         ['classic', 'endless'].forEach(function (md) {
           var b = MG.h('button', 'gd-mode' + (md === mode ? ' on' : ''));
@@ -972,6 +1031,9 @@
         panel.appendChild(go);
         pickEl.appendChild(panel);
         pickEl.hidden = false;
+        /* 上次选的那块地滚到看得见的地方 */
+        var onMap = maps.querySelector('.gd-map.on');
+        if (onMap) maps.scrollTop = Math.max(0, onMap.offsetTop - maps.offsetTop - 6);
         geometry(true);
         layout();
         changed();
@@ -1604,6 +1666,21 @@
         ctx.clearRect(0, 0, view.w, view.h);
         ctx.drawImage(bg, 0, 0, view.w, view.h);
         var i, p;
+
+        /* 池塘的涟漪 */
+        if (pond) {
+          ctx.save();
+          ctx.strokeStyle = P.waterHi;
+          ctx.lineWidth = Math.max(1, cs * 0.03);
+          for (var rp = 0; rp < 3; rp++) {
+            var ph = (S.t * 0.35 + rp / 3) % 1;
+            ctx.globalAlpha = (1 - ph) * 0.8;
+            ctx.beginPath();
+            ctx.ellipse(X(pond.x - 0.6 + rp * 0.5), Y(pond.y + 0.2 - rp * 0.3), cs * (0.1 + ph * 0.5), cs * (0.05 + ph * 0.25), 0, 0, TAU);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
 
         /* 小溪的水纹，顺流而下 */
         if (creekCells.length) {

@@ -1541,16 +1541,17 @@ body {
 .gd-pick[hidden] { display: none; }
 @keyframes gdIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .gd-pick-panel {
-  width: min(760px, 100%); max-height: 100%; overflow: auto;
-  padding: 18px 18px 16px;
+  width: min(820px, 100%); max-height: 100%; overflow: hidden;
+  padding: 14px 16px 14px;
   border: 1px solid var(--line); border-radius: 20px;
   background: var(--panel); box-shadow: var(--shadow);
-  display: flex; flex-direction: column; gap: 14px; align-items: stretch;
+  display: flex; flex-direction: column; gap: 10px; align-items: stretch;
 }
 .gd-pick-panel h3 { margin: 0; font-size: 17px; text-align: center; }
-.gd-maps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.gd-maps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; min-height: 0; overflow-y: auto; padding: 2px; margin: -2px; }
+.gd-stars { font-style: normal; font-size: 10px; letter-spacing: 1px; color: #d9a441; margin-left: 6px; font-weight: 400; }
 .gd-map {
-  display: flex; flex-direction: column; gap: 8px; padding: 8px;
+  display: flex; flex-direction: column; gap: 5px; padding: 6px;
   border: 1px solid var(--line); border-radius: 14px;
   background: var(--panel-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
   transition: border-color .2s, transform .15s, box-shadow .2s;
@@ -1560,19 +1561,23 @@ body {
 .gd-map canvas { width: 100%; aspect-ratio: 16 / 10; border-radius: 9px; display: block; }
 .gd-map-txt { display: flex; flex-direction: column; gap: 3px; }
 .gd-map-txt b { font-size: 14px; }
-.gd-map-txt span { font-size: 12px; color: var(--muted); line-height: 1.35; }
+.gd-map-txt span { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
 .gd-map-txt em { font-style: normal; font-size: 11px; color: var(--accent); font-weight: 600; }
 .gd-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .gd-mode {
-  display: flex; flex-direction: column; gap: 2px; padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 1px; padding: 7px 12px;
   border: 1px solid var(--line); border-radius: 12px;
   background: var(--panel-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
 }
 .gd-mode b { font-size: 14px; }
 .gd-mode span { font-size: 12px; color: var(--muted); }
 .gd-mode.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--ga-soft, rgba(127,174,115,.3)); }
-.gd-go { align-self: center; min-width: 180px; height: 42px; font-size: 15px; }
+.gd-go { align-self: center; min-width: 180px; height: 38px; font-size: 15px; }
 
+@media (max-width: 900px) {
+  .gd-maps { grid-template-columns: repeat(3, 1fr); }
+  .gd-map-txt span { display: none; }
+}
 @media (max-width: 720px) {
   .gd-maps { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1601,4 +1606,10 @@ body {
   .gd-mode { padding: 7px 10px; }
   .gd-mode span { font-size: 11px; line-height: 1.3; }
   .gd-go { height: 38px; width: 100%; }
+}
+.gd-pick-panel > h3, .gd-modes, .gd-go, .gd-mapdesc { flex-shrink: 0; }
+.gd-map-txt span { display: none; }
+.gd-mapdesc { margin: -4px 0 0; text-align: center; font-size: 12.5px; color: var(--muted); }
+@media (min-width: 721px) {
+  .gd-map canvas { width: auto; height: 64px; max-width: 100%; align-self: center; }
 }

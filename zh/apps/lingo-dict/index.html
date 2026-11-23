@@ -42,10 +42,10 @@
         <a class="back" href="../../#works">← 返回作品</a>
         <h1>LingoDict</h1>
         <p class="tagline">离线英汉词典</p>
-        <p class="lede">Windows / macOS 上的英汉词典，从头到尾不联网。查词、81 本词书、间隔重复背单词、朗读，连语法检查都跑在本机。不联网、不注册、不上报。</p>
+        <p class="lede">Windows / macOS 上的离线英汉词典。查词、81 本词书、间隔重复背单词、朗读，连语法检查都跑在本机；只有写作检查的模型需要下载一次。不注册，不上报使用数据。</p>
         <ul class="chips">
           <li class="on">新作</li>
-          <li>v0.5.1</li>
+          <li>v0.5.2</li>
           <li>Windows</li>
           <li>macOS</li>
           <li>离线</li>
@@ -93,15 +93,15 @@
           <table>
             <thead><tr><th>系统</th><th>文件</th></tr></thead>
             <tbody>
-              <tr><td>Windows 10/11（x64）</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">LingoDict-0.5.1-win-x64-Setup.exe</a></td></tr>
-              <tr><td>macOS，Apple 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">LingoDict-0.5.1-osx-arm64.dmg</a></td></tr>
-              <tr><td>macOS，Intel 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">LingoDict-0.5.1-osx-x64.dmg</a></td></tr>
+              <tr><td>Windows 10/11（x64）</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-win-x64-Setup.exe">LingoDict-0.5.2-win-x64-Setup.exe</a></td></tr>
+              <tr><td>macOS，Apple 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-osx-arm64.dmg">LingoDict-0.5.2-osx-arm64.dmg</a></td></tr>
+              <tr><td>macOS，Intel 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-osx-x64.dmg">LingoDict-0.5.2-osx-x64.dmg</a></td></tr>
             </tbody>
           </table>
         </div>
         <p>Windows 版装到 <code>%LOCALAPPDATA%\LingoDict</code>，不需要管理员权限。macOS 版<strong>没有签名和公证</strong>，第一次打开要右键 →「打开」，或者执行：</p>
 <pre><code>xattr -dr com.apple.quarantine /Applications/LingoDict.app</code></pre>
-        <p>写作检查用的语法模型不在安装包里（它仅限非商业用途），第一次打开写作页时应用会提示安装。历史版本见 <a href="https://github.com/txwmemoria/lingo-dict/releases" target="_blank" rel="noopener noreferrer">Releases 页面</a>。</p>
+        <p>写作检查用的语法模型（约 123 MiB）不在安装包里。第一次打开写作页时点「下载模型」，应用会从 GitHub Releases 下载并校验，断了可以续传；也可以从本地文件导入。历史版本见 <a href="https://github.com/txwmemoria/lingo-dict/releases" target="_blank" rel="noopener noreferrer">Releases 页面</a>。</p>
 
         <h2 id="build">从源码构建</h2>
         <p>需要 <strong>.NET SDK 9</strong>。</p>
@@ -120,14 +120,14 @@ git clone --depth 1 https://github.com/kajweb/dict data/kajweb-dict</code></pre>
 <pre><code>dotnet run --project src/LingoDict.App</code></pre>
 
         <h2 id="data">数据和模型</h2>
-        <p>代码是一回事，它读的东西是另一回事。词书数据留在 kajweb/dict。语法模型衍生自 <a href="https://github.com/gotutiyan/gector" target="_blank" rel="noopener noreferrer">gotutiyan/gector</a>，其训练数据仅限非商业用途，所以任何安装包都不打包它，而是在第一次打开写作页时由应用下载或从本地导入。</p>
+        <p>代码是一回事，它读的东西是另一回事。词书数据留在 kajweb/dict。语法模型衍生自 <a href="https://github.com/gotutiyan/gector" target="_blank" rel="noopener noreferrer">gotutiyan/gector</a>，其训练数据仅限非商业用途，所以安装包不打包它，而是单独放在 <a href="https://github.com/txwmemoria/lingo-dict/releases/tag/model-v1" target="_blank" rel="noopener noreferrer">model-v1</a>，由应用在你需要时下载。</p>
       </article>
 
       <aside class="side" aria-label="详情">
         <dl class="facts">
           <div><dt>平台</dt><dd>Windows · macOS</dd></div>
-          <div><dt>版本</dt><dd class="mono">v0.5.1</dd></div>
-          <div><dt>发布</dt><dd class="mono">2026-09-02</dd></div>
+          <div><dt>版本</dt><dd class="mono">v0.5.2</dd></div>
+          <div><dt>发布</dt><dd class="mono">2026-11-23</dd></div>
           <div><dt>技术</dt><dd>Avalonia 12 · .NET 9</dd></div>
           <div><dt>测试</dt><dd class="mono">541 条</dd></div>
         </dl>
@@ -135,9 +135,9 @@ git clone --depth 1 https://github.com/kajweb/dict data/kajweb-dict</code></pre>
           <code>git clone https://github.com/txwmemoria/lingo-dict</code>
           <button type="button" data-done="已复制">复制</button>
         </div>
-        <a class="btn solid block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">Windows 安装包</a>
-        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">macOS · Apple 芯片</a>
-        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">macOS · Intel 芯片</a>
+        <a class="btn solid block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-win-x64-Setup.exe">Windows 安装包</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-osx-arm64.dmg">macOS · Apple 芯片</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.2/LingoDict-0.5.2-osx-x64.dmg">macOS · Intel 芯片</a>
         <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         <p class="side-label">本页目录</p>
         <ul class="toc">

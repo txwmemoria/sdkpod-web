@@ -27,6 +27,27 @@
     document.head.appendChild(s);
   }
 
+  function push(ins, box) {
+    /* 等节点进了页面再请求广告 */
+    setTimeout(function () {
+      if (!ins.isConnected) return;
+      try { (w.adsbygoogle = w.adsbygoogle || []).push({}); } catch (e) { box.remove(); }
+    }, 0);
+  }
+
+  /* AdSense 会在 <ins> 上写 data-ad-status：filled 才显示，unfilled（没广告可投、网站还在审核）就把整张卡撤掉，不留空框 */
+  function watch(ins, box) {
+    if (!w.MutationObserver) { box.classList.add('ad-ready'); return; }
+    var mo = new MutationObserver(function () {
+      var st = ins.getAttribute('data-ad-status');
+      if (st === 'filled') { box.classList.add('ad-ready'); mo.disconnect(); }
+      else if (st === 'unfilled') { box.remove(); mo.disconnect(); }
+    });
+    mo.observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
+    /* 被广告拦截插件挡了、或者迟迟没回应：8 秒后撤掉，免得列表里空着一格 */
+    setTimeout(function () { if (!box.classList.contains('ad-ready')) { mo.disconnect(); box.remove(); } }, 8000);
+  }
+
   MG.ads = {
     /** 返回一个带「广告」小标签的容器；没配置时返回 null */
     block: function (slot) {
@@ -49,6 +70,27 @@
         try { (w.adsbygoogle = w.adsbygoogle || []).push({}); } catch (e) { box.remove(); }
       }, 0);
       return box;
+    },
+
+    /** 信息流广告：做成和游戏卡片一样的一张卡，插在游戏列表里；没配置返回 null */
+    feed: function () {
+      var f = cfg.feed;
+      if (!/^ca-pub-\d+$/.test(cfg.client || '') || !f || !f.slot) return null;
+      loadScript();
+      var card = MG.h('aside', 'gcard gcard-ad');
+      card.setAttribute('aria-label', MG.t('ad.label'));
+      card.appendChild(MG.h('span', 'ad-label', MG.t('ad.label')));
+      var ins = document.createElement('ins');
+      ins.className = 'adsbygoogle';
+      ins.style.display = 'block';
+      ins.setAttribute('data-ad-format', 'fluid');
+      if (f.layout) ins.setAttribute('data-ad-layout-key', f.layout);
+      ins.setAttribute('data-ad-client', cfg.client);
+      ins.setAttribute('data-ad-slot', f.slot);
+      card.appendChild(ins);
+      watch(ins, card);
+      push(ins, card);
+      return card;
     }
   };
 })(window);

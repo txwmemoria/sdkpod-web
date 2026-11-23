@@ -1639,3 +1639,9 @@ body {
   .gd-selbox .gd-tool { flex: 0 0 auto; padding: 2px 7px 0; }
   .gd-selbox .gd-close { width: 36px; }
 }
+
+/* 游戏列表里的信息流广告：跟游戏卡片同样的外框，加载到广告才淡入 */
+.gcard-ad { position: relative; cursor: default; padding: 28px 12px 12px; min-height: 0; opacity: 0; transition: opacity .4s ease; animation: none; }
+.gcard-ad:hover { transform: none; }
+.gcard-ad.ad-ready { opacity: 1; }
+.gcard-ad .ad-label { top: 9px; left: 14px; }

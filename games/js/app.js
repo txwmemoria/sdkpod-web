@@ -927,7 +927,12 @@
     wrap.appendChild(head);
 
     var grid = MG.h('div', 'shelf-grid');
-    MG.games.forEach(function (def, i) { grid.appendChild(buildGameCard(def, i)); });
+    var feedAd = MG.ads && MG.ads.feed ? MG.ads.feed() : null;
+    MG.games.forEach(function (def, i) {
+      grid.appendChild(buildGameCard(def, i));
+      /* 信息流广告夹在第 4 张卡后面，像列表里的一项 */
+      if (i === 3 && feedAd) grid.appendChild(feedAd);
+    });
     var soon = MG.h('div', 'gcard gcard-soon');
     soon.appendChild(MG.h('div', 'gcard-cover', ''));
     var sb = MG.h('div', 'gcard-body');

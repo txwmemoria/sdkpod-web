@@ -66,3 +66,5 @@ npx wrangler deploy
   ```
 
   `hub` is shown between the game list and the achievements; `play` under the rules on each game page. Both are labelled and kept away from game controls and pop-up panels.
+
+  `feed` is an in-feed (fluid) unit, slot `8241672150`, shown as a card after the fourth game in the hub list. It fades in only once AdSense reports `data-ad-status="filled"`; if it comes back unfilled, or nothing happens within 8 seconds (ad blockers), the card is removed so the list has no gap.

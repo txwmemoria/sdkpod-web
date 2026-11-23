@@ -64,11 +64,8 @@
       ins.setAttribute('data-ad-format', 'auto');
       ins.setAttribute('data-full-width-responsive', 'true');
       box.appendChild(ins);
-      /* 等节点进了页面再请求广告 */
-      setTimeout(function () {
-        if (!ins.isConnected) return;
-        try { (w.adsbygoogle = w.adsbygoogle || []).push({}); } catch (e) { box.remove(); }
-      }, 0);
+      watch(ins, box);
+      push(ins, box);
       return box;
     },
 

@@ -1645,3 +1645,7 @@ body {
 .gcard-ad:hover { transform: none; }
 .gcard-ad.ad-ready { opacity: 1; }
 .gcard-ad .ad-label { top: 9px; left: 14px; }
+
+/* 展示广告也是加载到了才淡入；没投放就整块撤掉 */
+.ad-box { opacity: 0; transition: opacity .4s ease; }
+.ad-box.ad-ready { opacity: 1; }

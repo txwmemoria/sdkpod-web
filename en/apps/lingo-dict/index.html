@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LingoDict — Offline English–Chinese dictionary · SDK Pods</title>
+  <meta name="description" content="An offline English–Chinese dictionary for Windows and macOS: look-up, 81 vocabulary books, spaced repetition, pronunciation and a local grammar checker. No network, no account, no telemetry." />
+  <meta property="og:title" content="LingoDict — Offline English–Chinese dictionary" />
+  <meta property="og:description" content="Look-up, vocabulary books, spaced repetition, pronunciation and a local grammar checker, all on your machine." />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0c0f" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../../../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="../../../zh/apps/lingo-dict/" />
+  <link rel="alternate" hreflang="en" href="./" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../../assets/css/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8749238606288275"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="../../" aria-label="SDK Pods home">
+        <img src="../../../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="../../#works">Works</a>
+        <a href="../../../games/">Games</a>
+        <a href="../../#about">About</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">Contact</a>
+        <span class="tools">
+          <a class="pill" href="../../../zh/apps/lingo-dict/" hreflang="zh-CN" lang="zh-CN" data-lang-switch="zh" aria-label="切换到中文">中</a>
+          <button type="button" data-theme-toggle aria-label="Toggle light or dark theme">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="app-hero">
+      <div class="wrap">
+        <a class="back" href="../../#works">← Back to works</a>
+        <h1>LingoDict</h1>
+        <p class="tagline">Offline English–Chinese dictionary</p>
+        <p class="lede">An English–Chinese dictionary for Windows and macOS that never goes online. Look-up, 81 vocabulary books, spaced repetition, pronunciation and even a grammar checker all run on your machine. No network, no account, no telemetry.</p>
+        <ul class="chips">
+          <li class="on">New</li>
+          <li>v0.5.1</li>
+          <li>Windows</li>
+          <li>macOS</li>
+          <li>Offline</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn solid" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">Open GitHub <span aria-hidden="true">↗</span></a>
+          <a class="btn line" href="#build">Build from source <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap app-layout">
+      <article class="prose">
+        <h2 id="features">What it does</h2>
+
+        <p><strong>Look up words.</strong> Search by English headword or by Chinese meaning; hits are highlighted in the list and in the entry. 21,319 headwords with phonetics, drawn from 81 vocabulary books.</p>
+
+        <p><strong>Read through a book.</strong> Browse any of the 81 books entry by entry. Each book keeps a bookmark of where you stopped, the way a paper dictionary would.</p>
+
+        <p><strong>Learn.</strong> SM-2 spaced repetition. After you flip a card it asks whether you recalled it, and each answer button also tells you when the word will come back. Daily limits for new and review cards are adjustable.</p>
+
+        <p><strong>Hear it.</strong> The speaker next to a headword reads it with the system voice, offline. Every symbol in a transcription is clickable: tap <code>æ</code> and it says <em>cat</em>. There is a full IPA chart and a listening drill built around the contrasts Chinese speakers really mix up: θ/s, v/w, ɪ/iː, n/ŋ, l/r.</p>
+
+        <p><strong>Check your writing.</strong> Paste a paragraph and get suggestions one by one, each openable in the entry pane. A quantized GECToR model runs locally through ONNX Runtime; the model is installed once from inside the app.</p>
+
+        <p><strong>Get around.</strong> Synonyms and word families are links. Double-click any word in an example sentence to look it up, or select a phrase and right-click.</p>
+
+        <h2 id="keys">Keyboard</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Keys</th><th>Does</th></tr></thead>
+            <tbody>
+              <tr><td><code>Ctrl+F</code> / <code>Ctrl+L</code></td><td>Focus search</td></tr>
+              <tr><td><code>Ctrl+D</code></td><td>Favourite the current entry</td></tr>
+              <tr><td><code>Ctrl+E</code></td><td>Add to or remove from the study plan</td></tr>
+              <tr><td><code>Alt+←</code> / <code>Alt+→</code></td><td>Back and forward through history</td></tr>
+              <tr><td><code>Alt+↑</code> / <code>Alt+↓</code></td><td>Previous and next word in the current list</td></tr>
+              <tr><td><code>Space</code>, <code>1</code>–<code>4</code></td><td>Flip a card and grade it</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="build">Build from source</h2>
+        <p>Installers for Windows (<code>Setup.exe</code>) and macOS (<code>.dmg</code> for Apple Silicon and Intel) will be published on the GitHub Releases page. Until then, build it yourself. You need the <strong>.NET SDK 9</strong> and <strong>Python 3</strong> for the one-time data import.</p>
+
+        <h3>1. Get the code and the vocabulary data</h3>
+<pre><code>git clone https://github.com/txwmemoria/lingo-dict
+cd lingo-dict
+git clone https://github.com/kajweb/dict data/kajweb-dict
+python data/kajweb-dict/download.py</code></pre>
+        <p>The vocabulary books belong to <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a> and are not redistributed in this repository; the script fetches 81 archives, about 71 MiB.</p>
+
+        <h3>2. Build the dictionary database</h3>
+<pre><code>dotnet run --project src/LingoDict.Importer</code></pre>
+        <p>Optionally add <a href="https://github.com/skywind3000/ECDICT" target="_blank" rel="noopener noreferrer">ECDICT</a> first for word frequency and inflected forms (so <code>cancelled</code> finds <code>cancel</code>).</p>
+
+        <h3>3. Run it</h3>
+<pre><code>dotnet run --project src/LingoDict.App</code></pre>
+
+        <h2 id="data">Data and model</h2>
+        <p>The code is one thing; what it reads is another. The vocabulary data stays with kajweb/dict. The grammar model is derived from <a href="https://github.com/gotutiyan/gector" target="_blank" rel="noopener noreferrer">gotutiyan/gector</a>, whose training data is licensed for non-commercial use only, so no build ships it: the app downloads or imports it the first time you open the writing page.</p>
+      </article>
+
+      <aside class="side" aria-label="Details">
+        <dl class="facts">
+          <div><dt>Platform</dt><dd>Windows · macOS</dd></div>
+          <div><dt>Version</dt><dd class="mono">v0.5.1</dd></div>
+          <div><dt>Released</dt><dd class="mono">2026-09-02</dd></div>
+          <div><dt>Built with</dt><dd>Avalonia 12 · .NET 9</dd></div>
+          <div><dt>Tests</dt><dd class="mono">541</dd></div>
+        </dl>
+        <div class="cmd wrap-text">
+          <code>git clone https://github.com/txwmemoria/lingo-dict</code>
+          <button type="button" data-done="Copied">Copy</button>
+        </div>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <p class="side-label">On this page</p>
+        <ul class="toc">
+          <li><a href="#features">What it does</a></li>
+          <li><a href="#keys">Keyboard</a></li>
+          <li><a href="#build">Build from source</a></li>
+          <li><a href="#data">Data and model</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="../../"><img src="../../../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. Small, refined, efficient.</p>
+    </div>
+  </footer>
+
+  <script src="../../../assets/js/site.js" defer></script>
+</body>
+</html>

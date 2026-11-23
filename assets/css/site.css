@@ -475,6 +475,8 @@ img { display: block; max-width: 100%; }
 }
 
 .work-name:hover { color: var(--accent); }
+/* 名字长的作品（LingoDict、Slack Inc.）字号缩一档，免得挤进右栏 */
+.work-name.long { font-size: clamp(2.2rem, 5vw, 3.3rem); letter-spacing: -0.04em; }
 
 .work-body h3 { margin: 0; font-size: 1.25rem; font-weight: 650; line-height: 1.35; }
 .work-body p { margin: 0.7rem 0 1.2rem; color: var(--ink-2); }

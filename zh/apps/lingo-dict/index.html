@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LingoDict — 离线英汉词典 · SDK Pods</title>
+  <meta name="description" content="Windows / macOS 上的离线英汉词典：查词、81 本词书、间隔重复、朗读和本机语法检查。不联网、不注册、不上报。" />
+  <meta property="og:title" content="LingoDict — 离线英汉词典" />
+  <meta property="og:description" content="查词、词书、背单词、发音和写作检查，全部跑在本机。" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0a0c0f" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="../../../assets/img/mark.svg" type="image/svg+xml" />
+  <link rel="alternate" hreflang="zh-CN" href="./" />
+  <link rel="alternate" hreflang="en" href="../../../en/apps/lingo-dict/" />
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="../../../assets/css/site.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8749238606288275"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="../../" aria-label="SDK Pods 首页">
+        <img src="../../../assets/img/mark.svg" width="26" height="26" alt="" />
+        SDK Pods
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="../../#works">作品</a>
+        <a href="../../../games/">小游戏</a>
+        <a href="../../#about">关于</a>
+        <a class="hide-s" href="mailto:hello@sdkpod.com">联系</a>
+        <span class="tools">
+          <a class="pill" href="../../../en/apps/lingo-dict/" hreflang="en" lang="en" data-lang-switch="en" aria-label="Switch to English">EN</a>
+          <button type="button" data-theme-toggle aria-label="切换浅色或深色主题">◐</button>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="app-hero">
+      <div class="wrap">
+        <a class="back" href="../../#works">← 返回作品</a>
+        <h1>LingoDict</h1>
+        <p class="tagline">离线英汉词典</p>
+        <p class="lede">Windows / macOS 上的英汉词典，从头到尾不联网。查词、81 本词书、间隔重复背单词、朗读，连语法检查都跑在本机。不联网、不注册、不上报。</p>
+        <ul class="chips">
+          <li class="on">新作</li>
+          <li>v0.5.1</li>
+          <li>Windows</li>
+          <li>macOS</li>
+          <li>离线</li>
+        </ul>
+        <div class="btn-row">
+          <a class="btn solid" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">打开 GitHub <span aria-hidden="true">↗</span></a>
+          <a class="btn line" href="#build">从源码构建 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap app-layout">
+      <article class="prose">
+        <h2 id="features">能做什么</h2>
+
+        <p><strong>查词。</strong>英文词头或中文释义都能搜，列表和释义里都会高亮命中的部分。21,319 个词头带音标，取自 81 本词书。</p>
+
+        <p><strong>逐本读。</strong>81 本词书可以一个词一个词地翻，每本书各记一个书签，记住你上次看到哪儿——纸质词典的习惯，去掉纸。</p>
+
+        <p><strong>背单词。</strong>SM-2 间隔重复。翻面后先问一句「刚才想起来了吗」，四个按钮上行是你记得怎么样，下行是这个词下次什么时候再出现。每日新词和复习上限可调。</p>
+
+        <p><strong>听发音。</strong>词头旁的喇叭用系统语音朗读，完全离线。音标里每个音都能点——点 <code>æ</code> 它念 <em>cat</em>。还有完整的音标表和听音辨词练习，练的全是中文母语者真会混的对立：θ/s、v/w、ɪ/iː、n/ŋ、l/r。</p>
+
+        <p><strong>检查写作。</strong>贴一段英文，逐条给建议，每条都能在右侧打开词条核对。本地运行量化过的 GECToR 模型（ONNX Runtime），模型在应用里装一次即可。</p>
+
+        <p><strong>到处跳。</strong>同近义词、同根词可点击直达。例句里双击单词就查，划选后右键查整段。</p>
+
+        <h2 id="keys">快捷键</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>快捷键</th><th>作用</th></tr></thead>
+            <tbody>
+              <tr><td><code>Ctrl+F</code> / <code>Ctrl+L</code></td><td>聚焦搜索框</td></tr>
+              <tr><td><code>Ctrl+D</code></td><td>收藏当前词条</td></tr>
+              <tr><td><code>Ctrl+E</code></td><td>加入 / 移出学习计划</td></tr>
+              <tr><td><code>Alt+←</code> / <code>Alt+→</code></td><td>历史后退 / 前进</td></tr>
+              <tr><td><code>Alt+↑</code> / <code>Alt+↓</code></td><td>当前列表的上一个 / 下一个词</td></tr>
+              <tr><td><code>空格</code>、<code>1</code>–<code>4</code></td><td>学习页翻面、评分</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="build">从源码构建</h2>
+        <p>Windows 安装程序（<code>Setup.exe</code>）和 macOS 安装包（Apple Silicon / Intel 的 <code>.dmg</code>）之后会发布在 GitHub Releases 页面。在那之前可以自己构建，需要 <strong>.NET SDK 9</strong>，以及一次性导入数据用的 <strong>Python 3</strong>。</p>
+
+        <h3>1. 取代码和词书数据</h3>
+<pre><code>git clone https://github.com/txwmemoria/lingo-dict
+cd lingo-dict
+git clone https://github.com/kajweb/dict data/kajweb-dict
+python data/kajweb-dict/download.py</code></pre>
+        <p>词书数据属于 <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a>，本仓库不再分发一次；脚本会取回 81 个压缩包，约 71 MiB。</p>
+
+        <h3>2. 生成词典数据库</h3>
+<pre><code>dotnet run --project src/LingoDict.Importer</code></pre>
+        <p>可选：先加上 <a href="https://github.com/skywind3000/ECDICT" target="_blank" rel="noopener noreferrer">ECDICT</a> 的词频和词形变化，输入 <code>cancelled</code> 也能落到 <code>cancel</code>。</p>
+
+        <h3>3. 运行</h3>
+<pre><code>dotnet run --project src/LingoDict.App</code></pre>
+
+        <h2 id="data">数据和模型</h2>
+        <p>代码是一回事，它读的东西是另一回事。词书数据留在 kajweb/dict。语法模型衍生自 <a href="https://github.com/gotutiyan/gector" target="_blank" rel="noopener noreferrer">gotutiyan/gector</a>，其训练数据仅限非商业用途，所以任何安装包都不打包它，而是在第一次打开写作页时由应用下载或从本地导入。</p>
+      </article>
+
+      <aside class="side" aria-label="详情">
+        <dl class="facts">
+          <div><dt>平台</dt><dd>Windows · macOS</dd></div>
+          <div><dt>版本</dt><dd class="mono">v0.5.1</dd></div>
+          <div><dt>发布</dt><dd class="mono">2026-09-02</dd></div>
+          <div><dt>技术</dt><dd>Avalonia 12 · .NET 9</dd></div>
+          <div><dt>测试</dt><dd class="mono">541 条</dd></div>
+        </dl>
+        <div class="cmd wrap-text">
+          <code>git clone https://github.com/txwmemoria/lingo-dict</code>
+          <button type="button" data-done="已复制">复制</button>
+        </div>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <p class="side-label">本页目录</p>
+        <ul class="toc">
+          <li><a href="#features">能做什么</a></li>
+          <li><a href="#keys">快捷键</a></li>
+          <li><a href="#build">从源码构建</a></li>
+          <li><a href="#data">数据和模型</a></li>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <a class="brand" href="../../"><img src="../../../assets/img/mark.svg" width="18" height="18" alt="" />SDK Pods</a>
+      <p>© 2026 SDK Pods. 小巧、精致、高效。</p>
+    </div>
+  </footer>
+
+  <script src="../../../assets/js/site.js" defer></script>
+</body>
+</html>

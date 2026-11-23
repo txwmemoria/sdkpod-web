@@ -8,6 +8,8 @@ en/index.html                 home (English)
 zh/index.html                 home (中文)
 en/apps/sync-work/index.html  sw guide (English)
 zh/apps/sync-work/index.html  sw guide (中文)
+en/apps/lingo-dict/index.html LingoDict guide (English)
+zh/apps/lingo-dict/index.html LingoDict guide (中文)
 games/                        摸鱼司 mini-games (own hub, bilingual in-page, plain scripts)
 404.html                      self-contained not-found page
 assets/css/site.css           all styles, light + dark

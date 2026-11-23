@@ -67,6 +67,123 @@
     }
   });
 
+  // Jade disc, step two: the static layers (body, turbulence texture, grains,
+  // rims, highlights) are rasterised once into a single <image>, so the sway
+  // animation only moves a bitmap. Any failure leaves the vector disc as is.
+  (() => {
+    try {
+      const bi = document.querySelector(".h-stage g.bi");
+      const svg = bi && bi.ownerSVGElement;
+      const sheen = bi && bi.querySelector(".sheen");
+      const body = bi && bi.querySelector('path[fill="url(#jd-body)"]');
+      if (!svg || !sheen || !body || !bi.querySelector(".grains > circle")) return;
+      const layers = [];
+      for (let n = body; n && n !== sheen; n = n.nextElementSibling) layers.push(n);
+      // highlight arcs sit after the sheen, before the clipped scan group
+      for (let n = sheen.nextElementSibling; n && n.tagName.toLowerCase() === "path"; n = n.nextElementSibling) layers.push(n);
+      const defs = svg.querySelector("defs");
+      const X = 30, Y = 90, W = 400, H = 400;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const ser = new XMLSerializer();
+      const src =
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${X} ${Y} ${W} ${H}" width="${W * dpr}" height="${H * dpr}">` +
+        ser.serializeToString(defs) + layers.map((n) => ser.serializeToString(n)).join("") + "</svg>";
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const c = document.createElement("canvas");
+          c.width = W * dpr; c.height = H * dpr;
+          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+          const url = c.toDataURL("image/png");
+          const el = document.createElementNS("http://www.w3.org/2000/svg", "image");
+          el.setAttribute("href", url);
+          el.setAttribute("x", X); el.setAttribute("y", Y);
+          el.setAttribute("width", W); el.setAttribute("height", H);
+          bi.insertBefore(el, layers[0]);
+          layers.forEach((n) => n.remove());
+        } catch (e) { /* keep the vector disc */ }
+      };
+      img.onerror = () => {};
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src);
+    } catch (e) { /* keep the vector disc */ }
+  })();
+
+  // Recent updates: refresh the hand-written log from GitHub Releases.
+  const log = document.querySelector("ul.h-log[data-auto]");
+  if (log) {
+    const zh = (document.documentElement.lang || "").toLowerCase().startsWith("zh");
+    const repos = [
+      ["txwmemoria/lingo-dict", "LingoDict", "apps/lingo-dict/#download"],
+      ["txwmemoria/sync-work", "sw", "apps/sync-work/"],
+    ];
+    const KEY = "sdk.releases", TTL = 6 * 3600 * 1000;
+    const load = async () => {
+      try {
+        const c = JSON.parse(localStorage.getItem(KEY) || "null");
+        if (c && Date.now() - c.t < TTL && Array.isArray(c.items)) return c.items;
+      } catch (e) {}
+      const items = [];
+      let ok = false;
+      await Promise.all(repos.map(async ([repo, name, href]) => {
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}/releases?per_page=10`, { headers: { Accept: "application/vnd.github+json" } });
+          if (!res.ok) return;
+          const list = await res.json();
+          ok = true;
+          list.forEach((r) => {
+            if (r.draft || r.prerelease || !/^v/.test(r.tag_name || "")) return;
+            const ver = r.tag_name.slice(1);
+            const t = (r.name || "").trim();
+            const bare = t.replace(new RegExp("^" + name + "\\s*", "i"), "").replace(/^v/i, "").trim();
+            const title = t && bare !== ver ? t : "";
+            items.push({ date: (r.published_at || r.created_at || "").slice(0, 10), name, ver, href, title });
+          });
+        } catch (e) {}
+      }));
+      if (ok) { try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), items })); } catch (e) {} }
+      return items;
+    };
+    load().then((items) => {
+      if (!items.length) return;
+      const key = (n, v) => (n + " " + v).toLowerCase();
+      // 每个产品只列最新的一版，免得同一个产品的历史版本把别的更新挤出去
+      const latest = new Map();
+      items.forEach((i) => {
+        const cur = latest.get(i.name);
+        if (!cur || i.date > cur.date) latest.set(i.name, i);
+      });
+      // 手写的条目：同一版本就沿用手写的说明（比默认文案具体），旧版本丢掉，其余（比如小游戏的更新）照留
+      const written = new Map();
+      const others = [];
+      [...log.children].forEach((li) => {
+        const what = ((li.querySelector(".what") || {}).textContent || "").trim();
+        const a = li.querySelector("p a");
+        const row = { date: (li.querySelector("time") || {}).textContent || "", what, href: a && a.getAttribute("href"), text: a ? a.textContent : "" };
+        if (/^(LingoDict|sw)\s+\d/i.test(what)) written.set(what.toLowerCase(), row);
+        else others.push(row);
+      });
+      const rows = [...latest.values()].map((i) => {
+        const hand = written.get(key(i.name, i.ver));
+        return {
+          date: i.date, what: `${i.name} ${i.ver}`, href: i.href,
+          text: (hand && hand.text) || i.title || (zh ? "发布新版本，安装包可在介绍页下载。" : "New release; installers are on the guide page."),
+        };
+      }).concat(others);
+      rows.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+      const frag = document.createDocumentFragment();
+      rows.slice(0, 5).forEach((r) => {
+        const li = document.createElement("li");
+        const tm = document.createElement("time"); tm.textContent = r.date;
+        const w = document.createElement("span"); w.className = "what"; w.textContent = r.what;
+        const p = document.createElement("p"), a = document.createElement("a");
+        a.href = r.href || "#"; a.textContent = r.text; p.append(a);
+        li.append(tm, w, p);
+        frag.append(li);
+      });
+      log.replaceChildren(frag);
+    });
+  }
+
   // Hero terminal: type the command, then print the output line by line.
   const code = document.querySelector(".hero .term code, [data-typing] code");
   if (code && !calm) {

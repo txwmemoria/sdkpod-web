@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Page not found — SDK Pods</title>
+  <title>404 — SDK Pods</title>
   <meta name="robots" content="noindex" />
-  <!-- Self-contained on purpose: a 404 can be served from any path depth. -->
+  <link rel="icon" href="/assets/img/mark.svg" type="image/svg+xml" />
+  <!-- Self-contained: a 404 can be served from any path depth, so every URL is absolute. -->
   <style>
-    :root { --paper: #ffffff; --ink: #0b0d12; --ink-2: #566070; --rule: #dfe3e8; --accent: #007a52; color-scheme: light dark; }
-    @media (prefers-color-scheme: dark) {
-      :root { --paper: #0a0c0f; --ink: #e8ecf1; --ink-2: #8b94a3; --rule: #232831; --accent: #2fe6a0; }
-    }
+    :root { --stage: #05080a; --ink: #e6efe9; --dim: #7f9089; --glow: #4fe3a8; --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; }
     * { box-sizing: border-box; }
     body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1.5rem;
-      background: var(--paper); color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      line-height: 1.6;
+      margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 2rem 1.5rem;
+      position: relative; overflow: hidden; color: var(--ink);
+      background: radial-gradient(55% 60% at 50% 40%, rgba(79,227,168,.13), transparent 70%), var(--stage);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6;
     }
-    main { max-width: 30rem; }
-    .code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.8rem; letter-spacing: 0.08em; color: var(--accent); }
-    h1 { margin: 0.5rem 0 0.75rem; font-size: clamp(2rem, 7vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
-    p { margin: 0 0 0.4rem; color: var(--ink-2); }
-    nav { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: 0.6rem; }
-    a {
-      display: inline-flex; align-items: center; min-height: 2.6rem; padding: 0 1.05rem;
-      border: 1px solid var(--rule); border-radius: 8px; color: inherit; font-weight: 600; font-size: 0.92rem; text-decoration: none;
+    body::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(160,220,190,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(160,220,190,.12) 1px, transparent 1px);
+      background-size: 44px 44px; background-position: center;
+      -webkit-mask-image: radial-gradient(70% 70% at 50% 42%, #000 20%, transparent 80%); mask-image: radial-gradient(70% 70% at 50% 42%, #000 20%, transparent 80%);
     }
-    a:hover { border-color: var(--ink); }
+    .corner { position: fixed; width: 18px; height: 18px; border: 0 solid rgba(185,255,220,.45); }
+    .tl { left: 16px; top: 16px; border-width: 1px 0 0 1px; } .tr { right: 16px; top: 16px; border-width: 1px 1px 0 0; }
+    .bl { left: 16px; bottom: 16px; border-width: 0 0 1px 1px; } .br { right: 16px; bottom: 16px; border-width: 0 1px 1px 0; }
+    main { position: relative; width: min(100%, 30rem); text-align: center; }
+    .label { margin: 0; font: 500 .72rem/1.6 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+    .label b { color: var(--glow); font-weight: 600; }
+    .stand { display: block; width: 190px; height: 190px; margin: 1.6rem auto 1.2rem; overflow: visible; }
+    .ring { transform-origin: 100px 100px; animation: spin 90s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { margin: 0 0 .7rem; font-size: clamp(1.7rem, 6vw, 2.4rem); line-height: 1.2; letter-spacing: .02em; background: linear-gradient(180deg,#fff 10%,#b9d6c7 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    p.msg { margin: 0 0 .3rem; color: #b8c6bf; }
+    nav { margin-top: 1.8rem; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+    a.btn { display: inline-flex; align-items: center; min-height: 2.7rem; padding: 0 1.3rem; border: 1px solid rgba(230,239,233,.22); border-radius: 8px; color: var(--ink); font-weight: 600; font-size: .94rem; text-decoration: none; transition: border-color .15s, background .15s; }
+    a.btn:hover { border-color: var(--ink); }
+    a.btn.solid { background: var(--glow); border-color: var(--glow); color: #04130c; }
+    a.btn.solid:hover { background: #7ff0c1; border-color: #7ff0c1; }
+    @media (prefers-reduced-motion: reduce) { .ring { animation: none; } }
   </style>
 </head>
 <body>
+  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
   <main>
-    <p class="code">404 · SDK PODS</p>
-    <h1>Page not found</h1>
-    <p>Nothing lives at this address. Head home to keep browsing.</p>
-    <p lang="zh-CN">这个地址没有对应内容。回到首页继续浏览。</p>
+    <p class="label"><b>OBJ-404</b> · 此物未入库 / NOT IN THE COLLECTION</p>
+    <svg class="stand" viewBox="0 0 200 200" aria-hidden="true">
+      <g class="ring" fill="none" stroke="rgba(185,255,220,.5)">
+        <circle cx="100" cy="100" r="92" stroke-opacity=".5"/>
+        <circle cx="100" cy="100" r="92" stroke-width="7" stroke-dasharray="1 7.2" stroke-opacity=".7"/>
+      </g>
+      <circle cx="100" cy="100" r="64" fill="none" stroke="rgba(185,255,220,.55)" stroke-dasharray="4 5"/>
+      <path d="M72 150h56M100 150v-8" stroke="rgba(185,255,220,.4)" fill="none"/>
+      <text x="100" y="106" text-anchor="middle" fill="#4fe3a8" font-family="ui-monospace,Menlo,monospace" font-size="22" letter-spacing="3">404</text>
+    </svg>
+    <h1>找不到这个页面</h1>
+    <p class="msg">这个地址没有对应的内容，展台是空的。</p>
+    <p class="msg" lang="en">Nothing is on display at this address.</p>
     <nav>
-      <a href="/en/">Back home →</a>
-      <a href="/zh/" lang="zh-CN">返回首页 →</a>
+      <a class="btn solid" href="/zh/">中文首页</a>
+      <a class="btn" href="/en/" lang="en">English</a>
     </nav>
   </main>
 </body>

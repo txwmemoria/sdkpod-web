@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy · SDK Pods</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../assets/img/mark.svg" type="image/svg+xml" />
+  <script>
+    // 跟站点根目录一样：先看保存过的语言，再看浏览器语言
+    (function () {
+      var lang = null;
+      try { lang = localStorage.getItem("lang"); } catch (e) {}
+      if (lang !== "zh" && lang !== "en") {
+        lang = (navigator.language || "en").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+      }
+      location.replace("../" + lang + "/privacy/");
+    })();
+  </script>
+  <noscript><meta http-equiv="refresh" content="0;url=../en/privacy/" /></noscript>
+</head>
+<body>
+  <p><a href="../en/privacy/">Privacy — English</a> · <a href="../zh/privacy/">隐私说明</a></p>
+</body>
+</html>

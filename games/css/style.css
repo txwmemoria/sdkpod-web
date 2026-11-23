@@ -1649,3 +1649,17 @@ body {
 /* 展示广告也是加载到了才淡入；没投放就整块撤掉 */
 .ad-box { opacity: 0; transition: opacity .4s ease; }
 .ad-box.ad-ready { opacity: 1; }
+
+/* ---------- 站点顶部细条：跟 SDK Pods 主站同一种仪表风格 ---------- */
+.sdk-strip {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 30px; padding: 0 clamp(14px, 3.5vw, 32px);
+  background: #05080a; color: #7f9089;
+  font: 500 11px/1 ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: .08em; white-space: nowrap; overflow: hidden;
+}
+.sdk-strip a { color: #b8c6bf; text-decoration: none; }
+.sdk-strip a:hover { color: #4fe3a8; }
+.sdk-strip span::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 1px; background: #4fe3a8; box-shadow: 0 0 8px #4fe3a8; vertical-align: 1px; }
+body.faking .sdk-strip { visibility: hidden; }
+.sdk-strip + .app { min-height: calc(100vh - 30px); }

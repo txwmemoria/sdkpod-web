@@ -171,7 +171,7 @@
 .h-stage .ring.rev { animation-duration: 140s; animation-direction: reverse; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.h-stage .bi { transform-box: view-box; transform-origin: 230px 30px; animation: sway 8s ease-in-out infinite; }
+.h-stage .bi { will-change: transform; transform-box: view-box; transform-origin: 230px 30px; animation: sway 8s ease-in-out infinite; }
 @keyframes sway { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(1.2deg); } }
 
 .h-stage .scan { animation: scan 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite; }

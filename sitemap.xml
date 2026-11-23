@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://sdkpod.com/en/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/zh/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/en/apps/sync-work/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/apps/sync-work/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/apps/sync-work/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/zh/apps/sync-work/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/apps/sync-work/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/apps/sync-work/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/en/apps/lingo-dict/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/apps/lingo-dict/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/apps/lingo-dict/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/zh/apps/lingo-dict/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/apps/lingo-dict/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/apps/lingo-dict/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/en/privacy/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/privacy/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/zh/privacy/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sdkpod.com/en/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://sdkpod.com/zh/privacy/"/>
+  </url>
+  <url>
+    <loc>https://sdkpod.com/games/</loc>
+    <lastmod>2026-11-23</lastmod>
+  </url>
+</urlset>

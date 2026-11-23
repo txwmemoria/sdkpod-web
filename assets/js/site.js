@@ -40,72 +40,81 @@
 
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Jade disc: the rings of small raised grains (谷纹) are drawn here rather
-  // than shipped as hundreds of circles in the HTML. Without JS it is a plain disc.
-  document.querySelectorAll("svg .grains").forEach((g) => {
-    const ns = "http://www.w3.org/2000/svg";
-    const cx = +g.dataset.cx, cy = +g.dataset.cy, r0 = +g.dataset.r0, r1 = +g.dataset.r1;
-    const step = +g.dataset.step || 12.5;
-    for (let r = r0, ring = 0; r <= r1; r += step, ring++) {
-      const n = Math.round((2 * Math.PI * r) / step);
-      for (let i = 0; i < n; i++) {
-        const a = ((i + (ring % 2) * 0.5) / n) * 2 * Math.PI;
-        const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
-        const shade = document.createElementNS(ns, "circle");
-        shade.setAttribute("cx", (x + 0.9).toFixed(1));
-        shade.setAttribute("cy", (y + 1.1).toFixed(1));
-        shade.setAttribute("r", (step * 0.36).toFixed(1));
-        shade.setAttribute("fill", "rgba(12,48,34,.28)");
-        const bump = document.createElementNS(ns, "circle");
-        bump.setAttribute("cx", x.toFixed(1));
-        bump.setAttribute("cy", y.toFixed(1));
-        bump.setAttribute("r", (step * 0.34).toFixed(1));
-        // a lit bead when the page defines one, a flat dot otherwise
-        bump.setAttribute("fill", document.getElementById("bumpG") ? "url(#bumpG)" : "rgba(255,255,255,.3)");
-        g.append(shade, bump);
-      }
-    }
-  });
-
-  // Jade disc, step two: the static layers (body, turbulence texture, grains,
-  // rims, highlights) are rasterised once into a single <image>, so the sway
-  // animation only moves a bitmap. Any failure leaves the vector disc as is.
+  // Hero stage: a stone worked in four passes (切 磋 琢 磨), looping. CSS does
+  // the drawing; this only steps data-pass on the figure, updates the readouts
+  // and pauses when the hero is off-screen or the tab is hidden. The markup
+  // already shows the finished pass 4, which reduced-motion visitors keep.
   (() => {
-    try {
-      const bi = document.querySelector(".h-stage g.bi");
-      const svg = bi && bi.ownerSVGElement;
-      const sheen = bi && bi.querySelector(".sheen");
-      const body = bi && bi.querySelector('path[fill="url(#jd-body)"]');
-      if (!svg || !sheen || !body || !bi.querySelector(".grains > circle")) return;
-      const layers = [];
-      for (let n = body; n && n !== sheen; n = n.nextElementSibling) layers.push(n);
-      // highlight arcs sit after the sheen, before the clipped scan group
-      for (let n = sheen.nextElementSibling; n && n.tagName.toLowerCase() === "path"; n = n.nextElementSibling) layers.push(n);
-      const defs = svg.querySelector("defs");
-      const X = 30, Y = 90, W = 400, H = 400;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const ser = new XMLSerializer();
-      const src =
-        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${X} ${Y} ${W} ${H}" width="${W * dpr}" height="${H * dpr}">` +
-        ser.serializeToString(defs) + layers.map((n) => ser.serializeToString(n)).join("") + "</svg>";
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const c = document.createElement("canvas");
-          c.width = W * dpr; c.height = H * dpr;
-          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-          const url = c.toDataURL("image/png");
-          const el = document.createElementNS("http://www.w3.org/2000/svg", "image");
-          el.setAttribute("href", url);
-          el.setAttribute("x", X); el.setAttribute("y", Y);
-          el.setAttribute("width", W); el.setAttribute("height", H);
-          bi.insertBefore(el, layers[0]);
-          layers.forEach((n) => n.remove());
-        } catch (e) { /* keep the vector disc */ }
-      };
-      img.onerror = () => {};
-      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(src);
-    } catch (e) { /* keep the vector disc */ }
+    const stage = document.querySelector(".h-stage");
+    if (!stage || calm) return;
+    const zh = (document.documentElement.lang || "").toLowerCase().startsWith("zh");
+    const t = [1, 2, 3, 4].map((n) => stage.querySelector(".t" + n));
+    if (t.some((el) => !el)) return;
+    const pass = zh ? ["切", "磋", "琢", "磨"] : ["CUT", "FILE", "CARVE", "POLISH"];
+    const state = zh ? ["粗胚", "平整", "纹样", "镜面"] : ["ROUGH", "LEVEL", "PATTERNED", "POLISHED"];
+    const tol = ["±0.40", "±0.12", "±0.03", "±0.01"];
+    const dur = [2800, 2400, 2800, 3300]; // ms per pass; the fade between loops adds 0.8 s
+    const FADE = 800, CUT_AT = 1500;
+    let cur = 3, bar = -1, t0 = 0, raf = 0, timer = 0, cutTimer = 0;
+    let onScreen = true, running = false;
+
+    const readout = (i) => {
+      t[0].innerHTML = `PASS 0${i + 1}/04 · <b>${pass[i]}</b>`;
+      t[1].innerHTML = `TOL · <b>${tol[i]}</b> mm`;
+      t[2].innerHTML = `SURFACE · <b>${state[i]}</b>`;
+    };
+    const meter = (p) => {
+      const q = Math.round(Math.min(p, 1) * 50); // 2% steps
+      if (q === bar) return;
+      bar = q;
+      const on = Math.round(q / 5);
+      t[3].textContent = "█".repeat(on) + "░".repeat(10 - on) + " " + String(q * 2).padStart(2, " ") + "%";
+    };
+    const tick = () => {
+      raf = 0;
+      if (!running) return;
+      meter((performance.now() - t0) / dur[cur]);
+      raf = requestAnimationFrame(tick);
+    };
+    const enter = (i) => {
+      cur = i; bar = -1; t0 = performance.now();
+      stage.dataset.pass = i + 1;
+      stage.classList.remove("cut");
+      readout(i);
+      meter(0);
+      clearTimeout(cutTimer);
+      if (i === 0) cutTimer = setTimeout(() => stage.classList.add("cut"), CUT_AT);
+      timer = setTimeout(() => {
+        if (i < 3) return enter(i + 1);
+        meter(1);
+        stage.dataset.pass = 0; // fade the stone out, then start over
+        timer = setTimeout(() => enter(0), FADE);
+      }, dur[i]);
+    };
+    const run = () => {
+      if (running || !onScreen || document.hidden) return;
+      running = true;
+      if (stage.dataset.pass === "4" && !stage.classList.contains("live")) {
+        // first start: snap to the beginning without transitions
+        stage.classList.add("live", "boot");
+        enter(0);
+        void stage.offsetWidth;
+        stage.classList.remove("boot");
+      } else {
+        enter(Math.max(0, (+stage.dataset.pass || 0) - 1));
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    const halt = () => {
+      running = false;
+      clearTimeout(timer); clearTimeout(cutTimer); cancelAnimationFrame(raf);
+    };
+    const sync = () => (onScreen && !document.hidden ? run() : halt());
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((es) => { onScreen = es[es.length - 1].isIntersecting; sync(); }, { threshold: 0.05 }).observe(stage);
+    }
+    document.addEventListener("visibilitychange", sync);
+    sync();
   })();
 
   // Recent updates: refresh the hand-written log from GitHub Releases.

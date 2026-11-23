@@ -407,3 +407,26 @@
   .h-stage .bi, .h-stage .ring, .h-stage .sheen { animation: none; }
   .h-stage .scan { display: none; }
 }
+
+/* 中文字形：等宽字体里没有汉字，浏览器随手找的替补很难看。
+   玉璧旁的标注用楷体（像博物馆展签），其余等宽位置给一个像样的黑体兜底。 */
+:lang(zh) .h-stage .tag b {
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", "BiauKai", "AR PL UKai CN", var(--serif);
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: #c9ffe6;
+  text-shadow: 0 0 10px rgba(79, 227, 168, 0.35);
+}
+
+:lang(zh) .h-source,
+:lang(zh) .h-specs,
+:lang(zh) .h-hero .eyebrow,
+:lang(zh) .h-idx,
+:lang(zh) .h-spec,
+:lang(zh) .h-log .what,
+:lang(zh) .h-habit::before {
+  font-family: var(--mono), "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+}
+
+:lang(zh) .h-source { font-family: "Kaiti SC", "STKaiti", "KaiTi", var(--serif); font-size: 0.9rem; letter-spacing: 0.12em; }

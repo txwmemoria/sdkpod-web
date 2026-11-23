@@ -52,8 +52,8 @@
           <li>离线</li>
         </ul>
         <div class="btn-row">
-          <a class="btn solid" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">打开 GitHub <span aria-hidden="true">↗</span></a>
-          <a class="btn line" href="#build">从源码构建 <span aria-hidden="true">↓</span></a>
+          <a class="btn solid" href="#download">下载 <span aria-hidden="true">↓</span></a>
+          <a class="btn line" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">打开 GitHub <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
@@ -89,15 +89,29 @@
           </table>
         </div>
 
+        <h2 id="download">下载</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>系统</th><th>文件</th></tr></thead>
+            <tbody>
+              <tr><td>Windows 10/11（x64）</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">LingoDict-0.5.1-win-x64-Setup.exe</a></td></tr>
+              <tr><td>macOS，Apple 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">LingoDict-0.5.1-osx-arm64.dmg</a></td></tr>
+              <tr><td>macOS，Intel 芯片</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">LingoDict-0.5.1-osx-x64.dmg</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Windows 版装到 <code>%LOCALAPPDATA%\LingoDict</code>，不需要管理员权限。macOS 版<strong>没有签名和公证</strong>，第一次打开要右键 →「打开」，或者执行：</p>
+<pre><code>xattr -dr com.apple.quarantine /Applications/LingoDict.app</code></pre>
+        <p>写作检查用的语法模型不在安装包里（它仅限非商业用途），第一次打开写作页时应用会提示安装。历史版本见 <a href="https://github.com/txwmemoria/lingo-dict/releases" target="_blank" rel="noopener noreferrer">Releases 页面</a>。</p>
+
         <h2 id="build">从源码构建</h2>
-        <p>Windows 安装程序（<code>Setup.exe</code>）和 macOS 安装包（Apple Silicon / Intel 的 <code>.dmg</code>）之后会发布在 GitHub Releases 页面。在那之前可以自己构建，需要 <strong>.NET SDK 9</strong>，以及一次性导入数据用的 <strong>Python 3</strong>。</p>
+        <p>需要 <strong>.NET SDK 9</strong>。</p>
 
         <h3>1. 取代码和词书数据</h3>
 <pre><code>git clone https://github.com/txwmemoria/lingo-dict
 cd lingo-dict
-git clone https://github.com/kajweb/dict data/kajweb-dict
-python data/kajweb-dict/download.py</code></pre>
-        <p>词书数据属于 <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a>，本仓库不再分发一次；脚本会取回 81 个压缩包，约 71 MiB。</p>
+git clone --depth 1 https://github.com/kajweb/dict data/kajweb-dict</code></pre>
+        <p>词书数据属于 <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a>，本仓库不再分发一次；81 个压缩包（约 71 MiB）克隆下来就有，不用跑它的 <code>download.py</code>。</p>
 
         <h3>2. 生成词典数据库</h3>
 <pre><code>dotnet run --project src/LingoDict.Importer</code></pre>
@@ -122,11 +136,15 @@ python data/kajweb-dict/download.py</code></pre>
           <code>git clone https://github.com/txwmemoria/lingo-dict</code>
           <button type="button" data-done="已复制">复制</button>
         </div>
+        <a class="btn solid block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">Windows 安装包</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">macOS · Apple 芯片</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">macOS · Intel 芯片</a>
         <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         <p class="side-label">本页目录</p>
         <ul class="toc">
           <li><a href="#features">能做什么</a></li>
           <li><a href="#keys">快捷键</a></li>
+          <li><a href="#download">下载</a></li>
           <li><a href="#build">从源码构建</a></li>
           <li><a href="#data">数据和模型</a></li>
         </ul>

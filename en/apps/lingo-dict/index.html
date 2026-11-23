@@ -52,8 +52,8 @@
           <li>Offline</li>
         </ul>
         <div class="btn-row">
-          <a class="btn solid" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">Open GitHub <span aria-hidden="true">↗</span></a>
-          <a class="btn line" href="#build">Build from source <span aria-hidden="true">↓</span></a>
+          <a class="btn solid" href="#download">Download <span aria-hidden="true">↓</span></a>
+          <a class="btn line" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">Open GitHub <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
@@ -89,15 +89,29 @@
           </table>
         </div>
 
+        <h2 id="download">Download</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>System</th><th>File</th></tr></thead>
+            <tbody>
+              <tr><td>Windows 10/11 (x64)</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">LingoDict-0.5.1-win-x64-Setup.exe</a></td></tr>
+              <tr><td>macOS, Apple Silicon</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">LingoDict-0.5.1-osx-arm64.dmg</a></td></tr>
+              <tr><td>macOS, Intel</td><td><a href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">LingoDict-0.5.1-osx-x64.dmg</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The Windows installer puts the app in <code>%LOCALAPPDATA%\LingoDict</code> and needs no administrator rights. The macOS build is <strong>not signed or notarized</strong>: the first time, right-click the app and choose Open, or run:</p>
+<pre><code>xattr -dr com.apple.quarantine /Applications/LingoDict.app</code></pre>
+        <p>The grammar model for writing checks is not in the installers (it is licensed for non-commercial use only); the app offers to install it the first time you open the writing page. Older versions are on the <a href="https://github.com/txwmemoria/lingo-dict/releases" target="_blank" rel="noopener noreferrer">Releases page</a>.</p>
+
         <h2 id="build">Build from source</h2>
-        <p>Installers for Windows (<code>Setup.exe</code>) and macOS (<code>.dmg</code> for Apple Silicon and Intel) will be published on the GitHub Releases page. Until then, build it yourself. You need the <strong>.NET SDK 9</strong> and <strong>Python 3</strong> for the one-time data import.</p>
+        <p>You need the <strong>.NET SDK 9</strong>.</p>
 
         <h3>1. Get the code and the vocabulary data</h3>
 <pre><code>git clone https://github.com/txwmemoria/lingo-dict
 cd lingo-dict
-git clone https://github.com/kajweb/dict data/kajweb-dict
-python data/kajweb-dict/download.py</code></pre>
-        <p>The vocabulary books belong to <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a> and are not redistributed in this repository; the script fetches 81 archives, about 71 MiB.</p>
+git clone --depth 1 https://github.com/kajweb/dict data/kajweb-dict</code></pre>
+        <p>The vocabulary books belong to <a href="https://github.com/kajweb/dict" target="_blank" rel="noopener noreferrer">kajweb/dict</a> and are not redistributed in this repository; the 81 archives (about 71 MiB) come with the clone. Don’t run its <code>download.py</code>.</p>
 
         <h3>2. Build the dictionary database</h3>
 <pre><code>dotnet run --project src/LingoDict.Importer</code></pre>
@@ -122,11 +136,15 @@ python data/kajweb-dict/download.py</code></pre>
           <code>git clone https://github.com/txwmemoria/lingo-dict</code>
           <button type="button" data-done="Copied">Copy</button>
         </div>
+        <a class="btn solid block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-win-x64-Setup.exe">Windows installer</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-arm64.dmg">macOS · Apple Silicon</a>
+        <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict/releases/download/v0.5.1/LingoDict-0.5.1-osx-x64.dmg">macOS · Intel</a>
         <a class="btn line block" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         <p class="side-label">On this page</p>
         <ul class="toc">
           <li><a href="#features">What it does</a></li>
           <li><a href="#keys">Keyboard</a></li>
+          <li><a href="#download">Download</a></li>
           <li><a href="#build">Build from source</a></li>
           <li><a href="#data">Data and model</a></li>
         </ul>

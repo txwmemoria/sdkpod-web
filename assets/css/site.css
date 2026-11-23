@@ -158,6 +158,12 @@ img { display: block; max-width: 100%; }
   .nav .hide-s { display: none; }
 }
 
+/* 很窄的手机上，品牌名和导航会挤在一起：先收起「关于」 */
+@media (max-width: 420px) {
+  .nav { gap: 0.85rem; }
+  .nav a[href$="#about"] { display: none; }
+}
+
 /* ── Shared bits ────────────────────────────────────── */
 
 .eyebrow {

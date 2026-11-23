@@ -14,6 +14,7 @@
   <link rel="alternate" hreflang="en" href="./" />
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="../assets/css/site.css" />
+  <link rel="stylesheet" href="../assets/css/home.css" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8749238606288275"
      crossorigin="anonymous"></script>
 </head>
@@ -38,22 +39,62 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="h-hero">
       <div class="wrap">
         <div>
           <p class="eyebrow">Independent app studio</p>
-          <h1>As cut, as filed; as <em>chiselled</em>, as polished.</h1>
-          <p class="source"><span class="verse" lang="zh-CN">如切如磋，如琢如磨</span> — Book of Songs (诗经), Odes of Wei</p>
-          <p class="lede">Refined in the small things, proven in speed.</p>
+          <h1>As cut, as filed;<br />as <em>carved</em>, as polished.</h1>
+          <p class="h-source"><span class="verse" lang="zh-CN">如切如磋，如琢如磨</span> — Book of Songs, Odes of Wei</p>
+          <p class="h-lede">Small, careful software: <b>a command that verifies your work on another machine</b>, <b>an offline English–Chinese dictionary</b> and <b>a set of easy-on-the-eyes games</b>. All of it runs on your own computer, and all of it keeps getting polished.</p>
           <div class="btn-row">
-            <a class="btn solid" href="#works">Browse works <span aria-hidden="true">↓</span></a>
-            <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>
+            <a class="btn solid" href="#works">See the works <span aria-hidden="true">↓</span></a>
+            <a class="btn line" href="mailto:hello@sdkpod.com">Write to me</a>
           </div>
         </div>
+        <figure class="h-disc" aria-hidden="true">
+            <svg viewBox="0 0 400 480" role="presentation">
+              <defs>
+                <radialGradient id="jade" cx="0.36" cy="0.3" r="0.85">
+                  <stop offset="0" stop-color="var(--jade-1)" />
+                  <stop offset="0.45" stop-color="var(--jade-2)" />
+                  <stop offset="0.8" stop-color="var(--jade-3)" />
+                  <stop offset="1" stop-color="var(--jade-4)" />
+                </radialGradient>
+                <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+              </defs>
+              <ellipse cx="200" cy="466" rx="120" ry="9" fill="rgba(11,13,18,.16)" filter="url(#soft)" />
+              <g class="bi">
+                <path d="M196 0 C194 80 193 150 192 232 M204 0 C206 80 207 150 208 232" fill="none" stroke="var(--cord)" stroke-width="3.2" stroke-linecap="round" />
+                <ellipse cx="200" cy="58" rx="9" ry="7" fill="var(--cord)" />
+                <path d="M196 64 l-10 26 M204 64 l10 26" stroke="var(--cord)" stroke-width="2.4" stroke-linecap="round" />
+                <path fill="url(#jade)" fill-rule="evenodd" d="M200 90 a180 180 0 1 0 0.01 0 z M200 210 a60 60 0 1 1 -0.01 0 z" />
+                <circle cx="200" cy="270" r="174" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" />
+                <circle cx="200" cy="270" r="66" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1.5" />
+                <circle cx="200" cy="270" r="179" fill="none" stroke="rgba(20,60,45,.35)" stroke-width="1.2" />
+                <circle cx="200" cy="270" r="61" fill="none" stroke="rgba(20,60,45,.35)" stroke-width="1.2" />
+                <g class="grains" data-cx="200" data-cy="270" data-r0="80" data-r1="164"></g>
+                <ellipse class="shine" cx="150" cy="190" rx="70" ry="34" transform="rotate(-32 150 190)" fill="#fff" opacity=".25" />
+                <path d="M192 226 C194 236 206 236 208 226" fill="none" stroke="var(--cord)" stroke-width="3.2" stroke-linecap="round" />
+              </g>
+            </svg>
+            <figcaption>A carved jade disc (璧)</figcaption>
+          </figure>
+      </div>
+    </section>
 
-        <div class="term" role="img" aria-label="Terminal preview: sw verify builds and tests on a peer machine and passes in 1.6 seconds">
-          <div class="term-bar"><i></i><i></i><i></i><span>sw · verify</span></div>
-          <pre><code><span class="t-dim">$</span> sw verify
+    <section id="works" class="h-section">
+      <div class="wrap">
+        <header class="h-head">
+          <p class="eyebrow">Works</p>
+          <h2>Small things, slowly polished.</h2>
+          <p>A command-line tool, a desktop app and browser games. Different shapes, same method: make it work, make it comfortable, then make it beautiful.</p>
+        </header>
+
+        <div class="h-works">
+          <article class="h-work">
+            <div class="h-visual term" data-typing role="img" aria-label="Terminal preview: sw verify builds and tests on a peer machine and passes in 1.6 seconds">
+              <div class="term-bar"><i></i><i></i><i></i><span>sw · verify</span></div>
+              <pre><code><span class="t-dim">$</span> sw verify
 <span class="t-ok">ok</span> mac-mini  <span class="t-dim">verify</span>  f3f2730 + 1 file
   on mac-mini (macos)  /Users/me/projects/app
   <span class="t-dim">›</span> reusing worktree
@@ -61,99 +102,151 @@
   <span class="t-dim">›</span> [1/2] cargo build --release
   <span class="t-dim">›</span> [2/2] cargo test
 <span class="t-ok">pass</span> mac-mini exit 0 in 1.6s</code></pre>
+            </div>
+            <div class="h-text">
+              <p class="h-idx">01</p>
+              <h3><a href="apps/sync-work/">sw</a></h3>
+              <p class="h-tag">Cross-machine verify and AI context sync</p>
+              <p class="h-desc">On two peer machines, send your uncommitted changes to the other side to build and test, and carry your local AI session along. No push needed, and the peer checkout stays untouched. LAN direct when possible, encrypted relay across networks.</p>
+              <ul class="chips"><li class="on">Stable</li><li>v0.1.0</li><li>MIT</li><li>macOS · Windows · Linux</li></ul>
+              <div class="btn-row">
+                <a class="btn solid" href="apps/sync-work/">Read guide <span aria-hidden="true">→</span></a>
+                <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="h-work">
+            <div class="h-visual ld" role="img" aria-label="LingoDict window preview: the entry for abandon, with every phonetic symbol clickable">
+              <div class="ld-bar"><i></i><i></i><i></i><span>LingoDict</span></div>
+              <div class="ld-body">
+                <div class="ld-list">
+                  <div class="ld-search">Search English or 中文</div>
+                  <ol><li class="on">abandon</li><li>ability</li><li>able</li><li>aboard</li><li>about</li><li>above</li><li>abroad</li><li>absence</li></ol>
+                </div>
+                <div class="ld-entry">
+                  <span class="ld-book">CET-4 · bookmark</span>
+                  <p class="ld-word">abandon</p>
+                  <div class="ld-ipa">/<b>ə</b><b>ˈb</b><b class="hot">æ</b><b>n</b><b>d</b><b>ə</b><b>n</b>/<span class="say">🔊</span><span class="hint">tap æ → cat</span></div>
+                  <p class="ld-sense"><i>v.</i><span lang="zh-CN">放弃；抛弃；离弃</span></p><p class="ld-sense"><i>n.</i><span lang="zh-CN">放任；纵情</span></p>
+                  <p class="ld-ex">They had to <mark>abandon</mark> the car and walk.</p>
+                </div>
+              </div>
+            </div>
+            <div class="h-text">
+              <p class="h-idx">02</p>
+              <h3><a href="apps/lingo-dict/">LingoDict</a></h3>
+              <p class="h-tag">Offline English–Chinese dictionary</p>
+              <p class="h-desc">Look up 21,319 words by English or Chinese, read through 81 vocabulary books with a bookmark in each, learn with spaced repetition, tap any phonetic symbol to hear it, and check your English with a grammar model that runs locally. No network, no account, no telemetry.</p>
+              <ul class="chips"><li class="on">New</li><li>v0.5.1</li><li>Windows · macOS</li></ul>
+              <div class="btn-row">
+                <a class="btn solid" href="apps/lingo-dict/">Read guide <span aria-hidden="true">→</span></a>
+                <a class="btn line" href="apps/lingo-dict/#download">Download <span aria-hidden="true">↓</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="h-work">
+            <div class="h-visual gm">
+              <svg viewBox="0 0 520 320" role="img" aria-label="A small garden: a path leads to a cabbage patch past a ladybug house, a scarecrow and a sunflower">
+              <defs>
+                <linearGradient id="gm-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#e3efe0" /><stop offset="1" stop-color="#f8f3e4" />
+                </linearGradient>
+              </defs>
+              <rect width="520" height="320" fill="url(#gm-sky)" />
+              <circle cx="436" cy="66" r="44" fill="#f6e3a6" opacity=".45" />
+              <circle cx="436" cy="66" r="28" fill="#f3d98a" />
+              <g fill="#fff" opacity=".85"><ellipse cx="120" cy="58" rx="34" ry="11" /><ellipse cx="146" cy="50" rx="22" ry="12" /><ellipse cx="300" cy="84" rx="26" ry="8" /></g>
+              <path d="M0 170 C80 130 160 140 240 158 C330 178 420 128 520 146 L520 320 L0 320 Z" fill="#c9dfb6" />
+              <path d="M0 214 C110 186 210 196 300 210 C390 224 450 196 520 204 L520 320 L0 320 Z" fill="#aecb9c" />
+              <path d="M-10 262 C60 248 110 276 170 262 C230 248 260 224 330 230 C380 234 392 250 404 252" fill="none" stroke="#c9ab7c" stroke-width="26" stroke-linecap="round" />
+              <path d="M-10 262 C60 248 110 276 170 262 C230 248 260 224 330 230 C380 234 392 250 404 252" fill="none" stroke="#e6d3ad" stroke-width="20" stroke-linecap="round" />
+              <path d="M-10 262 C60 248 110 276 170 262 C230 248 260 224 330 230 C380 234 392 250 404 252" fill="none" stroke="#efe0c0" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 14" />
+              <rect x="400" y="214" width="96" height="70" rx="10" fill="#c49c76" />
+              <g stroke="#a8805c" stroke-width="3" stroke-linecap="round"><path d="M398 212 H498 M398 286 H498 M498 212 V286" /></g>
+              <g fill="#a8805c"><rect x="396" y="204" width="5" height="16" rx="2" /><rect x="430" y="204" width="5" height="16" rx="2" /><rect x="464" y="204" width="5" height="16" rx="2" /><rect x="495" y="204" width="5" height="16" rx="2" /></g>
+              <g>
+                <g fill="#b9da9c" stroke="#7fae73" stroke-width="1.5"><circle cx="420" cy="234" r="10" /><circle cx="448" cy="234" r="10" /><circle cx="476" cy="234" r="10" /><circle cx="420" cy="262" r="10" /><circle cx="448" cy="262" r="10" /><circle cx="476" cy="262" r="10" /></g>
+                <g fill="#eef7df"><circle cx="420" cy="235" r="4.5" /><circle cx="448" cy="235" r="4.5" /><circle cx="476" cy="235" r="4.5" /><circle cx="420" cy="263" r="4.5" /><circle cx="448" cy="263" r="4.5" /><circle cx="476" cy="263" r="4.5" /></g>
+              </g>
+              <g transform="translate(250 176)">
+                <path d="M-14 10 L0 -3 L14 10" fill="#d9796c" stroke="#5a4a3e" stroke-width="2" stroke-linejoin="round" />
+                <rect x="-11" y="9" width="22" height="20" rx="2" fill="#e3c39a" stroke="#5a4a3e" stroke-width="2" />
+                <circle cy="18" r="4" fill="#6b5545" />
+                <path d="M0 29 V40" stroke="#5a4a3e" stroke-width="2" />
+                <circle cx="8" cy="-2" r="5" fill="#d9675c" stroke="#5a4a3e" stroke-width="1.5" />
+              </g>
+              <g transform="translate(150 212)">
+                <path d="M0 -26 V22 M-16 -12 H16" stroke="#5a4a3e" stroke-width="3" stroke-linecap="round" />
+                <path d="M-10 -12 H10 L8 2 H-8 Z" fill="#9cc4a4" stroke="#5a4a3e" stroke-width="1.8" stroke-linejoin="round" />
+                <circle cy="-22" r="7" fill="#f2deb4" stroke="#5a4a3e" stroke-width="1.8" />
+                <path d="M-13 -28 C-6 -31 6 -31 13 -28 C6 -26 -6 -26 -13 -28 Z" fill="#e5c36a" stroke="#5a4a3e" stroke-width="1.6" />
+              </g>
+              <g transform="translate(350 182)">
+                <path d="M0 0 V40" stroke="#5f9474" stroke-width="3" />
+                <g fill="#f0cf7a" stroke="#5a4a3e" stroke-width="1.2"><ellipse cy="-11" rx="4" ry="7" /><ellipse cy="11" rx="4" ry="7" /><ellipse cx="-11" rx="7" ry="4" /><ellipse cx="11" rx="7" ry="4" /><ellipse cx="-8" cy="-8" rx="4" ry="7" transform="rotate(-45 -8 -8)" /><ellipse cx="8" cy="-8" rx="4" ry="7" transform="rotate(45 8 -8)" /><ellipse cx="-8" cy="8" rx="4" ry="7" transform="rotate(45 -8 8)" /><ellipse cx="8" cy="8" rx="4" ry="7" transform="rotate(-45 8 8)" /></g>
+                <circle r="6" fill="#9a6b4a" stroke="#5a4a3e" stroke-width="1.2" />
+              </g>
+              <g transform="translate(84 252)">
+                <circle cx="-6" r="9" fill="#d9a07f" stroke="#5a4a3e" stroke-width="1.6" />
+                <path d="M-18 8 H10 C14 8 16 4 16 0 V-4 H20 V2 C20 10 14 13 8 13 H-18 Z" fill="#ead6b4" stroke="#5a4a3e" stroke-width="1.6" stroke-linejoin="round" />
+              </g>
+              <g fill="#f2c3a7"><ellipse cx="300" cy="128" rx="6" ry="4" transform="rotate(-30 300 128)" /><ellipse cx="309" cy="127" rx="5" ry="3.5" transform="rotate(30 309 127)" /></g>
+              <g fill="#cfd9f0"><ellipse cx="60" cy="150" rx="5" ry="3.5" transform="rotate(-30 60 150)" /><ellipse cx="68" cy="149" rx="4.5" ry="3" transform="rotate(30 68 149)" /></g>
+              <g fill="#e8a7a0"><circle cx="210" cy="292" r="3" /><circle cx="330" cy="300" r="3" /><circle cx="40" cy="300" r="3" /></g>
+              <g fill="#f0cf7a"><circle cx="236" cy="300" r="3" /><circle cx="120" cy="296" r="3" /></g>
+            </svg>
+              <div class="gm-tags"><span>Garden Guard</span><span>Afternoon Sudoku</span><span>Garden Sweep</span><span>Last One Out</span><span>+ 7 more</span></div>
+            </div>
+            <div class="h-text">
+              <p class="h-idx">03</p>
+              <h3><a href="../games/">Slack Inc.</a></h3>
+              <p class="h-tag">Easy-on-the-eyes games for a short break</p>
+              <p class="h-desc">Eleven slow-paced games with a countryside feel: Garden Guard (ten fields and an endless mode), Afternoon Sudoku, Garden Sweep, Last One Out, Mug Shelf and more. Soft colours, no flashing, no screen shake, and Esc turns the screen into a spreadsheet. Runs in the browser; scores stay on your device.</p>
+              <ul class="chips"><li class="on">Play now</li><li>11 games</li><li>Browser</li></ul>
+              <div class="btn-row">
+                <a class="btn solid" href="../games/">Play <span aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="works" class="section">
+    <section id="about" class="h-section">
       <div class="wrap">
-        <header class="section-head">
-          <p class="eyebrow">Works</p>
-          <h2>Tools and apps, iterated in small steps.</h2>
+        <header class="h-head">
+          <p class="eyebrow">About</p>
+          <h2>Three habits</h2>
         </header>
-
-        <article class="work">
-          <div class="work-id">
-            <span class="idx">01</span>
-            <a class="work-name" href="apps/sync-work/">sw</a>
-            <ul class="chips">
-              <li class="on">Stable</li>
-              <li>v0.1.0</li>
-              <li>MIT</li>
-            </ul>
-          </div>
-          <div class="work-body">
-            <h3>Cross-machine verify and AI context sync</h3>
-            <p>On two peer machines (Windows, macOS, or Linux), verify your current working tree—including uncommitted files—on the other side, and carry local AI session context with you. No push required; the peer checkout stays untouched. Built on iroh: LAN direct when possible, encrypted relay across networks.</p>
-            <div class="cmd">
-              <code>cargo install --git https://github.com/txwmemoria/sync-work --locked</code>
-              <button type="button" data-done="Copied">Copy</button>
+        <div class="h-habits">
+            <div class="h-habit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M9 10l2 2 4-4"/></svg>
+              <h3>Local first</h3>
+              <p>If it can run on your computer, it stays there. The dictionary is fully offline, and game scores live only in your browser.</p>
             </div>
-            <div class="btn-row">
-              <a class="btn solid" href="apps/sync-work/">Read guide <span aria-hidden="true">→</span></a>
-              <a class="btn line" href="https://github.com/txwmemoria/sync-work" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <div class="h-habit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18h4v-4h4v-4h4V6h4"/><circle cx="20" cy="6" r="1.2" fill="currentColor"/></svg>
+              <h3>Small steps</h3>
+              <p>Change one thing at a time and keep at it until it feels right. Each version is a little better than the last, never a rewrite for its own sake.</p>
             </div>
-          </div>
-        </article>
-
-        <article class="work">
-          <div class="work-id">
-            <span class="idx">02</span>
-            <a class="work-name long" href="apps/lingo-dict/">LingoDict</a>
-            <ul class="chips">
-              <li class="on">New</li>
-              <li>v0.5.1</li>
-              <li>Windows · macOS</li>
-            </ul>
-          </div>
-          <div class="work-body">
-            <h3>Offline English–Chinese dictionary</h3>
-            <p>Look up 21,319 words by English or Chinese, read through 81 vocabulary books with a bookmark in each, learn with spaced repetition, tap any phonetic symbol to hear it, and check your English writing with a grammar model that runs locally. No network, no account, no telemetry.</p>
-            <div class="cmd">
-              <code>git clone https://github.com/txwmemoria/lingo-dict</code>
-              <button type="button" data-done="Copied">Copy</button>
+            <div class="h-habit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6c0 6-3 7-3 7h18s-3-1-3-7a6 6 0 0 0-6-6z" opacity=".9"/><path d="M3 3l18 18"/></svg>
+              <h3>Quiet by default</h3>
+              <p>No sign-up, no notifications, no nagging about updates. The games never flash or shake; when your eyes are tired, take a break.</p>
             </div>
-            <div class="btn-row">
-              <a class="btn solid" href="apps/lingo-dict/">Read guide <span aria-hidden="true">→</span></a>
-              <a class="btn line" href="https://github.com/txwmemoria/lingo-dict" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-            </div>
-          </div>
-        </article>
-
-        <article class="work">
-          <div class="work-id">
-            <span class="idx">03</span>
-            <a class="work-name long" href="../games/">Slack Inc.</a>
-            <ul class="chips">
-              <li class="on">Play now</li>
-              <li>11 games</li>
-              <li>Browser</li>
-            </ul>
-          </div>
-          <div class="work-body">
-            <h3>Easy-on-the-eyes mini-games for a short break</h3>
-            <p>Eleven slow-paced games with a countryside feel: the gentle tower defense Garden Guard (ten fields, plus an endless mode), Afternoon Sudoku, Garden Sweep, quiet puzzles like Last One Out and Mug Shelf, Lunch Break Golf and Cubicle Snake. Soft colours, no flashing, no screen shake. A daily challenge, achievements, and Esc turns the screen into a spreadsheet. Runs in the browser; scores stay on your device.</p>
-            <div class="btn-row">
-              <a class="btn solid" href="../games/">Play <span aria-hidden="true">→</span></a>
-            </div>
-          </div>
-        </article>
+        </div>
       </div>
     </section>
 
-    <section id="about" class="section">
-      <div class="wrap about">
-        <p class="eyebrow">About</p>
-        <div>
-          <header class="section-head" style="display:block">
-            <h2>Independent. Local-first. Updates kept deliberate.</h2>
-          </header>
-          <p>Refined in the small things, proven in speed.</p>
-          <dl class="facts">
-            <div><dt>Domain</dt><dd class="mono">sdkpod.com</dd></div>
-            <div><dt>Email</dt><dd><a href="mailto:hello@sdkpod.com">hello@sdkpod.com</a></dd></div>
-            <div><dt>Catalog</dt><dd>3 works</dd></div>
-          </dl>
+    <section class="h-contact">
+      <div class="wrap">
+        <h2>Ideas, questions, a bug you found? Just write.</h2>
+        <p>Every message gets read. Issues on GitHub work too.</p>
+        <div class="btn-row">
+          <a class="btn solid" href="mailto:hello@sdkpod.com">hello@sdkpod.com</a>
+          <a class="btn line" href="https://github.com/txwmemoria" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>

@@ -40,8 +40,34 @@
 
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Jade disc: the rings of small raised grains (谷纹) are drawn here rather
+  // than shipped as hundreds of circles in the HTML. Without JS it is a plain disc.
+  document.querySelectorAll("svg .grains").forEach((g) => {
+    const ns = "http://www.w3.org/2000/svg";
+    const cx = +g.dataset.cx, cy = +g.dataset.cy, r0 = +g.dataset.r0, r1 = +g.dataset.r1;
+    const step = 12.5;
+    for (let r = r0, ring = 0; r <= r1; r += step, ring++) {
+      const n = Math.round((2 * Math.PI * r) / step);
+      for (let i = 0; i < n; i++) {
+        const a = ((i + (ring % 2) * 0.5) / n) * 2 * Math.PI;
+        const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+        const shade = document.createElementNS(ns, "circle");
+        shade.setAttribute("cx", (x + 0.9).toFixed(1));
+        shade.setAttribute("cy", (y + 1.1).toFixed(1));
+        shade.setAttribute("r", "4.1");
+        shade.setAttribute("fill", "rgba(20,70,50,.22)");
+        const bump = document.createElementNS(ns, "circle");
+        bump.setAttribute("cx", x.toFixed(1));
+        bump.setAttribute("cy", y.toFixed(1));
+        bump.setAttribute("r", "3.7");
+        bump.setAttribute("fill", "rgba(255,255,255,.3)");
+        g.append(shade, bump);
+      }
+    }
+  });
+
   // Hero terminal: type the command, then print the output line by line.
-  const code = document.querySelector(".hero .term code");
+  const code = document.querySelector(".hero .term code, [data-typing] code");
   if (code && !calm) {
     code.innerHTML = code.innerHTML
       .split("\n")
@@ -89,7 +115,7 @@
       { rootMargin: "0px 0px -8% 0px" }
     );
     document
-      .querySelectorAll(".section > .wrap > .section-head, .work, .about > div, .prose > h2, .prose > pre, .prose > .table-scroll")
+      .querySelectorAll(".section > .wrap > .section-head, .work, .about > div, .prose > h2, .prose > pre, .prose > .table-scroll, .h-head, .h-work, .h-habit, .h-contact .wrap")
       .forEach((el) => {
         if (el.getBoundingClientRect().top < innerHeight) return;
         el.classList.add("reveal");

@@ -18,6 +18,8 @@
   function loadScript() {
     if (loaded) return;
     loaded = true;
+    /* 页面 <head> 里已经放了 AdSense 脚本（站点验证要用），就不再重复加载 */
+    if (document.querySelector('script[src*="adsbygoogle.js"]')) return;
     var s = document.createElement('script');
     s.async = true;
     s.crossOrigin = 'anonymous';
